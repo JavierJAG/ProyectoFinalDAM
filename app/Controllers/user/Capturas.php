@@ -2,7 +2,6 @@
 
 namespace App\Controllers\user;
 
-use App\Models\CapturaModel;
 use App\Models\EspecieModel;
 use App\Models\ImagenCapturaModel;
 use App\Models\ImagenModel;
@@ -14,8 +13,8 @@ class Capturas extends ResourceController
 
     public function index()
     {
-        $capturas = $this->model->findAll();
-        return view('/user/capturas/index', ['capturas' => $capturas]);
+        $capturas = $this->model->where('usuario_id', auth()->user()->id)->paginate(10);
+        return view('/user/capturas/index', ['capturas' => $capturas, 'pager' => $this->model->pager]);
     }
     public function show($id = null)
     {
@@ -24,13 +23,13 @@ class Capturas extends ResourceController
         $especieModel = new EspecieModel();
         $imagenes = $imagenModel->getImagenesCaptura($id);
         $especie = null;
-        $imagenesEspecie= null;
-        if(!$captura->especie_id==null){
+        $imagenesEspecie = null;
+        if (!$captura->especie_id == null) {
             $especie = $especieModel->find($captura->especie_id);
             $imagenesEspecie = $imagenModel->getImagenesEspecie($captura->especie_id);
         }
 
-        return view('/user/capturas/show', ['captura' => $captura, 'imagenes' => $imagenes,'especie'=>$especie, 'imagenes_especie'=>$imagenesEspecie]);
+        return view('/user/capturas/show', ['captura' => $captura, 'imagenes' => $imagenes, 'especie' => $especie, 'imagenes_especie' => $imagenesEspecie]);
     }
     public function new()
     {
@@ -75,7 +74,7 @@ class Capturas extends ResourceController
                 'descripcion' => $descripcion,
                 'peso' => $peso,
                 'tamano' => $tamano,
-                'usuario_id' => 1,
+                'usuario_id' => auth()->user()->id,
                 'especie_id' => $especieId
             ]);
             // Manejar la subida de imágenes

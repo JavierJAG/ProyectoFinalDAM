@@ -2,18 +2,30 @@
 <?php $this->section('body') ?>
 <?= view('/dashboard/partials/_mensaje') ?>
 <?= view('/dashboard/partials/_error') ?>
-<h2>Información del logro</h2>
-<table>
-    <tr>
-        <td>Id</td>
-        <td>Nombre</td>
-        <td>Descripción</td>
-    </tr>
-    <tr>
-        <td><?= $logro->id ?></td>
-        <td><?= $logro->nombre ?></td>
-        <td><?= $logro->descripcion ?></td>
-    </tr>
-</table>
-<a href="<?= site_url('/dashboard/logros') ?>">Volver a la lista de logros</a>
+
+<div class="container mt-5">
+    <h2 class="text-primary mb-4">Información del Logro</h2>
+
+    <div class="bg-light p-4 shadow-sm rounded mb-4">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><?= esc($logro->id) ?></td>
+                    <td><?= esc($logro->nombre) ?></td>
+                    <td><?= esc($logro->descripcion) ?></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <a href="<?= site_url('/dashboard/logros') ?>" class="btn btn-primary mt-3">Volver a la lista de logros</a>
+</div>
+
 <?php $this->endSection() ?>

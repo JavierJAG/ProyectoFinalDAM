@@ -12,7 +12,7 @@ class ZonaPescaModel extends Model
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['nombre','descripcion','coordenadas','localidad_id'];
+    protected $allowedFields    = ['nombre','descripcion','coordenadas','localidad_id','usuario_id'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

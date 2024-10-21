@@ -26,3 +26,6 @@ $routes->group('user',['namespace'=>"App\Controllers\user"], function ($routes) 
     $routes->resource('participantes');
 
 });
+$routes->group('web',['namespace'=>"App\Controllers\web"], function ($routes) {
+    $routes->get('', 'Web::index');
+});

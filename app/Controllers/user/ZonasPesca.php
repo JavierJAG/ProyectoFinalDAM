@@ -12,7 +12,7 @@ class ZonasPesca extends ResourceController
 
     public function index()
     {
-        $zonasPesca = $this->model->paginate(10);
+        $zonasPesca = $this->model->where('usuario_id',auth()->user()->id)->paginate(10);
         return view('/user/zonasPesca/index', ['zonasPesca' => $zonasPesca, 'pager' => $this->model->pager]);
     }
     public function show($id = null)
@@ -39,7 +39,7 @@ class ZonasPesca extends ResourceController
         if ($this->validate('zonaPesca')) {
             $nombre = $this->request->getPost('nombre');
             $descripcion = $this->request->getPost('descripcion');
-            $coordenadas = $this->request->getPost('coordenadas');
+            // $coordenadas = $this->request->getPost('coordenadas');
 
 
             $PROVINCIA = $this->request->getPost('PROVINCIA');
@@ -67,13 +67,13 @@ class ZonasPesca extends ResourceController
             if (!$localidadData) {
                 return redirect()->back()->with("error", "La localidad especificada no existe.")->withInput();
             }
-
             // Realizar la inserción en la base de datos
             $this->model->insert([
                 'nombre' => $nombre,
                 'descripcion' => $descripcion,
-                // 'coordenadas' => "POINT($coordenadas)", // Asegúrate de que este valor es correcto
+                // 'coordenadas' => "POINT($coordenadas)", 
                 'localidad_id' => $localidadData->id,
+                'usuario_id'=>auth()->user()->id
             ]);
 
             return redirect()->to('/user/zonasPesca')->with('mensaje', "Zona de pesca creada con éxito");

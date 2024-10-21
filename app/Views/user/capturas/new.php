@@ -1,42 +1,49 @@
-<?php $this->extend("/user/layout/template") ?>
-<?php $this->section('body') ?>
+<?= $this->extend("/user/layout/template") ?>
+
+<?= $this->section('body') ?>
 <?= view('/user/partials/_mensaje') ?>
 <?= view('/user/partials/_error') ?>
 
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Crear Nueva Captura</h2>
 
-<form action="<?= site_url('/user/capturas') ?>" method="post" enctype="multipart/form-data">
+    <form action="<?= site_url('/user/capturas') ?>" method="post" enctype="multipart/form-data">
+        
+        <div class="mb-3">
+            <label for="fecha_captura" class="form-label">Fecha de Captura</label>
+            <input type="datetime-local" name="fecha_captura" id="fecha_captura" class="form-control" value="<?= old('fecha_captura') ?>" required>
+        </div>
 
-    <label for="fecha_captura">Fecha de Captura</label>
-    <input type="datetime-local" name="fecha_captura" id="fecha_captura" value="<?= old('fecha_captura') ?>" required>
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre de la Especie</label>
+            <input type="text" name="nombre" id="nombre_especie" class="form-control" value="<?= old('nombre') ?>" placeholder="Nombre de la especie capturada" required>
+        </div>
 
-    <label for="nombre">Nombre</label>
-    <input type="text" name="nombre" id="nombre_especie" value="<?= old('nombre') ?>" placeholder="Nombre de la especie capturada" required>
+        <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripción</label>
+            <textarea name="descripcion" id="descripcion" class="form-control" placeholder="Descripción de la captura"><?= old('descripcion') ?></textarea>
+        </div>
 
-    <label for="descripcion">Descripción</label>
-    <textarea name="descripcion" id="descripcion" placeholder="Descripción de la captura"><?= old('descripcion') ?></textarea>
+        <div class="mb-3">
+            <label for="tamano" class="form-label">Tamaño (cm)</label>
+            <input type="number" step="0.01" name="tamano" id="tamano" class="form-control" value="<?= old('tamano') ?>" placeholder="Tamaño en cm" required>
+        </div>
 
-    <label for="tamano">Tamaño (cm)</label>
-    <input type="number" step="0.01" name="tamano" id="tamano" value="<?= old('tamano') ?>" placeholder="Tamaño en cm" required>
+        <div class="mb-3">
+            <label for="peso" class="form-label">Peso (g)</label>
+            <input type="number" name="peso" id="peso" class="form-control" value="<?= old('peso') ?>" placeholder="Peso en g" required>
+        </div>
 
-    <label for="peso">Peso (g)</label>
-    <input type="number" name="peso" id="peso" value="<?= old('peso') ?>" placeholder="Peso en g" required>
+        <div class="mb-3">
+            <label for="imagenes" class="form-label">Imágenes de la Captura</label>
+            <input type="file" id="imagenes" name="imagenes[]" class="form-control" multiple accept="image/*" onchange="previewImages()">
+        </div>
 
-    <label for="imagenes">Imágenes de la Captura</label>
-    <input type="file" id="imagenes" name="imagenes[]" multiple accept="image/*" onchange="previewImages()">
+        <div id="imagePreview" class="d-flex flex-wrap"></div>
 
-    <div id="imagePreview"></div>
-
-    <button type="submit">Crear</button>
-</form>
-
-
-
-
-
-
-
-
-
+        <button type="submit" class="btn btn-primary mt-3">Crear</button>
+    </form>
+</div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
@@ -86,21 +93,17 @@
             const reader = new FileReader();
             reader.onload = function(event) {
                 const div = document.createElement('div');
-                div.className = 'image-item';
-                div.style.position = 'relative';
-                div.style.display = 'inline-block';
-                div.style.margin = '10px';
+                div.className = 'image-item position-relative me-3 mb-2';
 
                 const img = document.createElement('img');
                 img.src = event.target.result;
                 img.style.width = '100px'; // Ajusta el tamaño de la imagen
                 img.style.height = 'auto';
+                img.className = 'img-thumbnail';
 
                 const removeBtn = document.createElement('button');
                 removeBtn.textContent = 'Eliminar';
-                removeBtn.style.position = 'absolute';
-                removeBtn.style.top = '0';
-                removeBtn.style.right = '0';
+                removeBtn.className = 'btn btn-danger btn-sm position-absolute top-0 end-0';
                 removeBtn.onclick = function(e) {
                     e.preventDefault();
                     preview.removeChild(div); // Elimina la imagen del contenedor de previsualización

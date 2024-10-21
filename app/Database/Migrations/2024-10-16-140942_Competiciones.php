@@ -36,10 +36,17 @@ class Competiciones extends Migration
                 'type' => 'INT',
                 'constraint' => 10,
                 'unsigned'=>TRUE
+            ],
+            'usuario_id' => [
+                'type' => 'INT',
+                'constraint' => 10,
+                'unsigned'=>TRUE,
+                'null' => false,
             ]
         ]);
         $this->forge->addPrimaryKey('id');
         $this->forge->addForeignKey('zona_id','zonas_pesca','id','CASCADE','CASCADE');
+        $this->forge->addForeignKey('usuario_id', 'users', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('competiciones');
     }
 

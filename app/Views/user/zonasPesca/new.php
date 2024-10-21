@@ -3,42 +3,41 @@
 <?= view('/user/partials/_mensaje') ?>
 <?= view('/user/partials/_error') ?>
 
-<h2>Crear Zona de Pesca</h2>
-<form action="<?= site_url('/user/zonasPesca') ?>" method="post">
-    <div class="form-group">
-        <label for="nombre">Nombre</label>
-        <input type="text" name="nombre" id="nombre" class="form-control" value="<?= old('nombre') ?>" placeholder="nombre" required>
-    </div>
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Crear Zona de Pesca</h2>
+    <form action="<?= site_url('/user/zonasPesca') ?>" method="post">
+        <div class="form-group">
+            <label for="nombre">Nombre</label>
+            <input type="text" name="nombre" id="nombre" class="form-control" value="<?= old('nombre') ?>" placeholder="Nombre de la zona" required>
+        </div>
 
-    <div class="form-group">
-        <label for="descripcion" placeholder="descripcion">Descripción</label>
-        <textarea name="descripcion" id="descripcion" class="form-control"></textarea>
-    </div>
+        <div class="form-group">
+            <label for="descripcion">Descripción</label>
+            <textarea name="descripcion" id="descripcion" class="form-control" placeholder="Descripción de la zona"></textarea>
+        </div>
 
-    <div class="form-group">
-        <label for="provincia">Provincia</label>
-        <select name="PROVINCIA" id="provincia" class="form-control" required>
-            <option value="" selected></option>
-            <option value="A CORUÑA" <?= old('provincia') == 'A CORUÑA' ? 'selected' : '' ?>>A CORUÑA</option>
-            <option value="LUGO" <?= old('provincia') == 'LUGO' ? 'selected' : '' ?>>LUGO</option>
-            <option value="OURENSE" <?= old('provincia') == 'OURENSE' ? 'selected' : '' ?>>OURENSE</option>
-            <option value="PONTEVEDRA" <?= old('provincia') == 'PONTEVEDRA' ? 'selected' : '' ?>>PONTEVEDRA</option>
-        </select>
-    </div>
+        <div class="form-group">
+            <label for="provincia">Provincia</label>
+            <select name="PROVINCIA" id="provincia" class="form-control" required>
+                <option value="" selected disabled>Selecciona una provincia</option>
+                <option value="A CORUÑA" <?= old('provincia') == 'A CORUÑA' ? 'selected' : '' ?>>A CORUÑA</option>
+                <option value="LUGO" <?= old('provincia') == 'LUGO' ? 'selected' : '' ?>>LUGO</option>
+                <option value="OURENSE" <?= old('provincia') == 'OURENSE' ? 'selected' : '' ?>>OURENSE</option>
+                <option value="PONTEVEDRA" <?= old('provincia') == 'PONTEVEDRA' ? 'selected' : '' ?>>PONTEVEDRA</option>
+            </select>
+        </div>
 
-    <div class="form-group">
-        <label for="localidad">Localidad</label>
-        <select name="localidad" id="localidad" class="form-control" required>
-            <option value="" selected>Selecciona una localidad</option>
-            <!-- Las localidades se cargarán aquí -->
-        </select>
-    </div>
+        <div class="form-group">
+            <label for="localidad">Localidad</label>
+            <select name="localidad" id="localidad" class="form-control" required>
+                <option value="" selected disabled>Selecciona una localidad</option>
+                <!-- Las localidades se cargarán aquí -->
+            </select>
+        </div>
 
-    <label for="coordenadas">Coordenadas (latitud,longitud):</label>
-    <input type="text" name="coordenadas" placeholder="Ej. 42.2417300047165, -8.72028910343247">
-
-    <button type="submit" class="btn btn-primary">Crear</button>
-</form>
+        <button type="submit" class="btn btn-primary btn-block">Crear</button>
+    </form>
+</div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -46,7 +45,7 @@
         $('#provincia').change(function() {
             var provincia = $(this).val();
             $('#localidad').empty(); // Limpiar el select de localidades
-            $('#localidad').append('<option value="" selected>Selecciona una localidad</option>');
+            $('#localidad').append('<option value="" selected disabled>Selecciona una localidad</option>');
 
             if (provincia) {
                 // Hacer una petición AJAX
@@ -76,4 +75,5 @@
         });
     });
 </script>
+
 <?php $this->endSection() ?>

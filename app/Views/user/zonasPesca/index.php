@@ -3,30 +3,40 @@
 <?= view('/user/partials/_mensaje') ?>
 <?= view('/user/partials/_error') ?>
 
-<a href="/user/zonasPesca/new">Crear Zona de Pesca</a>
-<table>
-    <tr>
-        <td>Id</td>
-        <td>Zona de Pesca</td>
-        <td>Acciones</td>
-    </tr>
-
-    <body>
-        <?php foreach ($zonasPesca as $zonaPesca) : ?>
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Zonas de Pesca</h2>
+    <div class="mb-3">
+        <a href="/user/zonasPesca/new" class="btn btn-success">Crear Zona de Pesca</a>
+    </div>
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
             <tr>
-                <td> <?= $zonaPesca->id ?> </td>
-                <td> <?= $zonaPesca->nombre ?> </td>
-                <td>
-                    <a href="/user/zonasPesca/<?= $zonaPesca->id ?>">Detalles</a>
-                    <a href="/user/zonasPesca/<?= $zonaPesca->id ?>/edit">Editar</a>
-                    <form action="/user/zonasPesca/<?= $zonaPesca->id ?>" method="post">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <button type="submit">Eliminar</button>
-                    </form>
-                </td>
+                <th>Id</th>
+                <th>Zona de Pesca</th>
+                <th>Acciones</th>
             </tr>
-        <?php endforeach ?>
+        </thead>
+        <tbody>
+            <?php foreach ($zonasPesca as $zonaPesca) : ?>
+                <tr>
+                    <td><?= $zonaPesca->id ?></td>
+                    <td><?= $zonaPesca->nombre ?></td>
+                    <td>
+                        <a href="/user/zonasPesca/<?= $zonaPesca->id ?>" class="btn btn-info btn-sm">Detalles</a>
+                        <a href="/user/zonasPesca/<?= $zonaPesca->id ?>/edit" class="btn btn-warning btn-sm">Editar</a>
+                        <form action="/user/zonasPesca/<?= $zonaPesca->id ?>" method="post" style="display:inline;">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas eliminar esta zona de pesca?');">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
 
-</table>
-<?= $pager->Links() ?>
+    <div class="pagination">
+        <?= $pager->Links() ?>
+    </div>
+</div>
+
 <?php $this->endSection() ?>

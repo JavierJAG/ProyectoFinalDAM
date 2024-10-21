@@ -23,18 +23,25 @@ class ZonasPesca extends Migration
             'descripcion' => [
                 'type' => 'TEXT'
             ],
-            'coordenadas' => [
-                'type' => 'POINT'
-            ],
+            // 'coordenadas' => [
+            //     'type' => 'POINT'
+            // ],
             'localidad_id' => [
                 'type' => 'INT',
                 'constraint' => 10,
                 'unsigned'=>TRUE
             ],
+            'usuario_id' => [
+                'type' => 'INT',
+                'constraint' => 10,
+                'unsigned'=>TRUE,
+                'null' => false,
+            ]
             
         ]);
         $this->forge->addPrimaryKey('id');
         $this->forge->addForeignKey('localidad_id','localidades','id','CASCADE','CASCADE');
+        $this->forge->addForeignKey('usuario_id', 'users', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('zonas_pesca');
     }
 

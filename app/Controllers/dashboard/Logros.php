@@ -40,7 +40,7 @@ class Logros extends ResourceController
                 'descripcion' => $descripcion,
 
             ]);
-            return redirect()->to('/dashboard/logros')->with('mensaje', "logro creada con éxito");
+            return redirect()->to('/dashboard/logros')->with('mensaje', "logro creado con éxito");
         } else {
             return redirect()->back()->with("error", $this->validator->listErrors())->withInput();
         }
@@ -57,7 +57,7 @@ class Logros extends ResourceController
                 'descripcion' => $descripcion,
 
             ]);
-            return redirect()->to('/dashboard/logros')->with('mensaje', "logro actualizada con éxito");
+            return redirect()->to('/dashboard/logros')->with('mensaje', "logro actualizado con éxito");
         } else {
             return redirect()->back()->with("error", $this->validator->listErrors())->withInput();
         }
@@ -67,7 +67,7 @@ class Logros extends ResourceController
         $especie = $this->model->find($id);
         if ($especie) {
             $this->model->delete($id);
-            return redirect()->to('/dashboard/logros')->with('mensaje', "logro eliminada con éxito");
+            return redirect()->to('/dashboard/logros')->with('mensaje', "logro eliminado con éxito");
         } else {
             return redirect()->back()->with('error', "Error al eliminar la especie");
         }

@@ -17,7 +17,7 @@ class Competiciones extends ResourceController
     public function index()
     {
 
-        $competiciones = $this->model->paginate(10);
+        $competiciones = $this->model->where('usuario_id',auth()->user()->id)->paginate(10);
         return view('/user/competiciones/index', ['competiciones' => $competiciones, 'pager' => $this->model->pager]);
     }
     public function show($id = null)
@@ -75,7 +75,8 @@ class Competiciones extends ResourceController
                 'descripcion' => $descripcion,
                 'fecha_inicio' => $fechaInicio,
                 'fecha_fin' => $fechaFin,
-                'zona_id' => $zonaPesca
+                'zona_id' => $zonaPesca,
+                'usuario_id'=>auth()->user()->id
 
             ]);
             $imagenesModel = new ImagenModel();
