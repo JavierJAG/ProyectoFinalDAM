@@ -54,27 +54,27 @@ class ImagenModel extends Model
             ->findAll();
     }
    
-    public function getImagenesCaptura($especieId) {
+    public function getImagenesCaptura($capturaId) {
         return $this->select('imagenes.imagen,imagenes.extension')
-            ->join('imagenes_especies as ie', 'ie.imagen_id = imagenes.id')
-            ->join('especies', 'especies.id = ie.especie_id')
-            ->where('especies.id', $especieId)
+            ->join('imagenes_capturas as ic', 'ic.imagen_id = imagenes.id')
+            ->join('capturas', 'capturas.id = ic.captura_id')
+            ->where('capturas.id', $capturaId)
             ->findAll();
     }
-    public function getImagenesCompeticion($especieId) {
+    public function getImagenesCompeticion($competicionId) {
         return $this->select('imagenes.imagen,imagenes.extension')
-            ->join('imagenes_especies as ie', 'ie.imagen_id = imagenes.id')
-            ->join('especies', 'especies.id = ie.especie_id')
-            ->where('especies.id', $especieId)
+            ->join('imagenes_competiciones as ic', 'ic.imagen_id = imagenes.id')
+            ->join('competiciones', 'competiciones.id = ic.competicion_id')
+            ->where('competiciones.id', $competicionId)
             ->findAll();
     }
 
     public function deleteImagenesEspecie($especieId)
     {
         $imagenesEspecie = $this->select('imagenes.id')
-            ->join('imagenes_especies as ie', 'ie.imagen_id = imagenes.id')
-            ->join('especies as e', 'e.id = ie.especie_id')
-            ->where('e.id', $especieId)
+            ->join('imagenes_competiciones as ic', 'ic.imagen_id = imagenes.id')
+            ->join('competiciones as c', 'c.id = ic.competicion_id')
+            ->where('c.id', $especieId)
             ->findAll();
         if ($imagenesEspecie != null) {
             foreach ($imagenesEspecie as $i) {
@@ -85,8 +85,8 @@ class ImagenModel extends Model
     public function deleteImagenesCaptura($capturaId)
     {
         $imagenesEspecie = $this->select('imagenes.id')
-            ->join('imagenes_capturas as ie', 'ie.imagen_id = imagenes.id')
-            ->join('especies as e', 'e.id = ie.especie_id')
+            ->join('imagenes_capturas as ic', 'ic.imagen_id = imagenes.id')
+            ->join('capturas as e', 'e.id = ic.captura_id')
             ->where('e.id', $capturaId)
             ->findAll();
         if ($imagenesEspecie != null) {
@@ -98,8 +98,9 @@ class ImagenModel extends Model
     public function deleteImagenesCompeticion($competicionId)
     {
         $imagenesEspecie = $this->select('imagenes.id')
-            ->join('imagenes_competiciones as ic', 'ie.imagen_id = imagenes.id')
-            ->where('e.id', $competicionId)
+            ->join('imagenes_competiciones as ic', 'ic.imagen_id = imagenes.id')
+            ->join('competiciones as c', 'c.id = ic.competicion_id')
+            ->where('c.id', $competicionId)
             ->findAll();
         if ($imagenesEspecie != null) {
             foreach ($imagenesEspecie as $i) {

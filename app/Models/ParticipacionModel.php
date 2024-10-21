@@ -12,7 +12,7 @@ class ParticipacionModel extends Model
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['usuario_id','captura_id','competicion_id'];
+    protected $allowedFields    = ['usuario_id', 'captura_id', 'competicion_id'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -43,4 +43,21 @@ class ParticipacionModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getParticipantes($competicionId)
+    {
+        return $this->select('users.*')
+            ->join('users','users.id = participaciones.usuario_id')
+            ->where('competicion_id', $competicionId)
+            ->groupBy('usuario_id')
+            ->findAll();
+    }
+    public function getParticipaciones($competicionId, $usuarioId)
+    {
+        return $this->select('capturas.*')
+            ->join('capturas', 'capturas.id = participaciones.captura_id')
+            ->where('participaciones.usuario_id', $usuarioId)
+            ->where('participaciones.competicion_id', $competicionId)
+            ->findAll();
+    }
 }

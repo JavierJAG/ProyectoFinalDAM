@@ -43,7 +43,8 @@ class Capturas extends Migration
             'especie_id' => [
                 'type' => 'INT',
                 'constraint' => 10,
-                'unsigned'=>TRUE
+                'unsigned'=>TRUE,
+                'null'=>TRUE
             ]
         ]);
         $this->forge->addPrimaryKey('id');

@@ -16,7 +16,8 @@
         <tr>
             <td><?= $captura->fecha_captura ?></td>
             <td> <?= $captura->nombre ?></td>
-            <td> <?= $captura->nombre_cientificotamano ?></td>
+            <td> <?= $captura->descripcion ?></td>
+            <td> <?= $captura->tamano ?></td>
             <td> <?= $captura->peso ?></td>
             <td>
                 <a href="/user/capturas/<?= $captura->id ?>">Detalles</a>

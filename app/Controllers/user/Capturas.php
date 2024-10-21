@@ -21,8 +21,16 @@ class Capturas extends ResourceController
     {
         $captura = $this->model->find($id);
         $imagenModel = new ImagenModel();
+        $especieModel = new EspecieModel();
         $imagenes = $imagenModel->getImagenesCaptura($id);
-        return view('/user/capturas/show', ['captura' => $captura, 'imagenes' => $imagenes]);
+        $especie = null;
+        $imagenesEspecie= null;
+        if(!$captura->especie_id==null){
+            $especie = $especieModel->find($captura->especie_id);
+            $imagenesEspecie = $imagenModel->getImagenesEspecie($captura->especie_id);
+        }
+
+        return view('/user/capturas/show', ['captura' => $captura, 'imagenes' => $imagenes,'especie'=>$especie, 'imagenes_especie'=>$imagenesEspecie]);
     }
     public function new()
     {
@@ -41,16 +49,34 @@ class Capturas extends ResourceController
     public function create()
     {
         if ($this->validate('captura')) {
-            $nombre_comun = $this->request->getPost('nombre_comun');
-            $nombre_cientifico = $this->request->getPost('nombre_cientifico');
-            $talla_minima = $this->request->getPost('talla_minima');
-            $cupo_maximo = $this->request->getPost('cupo_maximo');
+            // if (!auth()->loggedIn()) {
+            //     return redirect()->to(base_url('/Home'))->with('error', 'Necesitas registrarte para poder continuar');
+            // }
 
+            $especieModel = new especieModel();
+
+            $fecha_captura = $this->request->getPost('fecha_captura');
+            $nombre = $this->request->getPost('nombre');
+            $descripcion = $this->request->getPost('descripcion');
+            $peso = $this->request->getPost('peso');
+            $tamano = $this->request->getPost('tamano');
+            $especies = $especieModel->findAll();
+            // $userId = auth()->user()->id;
+            $especieId = null;
+            foreach ($especies as $especie) {
+                if ($especie->nombre_comun == $nombre || $especie->nombre_cientifico == $nombre) {
+                    $especieId = $especie->id;
+                    break;
+                }
+            }
             $capturaId = $this->model->insert([
-                'nombre_comun' => $nombre_comun,
-                'nombre_cientifico' => $nombre_cientifico,
-                'talla_minima' => $talla_minima,
-                'cupo_maximo' => $cupo_maximo
+                'fecha_captura' => $fecha_captura,
+                'nombre' => $nombre,
+                'descripcion' => $descripcion,
+                'peso' => $peso,
+                'tamano' => $tamano,
+                'usuario_id' => 1,
+                'especie_id' => $especieId
             ]);
             // Manejar la subida de imágenes
 
@@ -78,7 +104,7 @@ class Capturas extends ResourceController
                 }
             }
 
-            return redirect()->to('/user/capturas')->with('mensaje', "Captura creada con éxito");
+            return redirect()->to('/user/capturas')->with('mensaje', "Captura actualizada con éxito");
         } else {
             return redirect()->back()->with("error", $this->validator->listErrors())->withInput();
         }
@@ -87,16 +113,34 @@ class Capturas extends ResourceController
     public function update($id = null)
     {
         if ($this->validate('captura')) {
-            $nombre_comun = $this->request->getPost('nombre_comun');
-            $nombre_cientifico = $this->request->getPost('nombre_cientifico');
-            $talla_minima = $this->request->getPost('talla_minima');
-            $cupo_maximo = $this->request->getPost('cupo_maximo');
+            // if (!auth()->loggedIn()) {
+            //     return redirect()->to(base_url('/Home'))->with('error', 'Necesitas registrarte para poder continuar');
+            // }
 
-            $this->model->update($id, [
-                'nombre_comun' => $nombre_comun,
-                'nombre_cientifico' => $nombre_cientifico,
-                'talla_minima' => $talla_minima,
-                'cupo_maximo' => $cupo_maximo
+            $especieModel = new especieModel();
+
+            $fecha_captura = $this->request->getPost('fecha_captura');
+            $nombre = $this->request->getPost('nombre');
+            $descripcion = $this->request->getPost('descripcion');
+            $peso = $this->request->getPost('peso');
+            $tamano = $this->request->getPost('tamano');
+            $especies = $especieModel->findAll();
+            // $userId = auth()->user()->id;
+            $especieId = null;
+            foreach ($especies as $especie) {
+                if ($especie->nombre_comun == $nombre || $especie->nombre_cientifico == $nombre) {
+                    $especieId = $especie->id;
+                    break;
+                }
+            }
+            $capturaId = $this->model->update($id, [
+                'fecha_captura' => $fecha_captura,
+                'nombre' => $nombre,
+                'descripcion' => $descripcion,
+                'peso' => $peso,
+                'tamano' => $tamano,
+                'usuario_id' => 1,
+                'especie_id' => $especieId
             ]);
             // Manejar la subida de imágenes
 
@@ -158,7 +202,8 @@ class Capturas extends ResourceController
             return redirect()->back()->with('error', "Error al eliminar la captura");
         }
     }
-    function get_especies() {
+    function get_especies()
+    {
         $term = $this->request->getVar('term');
 
         $especieModel = new EspecieModel();
@@ -168,7 +213,7 @@ class Capturas extends ResourceController
             $especies = $especieModel
                 ->like('nombre_comun', $term)
                 ->findAll(); // Puedes limitar la cantidad con un ->limit(10) si deseas
-    
+
             // Formatear los resultados para la respuesta en formato JSON
             $data = [];
             foreach ($especies as $especie) {
@@ -176,7 +221,7 @@ class Capturas extends ResourceController
                     'nombre' => $especie->nombre_comun
                 ];
             }
-    
+
             // Retornar los resultados en formato JSON
             return $this->response->setJSON($data);
         }

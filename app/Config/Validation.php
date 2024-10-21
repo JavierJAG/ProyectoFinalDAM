@@ -44,18 +44,25 @@ class Validation extends BaseConfig
     public $especie = [
         'nombre_comun' => 'required|alpha_numeric_space',
         'nombre_cientifico' => 'permit_empty|alpha_numeric_space',
-        'talla_minima'=>'permit_empty|numeric|greater_than_equal_to[0]',
-        'cupo_maximo'=>'permit_empty|is_natural|greater_than_equal_to[0]'
+        'talla_minima' => 'permit_empty|numeric|greater_than_equal_to[0]',
+        'cupo_maximo' => 'permit_empty|is_natural|greater_than_equal_to[0]'
     ];
-    public $localidad =[
-        'nombre'=>'required|alpha_numeric_space',
-        'nombre'=>'required'
+    public $localidad = [
+        'nombre' => 'required|alpha_numeric_space',
+        'nombre' => 'required'
     ];
-    public $logro =[
-        'nombre'=>'required|alpha_numeric_space',
-        'descripcion'=>'required'
+    public $logro = [
+        'nombre' => 'required|alpha_numeric_space',
+        'descripcion' => 'required'
     ];
-    public $zonaPesca =[
-        'nombre'=>'required|alpha_numeric_space',
+    public $zonaPesca = [
+        'nombre' => 'required|alpha_numeric_space',
+    ];
+    public $captura = [
+        'fecha_captura' => 'required',
+        'nombre' => 'required|min_length[3]',
+    ];
+    public $competicion = [
+        'nombre' => 'required|min_length[3]'
     ];
 }

@@ -4,29 +4,41 @@
 <?= view('/user/partials/_error') ?>
 
 
-<form action="<?= site_url('/user/capturas') ?>" method="post" enctype="multipart/form-data">
+<form action="<?= site_url('/user/capturas/'.$captura->id) ?>" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="_method" value="PATCH">
 
     <label for="fecha_captura">Fecha de Captura</label>
-    <input type="datetime-local" name="fecha_captura" id="fecha_captura" value="<?= old('fecha_captura') ?>" required>
+    <input type="datetime-local" name="fecha_captura" id="fecha_captura" value="<?= old('fecha_captura',$captura->fecha_captura) ?>" required>
 
     <label for="nombre">Nombre</label>
-    <input type="text" name="nombre" id="nombre_especie" value="<?= old('nombre') ?>" placeholder="Nombre de la especie capturada" required>
+    <input type="text" name="nombre" id="nombre_especie" value="<?= old('nombre',$captura->nombre) ?>" placeholder="Nombre de la especie capturada" required>
 
     <label for="descripcion">Descripción</label>
-    <textarea name="descripcion" id="descripcion" placeholder="Descripción de la captura"><?= old('descripcion') ?></textarea>
+    <textarea name="descripcion" id="descripcion" placeholder="Descripción de la captura"><?= old('descripcion',$captura->descripcion) ?></textarea>
 
     <label for="tamano">Tamaño (cm)</label>
-    <input type="number" step="0.01" name="tamano" id="tamano" value="<?= old('tamano') ?>" placeholder="Tamaño en cm" required>
+    <input type="number" step="0.01" name="tamano" id="tamano" value="<?= old('tamano',$captura->tamano) ?>" placeholder="Tamaño en cm" required>
 
     <label for="peso">Peso (g)</label>
-    <input type="number" name="peso" id="peso" value="<?= old('peso') ?>" placeholder="Peso en g" required>
+    <input type="number" name="peso" id="peso" value="<?= old('peso',$captura->peso) ?>" placeholder="Peso en g" required>
 
     <label for="imagenes">Imágenes de la Captura</label>
     <input type="file" id="imagenes" name="imagenes[]" multiple accept="image/*" onchange="previewImages()">
 
+    <?php if (!empty($imagenes)): ?>
+    <h3>Imágenes Actuales:</h3>
+    <ul>
+        <?php foreach ($imagenes as $imagen): ?>
+            <li>
+                <img src="<?= base_url('uploads/capturas/' . $imagen->imagen) ?>" alt="Imagen de <?= esc($captura->nombre) ?>" width="100">
+            </li>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>
+
     <div id="imagePreview"></div>
 
-    <button type="submit">Crear</button>
+    <button type="submit">Actualizar</button>
 </form>
 
 
