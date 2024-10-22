@@ -12,7 +12,7 @@ class UsuarioLogroModel extends Model
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['usuario_id','logro_id','fecha_obtencion'];
+    protected $allowedFields    = ['usuario_id','logro_id','competicion_id','fecha_obtencion'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -21,10 +21,10 @@ class UsuarioLogroModel extends Model
     protected array $castHandlers = [];
 
     // Dates
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
-    protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
+    protected $createdField  = 'fecha_obtencion';
+    protected $updatedField  = 'fecha_obtencion';
     protected $deletedField  = 'deleted_at';
 
     // Validation

@@ -70,7 +70,7 @@
     <?php endif; ?>
 
     <div class="mt-4">
-        <a href="<?= site_url('/user/capturas') ?>" class="btn btn-secondary">Volver a la lista de capturas</a>
+        <a href="javascript:history.back()" class="btn btn-secondary">Volver</a>
     </div>
 </div>
 

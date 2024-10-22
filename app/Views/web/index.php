@@ -1,4 +1,4 @@
-<?php $this->extend("/web/layout/template") ?>
+<?php auth()->loggedIn()? $this->extend("/user/layout/template") : $this->extend("/web/layout/template") ?>
 <?php $this->section('body') ?>
 <?= view('/web/partials/_mensaje') ?>
 <?= view('/web/partials/_error') ?>
@@ -11,7 +11,7 @@
                 <div class="card-body">
                     <h2 class="card-title">Registrar Capturas</h2>
                     <p class="card-text">Documenta tus mejores capturas y mantén un registro de tus aventuras de pesca.</p>
-                    <a href="<?= site_url('/capturas') ?>" class="btn btn-primary">Registrar Captura</a>
+                    <a href="<?= site_url('/user/capturas/new') ?>" class="btn btn-primary">Registrar Captura</a>
                 </div>
             </div>
         </div>
@@ -29,7 +29,7 @@
                 <div class="card-body">
                     <h2 class="card-title">Ver Competiciones</h2>
                     <p class="card-text">Participa en competiciones de pesca y demuestra tus habilidades en el agua.</p>
-                    <a href="<?= site_url('/competiciones') ?>" class="btn btn-primary">Ver Competiciones</a>
+                    <a href="<?= site_url('/user/buscarCompeticiones') ?>" class="btn btn-primary">Ver Competiciones</a>
                 </div>
             </div>
         </div>
@@ -41,7 +41,7 @@
                 <div class="card-body">
                     <h2 class="card-title">Normativa de Pesca</h2>
                     <p class="card-text">Infórmate sobre las normativas y regulaciones de pesca para disfrutar de manera responsable.</p>
-                    <a href="<?= site_url('/normativa') ?>" class="btn btn-primary">Ver Normativa</a>
+                    <a href="<?= site_url('/user/normativa') ?>" class="btn btn-primary">Ver Normativa</a>
                 </div>
             </div>
         </div>

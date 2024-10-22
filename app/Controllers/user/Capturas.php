@@ -13,7 +13,7 @@ class Capturas extends ResourceController
 
     public function index()
     {
-        $capturas = $this->model->where('usuario_id', auth()->user()->id)->paginate(10);
+        $capturas = $this->model->paginate(10);
         return view('/user/capturas/index', ['capturas' => $capturas, 'pager' => $this->model->pager]);
     }
     public function show($id = null)

@@ -6,7 +6,9 @@ use App\Models\CapturaModel;
 use App\Models\ImagenCompeticionModel;
 use App\Models\ImagenModel;
 use App\Models\LocalidadModel;
+use App\Models\LogroModel;
 use App\Models\ParticipacionModel;
+use App\Models\UsuarioLogroModel;
 use App\Models\ZonaPescaModel;
 use CodeIgniter\RESTful\ResourceController;
 
@@ -17,7 +19,10 @@ class Competiciones extends ResourceController
     public function index()
     {
 
-        $competiciones = $this->model->where('usuario_id',auth()->user()->id)->paginate(10);
+        if (!auth()->user()->inGroup('superadmin') && !auth()->user()->inGroup('admin')) {
+            return redirect()->to('/')->with('error', 'Acceso no permitido'); // Solo admin o superadmin pueden acceder
+        }
+        $competiciones = $this->model->paginate(10);
         return view('/user/competiciones/index', ['competiciones' => $competiciones, 'pager' => $this->model->pager]);
     }
     public function show($id = null)
@@ -39,10 +44,16 @@ class Competiciones extends ResourceController
     }
     public function new()
     {
+        if (!auth()->user()->inGroup('superadmin') && !auth()->user()->inGroup('admin')) {
+            return redirect()->to('/')->with('error', 'Acceso no permitido'); // Solo admin o superadmin pueden acceder
+        }
         return view('/user/competiciones/new');
     }
     public function edit($id = null)
     {
+        if (!auth()->user()->inGroup('superadmin') && !auth()->user()->inGroup('admin')) {
+            return redirect()->to('/')->with('error', 'Acceso no permitido'); // Solo admin o superadmin pueden acceder
+        }
         $zonaPescaModel = new ZonaPescaModel();
         $localidadModel = new LocalidadModel();
         $imagenModel = new ImagenModel();
@@ -63,6 +74,10 @@ class Competiciones extends ResourceController
     }
     public function create()
     {
+        if (!auth()->user()->inGroup('superadmin') && !auth()->user()->inGroup('admin')) {
+            return redirect()->to('/')->with('error', 'Acceso no permitido'); // Solo admin o superadmin pueden acceder
+        }
+
         if ($this->validate('competicion')) {
             $nombre = $this->request->getPost('nombre');
             $fechaInicio = $this->request->getPost('fecha_inicio');
@@ -76,7 +91,7 @@ class Competiciones extends ResourceController
                 'fecha_inicio' => $fechaInicio,
                 'fecha_fin' => $fechaFin,
                 'zona_id' => $zonaPesca,
-                'usuario_id'=>auth()->user()->id
+                'usuario_id' => auth()->user()->id
 
             ]);
             $imagenesModel = new ImagenModel();
@@ -102,13 +117,16 @@ class Competiciones extends ResourceController
                     ]);
                 }
             }
-            return redirect()->to('/user/competiciones')->with('mensaje', "competicion creada con éxito");
+            return redirect()->to('/user/perfil/misCompeticiones')->with('mensaje', "competicion creada con éxito");
         } else {
             return redirect()->back()->with("error", $this->validator->listErrors())->withInput();
         }
     }
     public function update($id = null)
     {
+        if (!auth()->user()->inGroup('superadmin') && !auth()->user()->inGroup('admin')) {
+            return redirect()->to('/')->with('error', 'Acceso no permitido'); // Solo admin o superadmin pueden acceder
+        }
         if ($this->validate('competicion')) {
             $nombre = $this->request->getPost('nombre');
             $fechaInicio = $this->request->getPost('fecha_inicio');
@@ -159,13 +177,16 @@ class Competiciones extends ResourceController
                     ]);
                 }
             }
-            return redirect()->to('/user/competiciones')->with('mensaje', "competicion actualizada con éxito");
+            return redirect()->to('/user/perfil/misCompeticiones')->with('mensaje', "competicion actualizada con éxito");
         } else {
             return redirect()->back()->with("error", $this->validator->listErrors())->withInput();
         }
     }
     public function delete($id = null)
     {
+        if (!auth()->user()->inGroup('superadmin') && !auth()->user()->inGroup('admin')) {
+            return redirect()->to('/')->with('error', 'Acceso no permitido'); // Solo admin o superadmin pueden acceder
+        }
         $competicion = $this->model->find($id);
         if ($competicion) {
             $imagenesModel = new ImagenModel();
@@ -199,22 +220,72 @@ class Competiciones extends ResourceController
     public function verParticipantes($id)
     {
         $participacionModel = new ParticipacionModel();
+        $usuarioLogroModel = new UsuarioLogroModel();
+        $usuariosLogros = $usuarioLogroModel->where('competicion_id',$id)->findAll();
+        $logroModel = new LogroModel();
+        $logros = $logroModel->findAll();
         $participantes = $participacionModel->getParticipantes($id);
-        return view('/user/competiciones/participantes',['participantes'=>$participantes,'competicion_id'=>$id]);
+        return view('/user/competiciones/participantes', ['participantes' => $participantes, 'competicion_id' => $id, 'logros' => $logros,'usuariosLogros'=>$usuariosLogros]);
     }
 
     public function verParticipaciones($competicionId, $usuarioId)
     {
         $participacionModel = new ParticipacionModel();
-        $capturas = $participacionModel->getParticipaciones($competicionId,$usuarioId);
-        return view('/user/competiciones/participaciones',['capturas'=>$capturas]);
+        $capturas = $participacionModel->getParticipaciones($competicionId, $usuarioId);
+        return view('/user/competiciones/participaciones', ['capturas' => $capturas]);
     }
-    public function participar($competicionId,$capturaId) {
+    public function participar($competicionId, $capturaId)
+    {
         $participacionModel = new ParticipacionModel();
         $participacionModel->insert([
-            'usuario_id'=>1,
-            'competicion_id'=>$competicionId,
-            'captura_id'=>$capturaId
+            'usuario_id' => 1,
+            'competicion_id' => $competicionId,
+            'captura_id' => $capturaId
         ]);
+    }
+
+    public function otorgarLogro($competicionId, $usuarioId)
+    {
+        $usuarioLogroModel = new UsuarioLogroModel();
+        $logroId = $this->request->getPost('logro');
+        if (!is_numeric($logroId)) {
+            return redirect()->back()->with('error', 'Debes seleccionar un premio');
+        }
+        $usuarioLogro = $usuarioLogroModel->where('competicion_id', $competicionId)
+            ->where('usuario_id', $usuarioId)
+            ->where('logro_id', $logroId)
+            ->first();
+        if (!$usuarioLogro == null) {
+            return redirect()->back()->with('error', 'El usuario ya tiene ese premio asignado');
+        }
+        $usuarioLogro = $usuarioLogroModel->where('competicion_id', $competicionId)
+            ->where('logro_id', $logroId)
+            ->first();
+        if (!$usuarioLogro == null) {
+            return redirect()->back()->with('error', 'Ese premio ya ha sido asignado');
+        }
+        $usuarioLogroModel->insert([
+            'usuario_id' => $usuarioId,
+            'logro_id' => $logroId,
+            'competicion_id' => $competicionId,
+        ]);
+        return redirect()->back()->with('mensaje', 'Premio otorgado con éxito');
+    }
+    public function eliminarLogro($competicionId, $usuarioId)
+    {
+        $usuarioLogroModel = new UsuarioLogroModel();
+        $logroId = $this->request->getPost('logro');
+        if (!is_numeric($logroId)) {
+            return redirect()->back()->with('error', 'Debes seleccionar un premio');
+        }
+        $usuarioLogro = $usuarioLogroModel->where('competicion_id', $competicionId)
+            ->where('usuario_id', $usuarioId)
+            ->where('logro_id', $logroId)
+            ->first();
+        if ($usuarioLogro == null) {
+            return redirect()->back()->with('error', 'El usuario no posee premio asignado');
+        }
+       $usuarioLogroModel->delete($usuarioLogro->id);
+        return redirect()->back()->with('mensaje', 'Premio eliminado con éxito');
     }
 }

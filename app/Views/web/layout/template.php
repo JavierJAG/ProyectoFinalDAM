@@ -10,9 +10,17 @@
 </head>
 
 <body>
+    <?php if(auth()->isLoggedIn()) : ?>
+    <?= view("/user/layout/header") ?>
+    <?php else :?>
     <?= view("/web/layout/header") ?>
+    <?php endif ?>
     <?php $this->renderSection('body') ?>
+    <?php if(auth()->isLoggedIn()) : ?>
+    <?= view("/user/layout/footer") ?>
+    <?php else :?>
     <?= view("/web/layout/footer") ?>
+    <?php endif ?>
 
     <script src="<?= base_url("/bootstrap/js/bootstrap.min.js") ?>"></script>
 </body>

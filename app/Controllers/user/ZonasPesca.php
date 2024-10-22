@@ -12,7 +12,7 @@ class ZonasPesca extends ResourceController
 
     public function index()
     {
-        $zonasPesca = $this->model->where('usuario_id',auth()->user()->id)->paginate(10);
+        $zonasPesca = $this->model->paginate(10);
         return view('/user/zonasPesca/index', ['zonasPesca' => $zonasPesca, 'pager' => $this->model->pager]);
     }
     public function show($id = null)

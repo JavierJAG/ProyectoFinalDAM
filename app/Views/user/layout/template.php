@@ -9,7 +9,7 @@
 
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
     <?= view("/user/layout/header") ?>
     <?php $this->renderSection('body') ?>
     <?= view("/user/layout/footer") ?>

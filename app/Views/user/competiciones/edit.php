@@ -3,7 +3,6 @@
 <?= $this->section('body') ?>
 <?= view('/user/partials/_mensaje') ?>
 <?= view('/user/partials/_error') ?>
-
 <div class="container mt-4">
     <h2 class="text-center mb-4">Editar Competición</h2>
 

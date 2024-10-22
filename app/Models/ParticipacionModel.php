@@ -60,4 +60,9 @@ class ParticipacionModel extends Model
             ->where('participaciones.competicion_id', $competicionId)
             ->findAll();
     }
+    public function getUserParticipaciones($usuarioId){
+        return $this->select('competiciones.*')
+        ->join('competiciones','competiciones.id = participaciones.competicion_id')
+        ->where('participaciones.usuario_id',$usuarioId);
+    }
 }

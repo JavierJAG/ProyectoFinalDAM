@@ -1,4 +1,4 @@
-<footer class="bg-primary text-white text-center py-4 mt-auto">
+<footer class="footer bg-primary text-white text-center py-4 mt-auto">
     <div class="container">
         <p class="mb-1">&copy; 2024 PescadoresDaRia |
             <a href="#" class="text-white text-decoration-none">Términos y Condiciones</a> |
