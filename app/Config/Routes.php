@@ -24,15 +24,21 @@ $routes->group('user', ['namespace' => "App\Controllers\user"], function ($route
     $routes->group('perfil', ['namespace' => "App\Controllers\user"], function ($routes) {
         $routes->get('misZonasPesca', 'User::misZonasPesca');
         $routes->get('misCapturas', 'User::misCapturas');
+        $routes->post('misCapturas', 'User::misCapturas');
         $routes->get('misLogros', 'User::misLogros');
         $routes->get('misCompeticiones', 'User::misCompeticiones');
         $routes->get('misParticipaciones', 'User::misParticipaciones');
         $routes->get('', 'User::index');
     });
+    $routes->get('salidas', 'Salidas::index');
+    $routes->get('salidas/events', 'Salidas::events');
+    $routes->post('salidas/saveEvent', 'Salidas::saveEvent');
+    $routes->post('salidas/deleteEvent', 'Salidas::deleteEvent');
     $routes->get('normativa', 'Normativa::index');
     $routes->post('participantes/otorgarLogro/(:num)/(:num)', 'Competiciones::otorgarLogro/$1/$2');
     $routes->post('participantes/eliminarLogro/(:num)/(:num)/(:num)', 'Competiciones::eliminarLogro/$1/$2/$3');
     $routes->get('buscarCapturas', 'User::verTodasCapturas');
+    $routes->post('buscarCapturas', 'User::verTodasCapturas');
     $routes->get('buscarCompeticiones', 'User::verTodasCompeticiones');
     $routes->post('zonasPesca/get_localidades', 'ZonasPesca::getLocalidades');
     $routes->post('competiciones/get_zonasPesca', 'Competiciones::get_zonasPesca');

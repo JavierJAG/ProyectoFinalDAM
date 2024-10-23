@@ -5,11 +5,37 @@
 
 <div class="container mt-4">
     <h2 class="text-center mb-4">Capturas</h2>
-    
+
+    <!-- Formulario de búsqueda y ordenación -->
+    <form method="POST" action="/user/buscarCapturas" class="mb-4">
+        <div class="row">
+            <!-- Cuadro de búsqueda -->
+            <div class="col-md-6">
+                <input type="text" name="search" class="form-control" placeholder="Buscar por nombre de especie" value="<?= isset($search) ? esc($search) : '' ?>">
+            </div>
+
+            <!-- Menú desplegable para ordenar -->
+            <div class="col-md-4">
+                <select name="order" class="form-select">
+                    <option value="fecha" <?= isset($order) && $order === 'fecha' ? 'selected' : '' ?>>Ordenar por Fecha</option>
+                    <option value="peso" <?= isset($order) && $order === 'peso' ? 'selected' : '' ?>>Ordenar por Peso</option>
+                    <option value="tamano" <?= isset($order) && $order === 'tamano' ? 'selected' : '' ?>>Ordenar por Tamaño</option>
+                </select>
+            </div>
+
+            <!-- Botón de envío -->
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Buscar</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Botón para crear una nueva captura -->
     <div class="mb-3">
-        <a href="/user/capturas/new" class="btn btn-primary">Crear Captura</a>
+        <a href="/user/capturas/new" class="btn btn-primary">Añadir Captura</a>
     </div>
-    
+
+    <!-- Tabla de capturas -->
     <table class="table table-striped table-bordered">
         <thead class="thead-dark">
             <tr>
@@ -21,21 +47,27 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($capturas as $captura) : ?>
+            <?php if (!empty($capturas)) : ?>
+                <?php foreach ($capturas as $captura) : ?>
+                    <tr>
+                        <td><?= date('d/m/Y H:i', strtotime($captura->fecha_captura)) ?></td>
+                        <td><?= esc($captura->nombre) ?></td>
+                        <td><?= esc($captura->tamano) ?></td>
+                        <td><?= esc($captura->peso) ?></td>
+                        <td>
+                            <a href="/user/capturas/<?= $captura->id ?>" class="btn btn-info btn-sm">Detalles</a>
+                        </td>
+                    </tr>
+                <?php endforeach ?>
+            <?php else : ?>
                 <tr>
-                    <td><?= date('d/m/Y H:i', strtotime($captura->fecha_captura)) ?></td>
-                    <td><?= $captura->nombre ?></td>
-                    <td><?= $captura->tamano ?></td>
-                    <td><?= $captura->peso ?></td>
-                    <td>
-                        <a href="/user/capturas/<?= $captura->id ?>" class="btn btn-info btn-sm">Detalles</a>
-                        
-                    </td>
+                    <td colspan="5" class="text-center">No se encontraron capturas</td>
                 </tr>
-            <?php endforeach ?>
+            <?php endif ?>
         </tbody>
     </table>
-    
+
+    <!-- Paginación -->
     <div class="d-flex justify-content-center">
         <?= $pager->links() ?>
     </div>

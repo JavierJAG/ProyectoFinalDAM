@@ -5,10 +5,11 @@
 
 <div class="container mt-5">
     <h2 class="text-primary mb-4">Lista de Logros</h2>
-
-    <div class="mb-3">
+    <?= auth()->user()->inGroup('superadmin') ?
+        '<div class="mb-3">
         <a href="/dashboard/logros/new" class="btn btn-primary">Crear Logro</a>
-    </div>
+    </div>' : ''
+    ?>
 
     <table class="table table-striped table-bordered">
         <thead>

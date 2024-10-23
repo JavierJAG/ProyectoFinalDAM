@@ -6,6 +6,7 @@ use App\Models\CapturaModel;
 use App\Models\CompeticionModel;
 use App\Models\LogroModel;
 use App\Models\ParticipacionModel;
+use App\Models\UsuarioLogroModel;
 use App\Models\ZonaPescaModel;
 use CodeIgniter\RESTful\ResourceController;
 
@@ -28,14 +29,47 @@ class User extends ResourceController
     public function misCapturas()
     {
         $capturaModel = new CapturaModel();
-        $capturas = $capturaModel->where('usuario_id', auth()->user()->id)->paginate(10);
-        return view('/user/capturas/index', ['capturas' => $capturas, 'pager' => $capturaModel->pager]);
+     
+        $search = $this->request->getPost('search'); // Obtener el término de búsqueda
+        $order = $this->request->getPost('order'); // Obtener el criterio de ordenación
+    
+        // Base de la consulta
+        $capturasQuery = $capturaModel;
+    
+        // Filtrar por nombre si hay un término de búsqueda
+        if (!empty($search)) {
+            $capturasQuery = $capturasQuery->like('nombre', $search);
+        }
+    
+        // Aplicar ordenación según el criterio seleccionado
+        switch ($order) {
+            case 'peso':
+                $capturasQuery = $capturasQuery->orderBy('peso', 'DESC');
+                break;
+            case 'tamano':
+                $capturasQuery = $capturasQuery->orderBy('tamano', 'DESC');
+                break;
+            default:
+                // Ordenar por fecha por defecto
+                $capturasQuery = $capturasQuery->orderBy('fecha_captura', 'DESC');
+                break;
+        }
+    
+        // Obtener los resultados paginados
+        $data = [
+            'capturas' => $capturasQuery->paginate(10), // Cambia el número de capturas por página según sea necesario
+            'pager' => $capturaModel->pager,
+            'search' => $search,
+            'order' => $order
+        ];
+    
+        return view('/user/capturas/index', $data);
     }
     public function misLogros()
     {
-        $logroModel = new LogroModel();
-        $logros = $logroModel->where('usuario_id', auth()->user()->id)->paginate(10);
-        return view('/dashboard/logros/index', ['logros' => $logros, 'pager' => $logroModel->pager]);
+        $usuarioLogroModel = new UsuarioLogroModel();
+        $logros = $usuarioLogroModel->where('usuario_id', auth()->user()->id)->paginate(10);
+        return view('/dashboard/logros/index', ['logros' => $logros, 'pager' => $usuarioLogroModel->pager]);
     }
     public function misCompeticiones()
     {
@@ -53,8 +87,39 @@ class User extends ResourceController
     public function verTodasCapturas()
     {
         $capturaModel = new CapturaModel();
-        $capturas = $capturaModel->paginate(10);
-        return view('user/capturas/findAllUser', ['capturas' => $capturas, 'pager' => $capturaModel->pager]);
+        $search = $this->request->getPost('search'); // Obtener el término de búsqueda
+        $order = $this->request->getPost('order'); // Obtener el criterio de ordenación
+    
+        // Base de la consulta
+        $capturasQuery = $capturaModel;
+    
+        // Filtrar por nombre si hay un término de búsqueda
+        if (!empty($search)) {
+            $capturasQuery = $capturasQuery->like('nombre', $search);
+        }
+    
+        // Aplicar ordenación según el criterio seleccionado
+        switch ($order) {
+            case 'peso':
+                $capturasQuery = $capturasQuery->orderBy('peso', 'DESC');
+                break;
+            case 'tamano':
+                $capturasQuery = $capturasQuery->orderBy('tamano', 'DESC');
+                break;
+            default:
+                // Ordenar por fecha por defecto
+                $capturasQuery = $capturasQuery->orderBy('fecha_captura', 'DESC');
+                break;
+        }
+    
+        // Obtener los resultados paginados
+        $data = [
+            'capturas' => $capturasQuery->paginate(10), // Cambia el número de capturas por página según sea necesario
+            'pager' => $capturaModel->pager,
+            'search' => $search,
+            'order' => $order
+        ];
+        return view('user/capturas/findAllUser', $data);
     }
     public function verTodasCompeticiones()
     {

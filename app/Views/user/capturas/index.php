@@ -9,6 +9,29 @@
     <div class="mb-3">
         <a href="/user/capturas/new" class="btn btn-primary">Crear Captura</a>
     </div>
+    <!-- Formulario de búsqueda y ordenación -->
+    <form method="POST" action="/user/perfil/misCapturas" class="mb-4">
+        <div class="row">
+            <!-- Cuadro de búsqueda -->
+            <div class="col-md-6">
+                <input type="text" name="search" class="form-control" placeholder="Buscar por nombre de especie" value="<?= isset($search) ? esc($search) : '' ?>">
+            </div>
+
+            <!-- Menú desplegable para ordenar -->
+            <div class="col-md-4">
+                <select name="order" class="form-select">
+                    <option value="fecha" <?= isset($order) && $order === 'fecha' ? 'selected' : '' ?>>Ordenar por Fecha</option>
+                    <option value="peso" <?= isset($order) && $order === 'peso' ? 'selected' : '' ?>>Ordenar por Peso</option>
+                    <option value="tamano" <?= isset($order) && $order === 'tamano' ? 'selected' : '' ?>>Ordenar por Tamaño</option>
+                </select>
+            </div>
+
+            <!-- Botón de envío -->
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Buscar</button>
+            </div>
+        </div>
+    </form>
     
     <table class="table table-striped table-bordered">
         <thead class="thead-dark">

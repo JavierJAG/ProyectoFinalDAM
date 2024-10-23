@@ -19,8 +19,8 @@
             <div class="card shadow-sm">
                 <div class="card-body">
                     <h2 class="card-title">Planificar Jornadas</h2>
-                    <p class="card-text">Organiza tus jornadas de pesca, elige tus lugares favoritos y comparte tus planes.</p>
-                    <a href="<?= site_url('/jornadas') ?>" class="btn btn-primary">Planificar Jornada</a>
+                    <p class="card-text">Organiza tus jornadas de pesca en tus lugares favoritos.</p>
+                    <a href="<?= site_url('/user/salidas') ?>" class="btn btn-primary">Planificar Jornada</a>
                 </div>
             </div>
         </div>

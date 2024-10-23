@@ -13,7 +13,7 @@
                     <a class="nav-link" href="/user/buscarCapturas">Capturas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Planificar Salida</a>
+                    <a class="nav-link" href="/user/salidas">Planificar Salida</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/user/normativa">Normativa</a>

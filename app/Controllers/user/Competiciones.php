@@ -264,6 +264,12 @@ class Competiciones extends ResourceController
         if (!$usuarioLogro == null) {
             return redirect()->back()->with('error', 'Ese premio ya ha sido asignado');
         }
+        $usuarioLogro = $usuarioLogroModel->where('competicion_id', $competicionId)
+        ->where('usuario_id', $usuarioId)
+        ->first();
+    if (!$usuarioLogro == null) {
+        return redirect()->back()->with('error', 'El usuario ya tiene un premio asignado');
+    }
         $usuarioLogroModel->insert([
             'usuario_id' => $usuarioId,
             'logro_id' => $logroId,
@@ -271,13 +277,10 @@ class Competiciones extends ResourceController
         ]);
         return redirect()->back()->with('mensaje', 'Premio otorgado con éxito');
     }
-    public function eliminarLogro($competicionId, $usuarioId)
+    public function eliminarLogro($competicionId, $usuarioId,$logroId)
     {
         $usuarioLogroModel = new UsuarioLogroModel();
-        $logroId = $this->request->getPost('logro');
-        if (!is_numeric($logroId)) {
-            return redirect()->back()->with('error', 'Debes seleccionar un premio');
-        }
+       
         $usuarioLogro = $usuarioLogroModel->where('competicion_id', $competicionId)
             ->where('usuario_id', $usuarioId)
             ->where('logro_id', $logroId)
