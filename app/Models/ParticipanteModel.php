@@ -43,4 +43,21 @@ class ParticipanteModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+   
+    public function getParticipantes($usuarioId)
+    {
+        return $this->select('competiciones.fecha_inicio as fecha_inicio, competiciones.fecha_fin as fecha_fin, competiciones.nombre as nombre,participantes.usuario_id as id')
+            ->join('competiciones', 'competiciones.id = participantes.competicion_id')
+            ->where('participantes.usuario_id', $usuarioId)
+            ->findAll();
+    }
+    public function getAllParticipantes($competicionId)
+    {
+        return $this->select('competiciones.usuario_id as autor_id,competiciones.fecha_inicio as fecha_inicio, competiciones.fecha_fin as fecha_fin, competiciones.nombre as nombre,participantes.usuario_id as id,users.username as username')
+            ->join('competiciones', 'competiciones.id = participantes.competicion_id')
+            ->join('users','users.id=participantes.usuario_id')
+            ->where('participantes.competicion_id', $competicionId)
+            ->findAll();
+    }
 }

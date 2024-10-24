@@ -7,7 +7,7 @@
 <div class="d-flex justify-content-left">
     <a href="javascript:history.back()" class="btn btn-secondary mx-2">Volver</a>
 </div>
-    <h1 class="text-center mb-4">Participaciones</h1>
+    <h1 class="text-center mb-4">Capturas</h1>
 
     <div class="list-group">
         <?php if (empty($capturas)): ?>
@@ -26,6 +26,9 @@
             <?php endforeach ?>
         <?php endif; ?>
     </div>
+    <?php if($usuario_id==auth()->user()->id) : ?>
+        <a href="/user/competiciones/anhadirParticipacion/<?= $competicion_id ?>">Añadir participación</a>
+        <?php endif ?>
 </div>
 
 <?php $this->endSection() ?>

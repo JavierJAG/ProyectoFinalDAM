@@ -15,6 +15,7 @@
             <div class="list-group-item d-flex justify-content-between align-items-center">
                 <span><?= esc($p->username) ?></span>
 
+                <?php if($p->autor_id==$p->id) :?>
                 <!-- Formulario para otorgar logros -->
                 <form action="<?= base_url("/user/participantes/otorgarLogro/" . $competicion_id . "/" . $p->id) ?>" method="POST" class="d-flex align-items-center">
                     <select name="logro" id="logro" class="form-select form-select-sm me-2" required>
@@ -45,6 +46,8 @@
                         <?php endif; ?>
                     <?php endforeach; ?>
                 <?php endforeach; ?>
+
+                <?php endif ?>
 
                 <!-- Botón para ver participaciones -->
                 <a href="<?= base_url("user/participantes/" . $competicion_id . "/" . $p->id) ?>" class="btn btn-outline-primary btn-sm ms-2">Ver Participaciones</a>

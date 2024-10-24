@@ -40,8 +40,8 @@ class Competiciones extends ResourceController
         $localidad = $localidadModel->find($zonaPesca->localidad_id);
         $participa = false;
         $participante = $participanteModel->where('competicion_id', $id)->where('usuario_id', auth()->user()->id)->first();
-        if($participante!=null){
-            $participa=true;
+        if ($participante != null) {
+            $participa = true;
         }
 
         $logros = $usuarioLogroModel
@@ -51,13 +51,22 @@ class Competiciones extends ResourceController
             ->join('users', 'users.id = usuarios_logros.usuario_id')
             ->where('usuarios_logros.competicion_id', $id)
             ->findAll();
+
+
+        $fechaActual = new \DateTime(); // Fecha actual
+        $fechaFinCompeticion = new \DateTime($competicion->fecha_fin); // Fecha de fin de la competición
+
+        // Crear una variable booleana que indica si la competición ha finalizado
+        $competicionFinalizada = $fechaActual > $fechaFinCompeticion;
+
         return view('/user/competiciones/show', [
             'competicion' => $competicion,
             'zonaPesca' => $zonaPesca,
             'localidad' => $localidad,
             'imagenes' => $imagenes,
             'logros' => $logros,
-            'participa'=>$participa
+            'participa' => $participa,
+            'competicionFinalizada' => $competicionFinalizada
         ]);
     }
     public function new()
@@ -237,12 +246,13 @@ class Competiciones extends ResourceController
 
     public function verParticipantes($id)
     {
-        $participacionModel = new ParticipacionModel();
         $usuarioLogroModel = new UsuarioLogroModel();
+
+        $participanteModel = new ParticipanteModel();
+        $participantes = $participanteModel->getAllParticipantes($id);
         $usuariosLogros = $usuarioLogroModel->where('competicion_id', $id)->findAll();
         $logroModel = new LogroModel();
         $logros = $logroModel->findAll();
-        $participantes = $participacionModel->getParticipantes($id);
         return view('/user/competiciones/participantes', ['participantes' => $participantes, 'competicion_id' => $id, 'logros' => $logros, 'usuariosLogros' => $usuariosLogros]);
     }
 
@@ -250,7 +260,7 @@ class Competiciones extends ResourceController
     {
         $participacionModel = new ParticipacionModel();
         $capturas = $participacionModel->getParticipaciones($competicionId, $usuarioId);
-        return view('/user/competiciones/participaciones', ['capturas' => $capturas]);
+        return view('/user/competiciones/participaciones', ['capturas' => $capturas, 'usuario_id' => $usuarioId,'competicion_id'=>$competicionId]);
     }
     public function participar($competicionId, $capturaId)
     {
@@ -320,7 +330,7 @@ class Competiciones extends ResourceController
             'usuario_id' => auth()->user()->id,
             'competicion_id' => $competicionId
         ]);
-        return redirect()->to("/user/competiciones/".$competicionId)->with('mensaje', 'Te has inscrito a esta competición');
+        return redirect()->back()->with('mensaje', 'Te has inscrito a esta competición');
     }
     public function eliminarParticipacionCompeticion($competicionId)
     {
@@ -331,5 +341,10 @@ class Competiciones extends ResourceController
         }
         $participanteModel->delete($participante->id);
         return redirect()->back()->with('mensaje', 'Te has desinscrito a esta competición');
+    }
+    public function crearParticipacion() {}
+    public function anhadirParticipacion($competicionId) {
+
+        return view('/user/competiciones/anhadir_participacion',['competicion_id'=>$competicionId]);
     }
 }

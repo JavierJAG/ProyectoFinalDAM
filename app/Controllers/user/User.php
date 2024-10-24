@@ -5,8 +5,7 @@ namespace App\Controllers\user;
 use App\Models\CapturaModel;
 use App\Models\CompeticionModel;
 use App\Models\LocalidadModel;
-use App\Models\LogroModel;
-use App\Models\ParticipacionModel;
+use App\Models\ParticipanteModel;
 use App\Models\UsuarioLogroModel;
 use App\Models\ZonaPescaModel;
 use CodeIgniter\RESTful\ResourceController;
@@ -158,9 +157,9 @@ class User extends ResourceController
     }
     public function misParticipaciones()
     {
-        $participacionModel = new ParticipacionModel();
-        $participaciones = $participacionModel->getUserParticipaciones(auth()->user()->id)->paginate(10);
-        return view('/user/competiciones/participaciones', ['participaciones' => $participaciones, 'pager' => $participacionModel->pager]);
+        $participanteModel = new ParticipanteModel();
+        $participaciones = $participanteModel->getParticipantes(auth()->user()->id);
+        return view('/user/competiciones/participacionesUser', ['participaciones' => $participaciones, 'pager' => $participanteModel->pager]);
     }
 
     public function verTodasCapturas()

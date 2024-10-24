@@ -32,8 +32,10 @@ $routes->group('user', ['namespace' => "App\Controllers\user"], function ($route
         $routes->get('', 'User::index');
     });
     // app/Config/Routes.php
-    $routes->post('competiciones/participarCompeticion', 'Competiciones::participarCompeticion');
-    $routes->post('competiciones/eliminarParticipacionCompeticion', 'Competiciones::eliminarParticipacionCompeticion');
+    $routes->get('competiciones/anhadirParticipacion/(:num)', 'Competiciones::anhadirParticipacion/$1');
+    $routes->post('competiciones/anhadirParticipacion', 'Competiciones::anhadirParticipacion');
+    $routes->post('competiciones/participarCompeticion/(:num)', 'Competiciones::participarCompeticion/$1');
+    $routes->post('competiciones/eliminarParticipacionCompeticion/(:num)', 'Competiciones::eliminarParticipacionCompeticion/$1');
     $routes->get('buscarCapturas/(:num)', 'User::buscarCapturas/$1');
     $routes->post('buscarCapturas/(:num)', 'User::buscarCapturas/$1');
     $routes->get('buscarLogros/(:num)', 'User::buscarLogros/$1');
