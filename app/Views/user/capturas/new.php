@@ -8,7 +8,7 @@
     <h2 class="text-center mb-4">Crear Nueva Captura</h2>
 
     <form action="<?= site_url('/user/capturas') ?>" method="post" enctype="multipart/form-data">
-        
+
         <div class="mb-3">
             <label for="fecha_captura" class="form-label">Fecha de Captura</label>
             <input type="datetime-local" name="fecha_captura" id="fecha_captura" class="form-control" value="<?= old('fecha_captura') ?>" required>
@@ -33,7 +33,32 @@
             <label for="peso" class="form-label">Peso (g)</label>
             <input type="number" name="peso" id="peso" class="form-control" value="<?= old('peso') ?>" placeholder="Peso en g" required>
         </div>
+        <div class="mb-3">
+            <label for="provincia" class="form-label">Provincia</label>
+            <select name="provincia" id="provincia" class="form-control" required>
+                <option value="" selected></option>
+                <option value="A CORUÑA" <?= old('provincia') == 'A CORUÑA' ? 'selected' : '' ?>>A CORUÑA</option>
+                <option value="LUGO" <?= old('provincia') == 'LUGO' ? 'selected' : '' ?>>LUGO</option>
+                <option value="OURENSE" <?= old('provincia') == 'OURENSE' ? 'selected' : '' ?>>OURENSE</option>
+                <option value="PONTEVEDRA" <?= old('provincia') == 'PONTEVEDRA' ? 'selected' : '' ?>>PONTEVEDRA</option>
+            </select>
+        </div>
 
+        <div class="mb-3">
+            <label for="localidad" class="form-label">Localidad</label>
+            <select name="localidad" id="localidad" class="form-control" required>
+                <option value="" selected>Selecciona una localidad</option>
+                <!-- Las localidades se cargarán aquí -->
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="zonaPesca" class="form-label">Zona de Pesca</label>
+            <select name="zonaPesca" id="zonaPesca" class="form-control" required>
+                <option value="" selected>Selecciona una zona de pesca</option>
+                <!-- Las zonas de pesca se cargarán aquí -->
+            </select>
+        </div>
         <div class="mb-3">
             <label for="imagenes" class="form-label">Imágenes de la Captura</label>
             <input type="file" id="imagenes" name="imagenes[]" class="form-control" multiple accept="image/*" onchange="previewImages()">
@@ -48,6 +73,81 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var provincia; // Declara la variable para la provincia
+
+        // Cuando se selecciona una provincia, cargar las localidades correspondientes
+        $('#provincia').change(function() {
+            provincia = $(this).val(); // Asigna el valor seleccionado a la variable
+            $('#localidad').empty(); // Limpiar el select de localidades
+            $('#localidad').append('<option value="" selected>Selecciona una localidad</option>');
+            $('#zonaPesca').empty(); // Limpiar el select de zonas de pesca
+            $('#zonaPesca').append('<option value="" selected>Selecciona una zona de pesca</option>');
+
+            if (provincia) {
+                // Petición AJAX para obtener localidades
+                $.ajax({
+                    url: '<?= site_url("user/zonasPesca/get_localidades") ?>',
+                    type: 'POST',
+                    data: {
+                        provincia: provincia
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log(data); // Para depurar la respuesta
+                        if (data.length > 0) {
+                            $.each(data, function(index, localidad) {
+                                $('#localidad').append('<option value="' + localidad.nombre + '">' + localidad.nombre + '</option>');
+                            });
+                        } else {
+                            $('#localidad').append('<option value="">No hay localidades disponibles</option>');
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error('Error:', textStatus, errorThrown);
+                        alert('Error al cargar las localidades');
+                    }
+                });
+            }
+        });
+
+        // Cuando se selecciona una localidad, cargar las zonas de pesca correspondientes
+        $('#localidad').change(function() {
+            var localidad = $(this).val();
+            $('#zonaPesca').empty(); // Limpiar el select de zonas de pesca
+            $('#zonaPesca').append('<option value="" selected>Selecciona una zona de pesca</option>');
+
+            if (localidad) {
+                // Petición AJAX para obtener zonas de pesca
+                $.ajax({
+                    url: '<?= site_url("/user/competiciones/get_zonasPesca") ?>',
+                    type: 'POST',
+                    data: {
+                        provincia: provincia, // Usa la variable aquí
+                        localidad: localidad
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log(data); // Para depurar la respuesta
+                        if (data.length > 0) {
+                            $.each(data, function(index, zonaPesca) {
+                                $('#zonaPesca').append('<option value="' + zonaPesca.id + '">' + zonaPesca.nombre + '</option>');
+                            });
+                        } else {
+                            $('#zonaPesca').append('<option value="">No hay zonas de pesca disponibles</option>');
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error('Error:', textStatus, errorThrown);
+                        alert('Error al cargar las zonas de pesca');
+                    }
+                });
+            }
+        });
+    });
+</script>
 <script>
     $(document).ready(function() {
         // Implementación del autocompletado usando jQuery UI

@@ -1,18 +1,50 @@
 <?= $this->extend("/user/layout/template") ?>
-
 <?= $this->section('body') ?>
 <?= view('/user/partials/_mensaje') ?>
 <?= view('/user/partials/_error') ?>
 
 <div class="container mt-4">
-    <h2 class="text-center mb-4">Lista de Competiciones</h2>
+    <h2 class="text-left mb-4">Lista de Competiciones</h2>
 
-    <div class="mb-3">
-        <a href="/user/competiciones/new" class="btn btn-primary">Crear Competición</a>
+    <div class="d-flex justify-content-between mb-3">
+        <a href="/user/competiciones/new" class="btn btn-primary d-flex align-items-center">Crear Competición</a>
+        <form action="/user/buscarCompeticiones" method="get" class="d-flex">
+            <div class="me-3">
+                <label for="provincia" class="form-label">Provincia</label>
+                <select name="PROVINCIA" id="provincia" class="form-select">
+                    <option value="" selected disabled>Selecciona una provincia</option>
+                    <?php foreach ($todasProvincias as $prov) : ?>
+                        <option value="<?= $prov ?>" <?= old('provincia', $provinciaSeleccionada) == $prov ? 'selected' : '' ?>>
+                            <?= $prov ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <div class="me-3">
+                <label for="localidad" class="form-label">Localidad</label>
+                <select name="localidad" id="localidad" class="form-select">
+                    <option value="" selected disabled>Selecciona una localidad</option>
+                    <!-- Las localidades se cargarán aquí -->
+                    <?php if (!empty($localidades)) : ?>
+                        <?php foreach ($localidades as $l) : ?>
+                            <option value="<?= $l->nombre ?>" <?= old('localidad', $localidadSeleccionada) == $l->nombre ? 'selected' : '' ?>>
+                                <?= $l->nombre ?>
+                            </option>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </select>
+            </div>
+            <div class="align-self-end">
+                <button type="submit" class="btn btn-success">Buscar</button>
+            </div>
+        </form>
     </div>
 
-    <table class="table table-striped table-bordered">
-        <thead>
+    <!-- Competiciones Activas -->
+    <h3 class="mt-4">Competiciones Activas</h3>
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
             <tr>
                 <th>Fecha Inicio</th>
                 <th>Fecha Fin</th>
@@ -21,19 +53,117 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($competiciones as $competicion) : ?>
+            <?php if (count($competicionesActivas) > 0) : ?>
+                <?php foreach ($competicionesActivas as $competicion) : ?>
+                    <tr>
+                        <td><?= date('d/m/Y H:i', strtotime($competicion->fecha_inicio)) ?></td>
+                        <td><?= date('d/m/Y H:i', strtotime($competicion->fecha_fin)) ?></td>
+                        <td><?= htmlspecialchars($competicion->nombre) ?></td>
+                        <td>
+                            <a href="/user/competiciones/<?= $competicion->id ?>" class="btn btn-info btn-sm">Detalles</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else : ?>
                 <tr>
-                    <td><?= date('d/m/Y H:i', strtotime($competicion->fecha_inicio)) ?></td>
-                    <td><?= date('d/m/Y H:i', strtotime($competicion->fecha_fin)) ?></td>
-                    <td><?= htmlspecialchars($competicion->nombre) ?></td>
-                    <td>
-                        <a href="/user/competiciones/<?= $competicion->id ?>" class="btn btn-info btn-sm">Detalles</a>
-                       
-                    </td>
+                    <td colspan="4" class="text-center">No hay competiciones activas.</td>
                 </tr>
-            <?php endforeach; ?>
+            <?php endif; ?>
+        </tbody>
+    </table>
+
+    <!-- Competiciones Finalizadas -->
+    <h3 class="mt-4">Competiciones Finalizadas</h3>
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Fecha Inicio</th>
+                <th>Fecha Fin</th>
+                <th>Nombre</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (count($competicionesFinalizadas) > 0) : ?>
+                <?php foreach ($competicionesFinalizadas as $competicion) : ?>
+                    <tr>
+                        <td><?= date('d/m/Y H:i', strtotime($competicion->fecha_inicio)) ?></td>
+                        <td><?= date('d/m/Y H:i', strtotime($competicion->fecha_fin)) ?></td>
+                        <td><?= htmlspecialchars($competicion->nombre) ?></td>
+                        <td>
+                            <a href="/user/competiciones/<?= $competicion->id ?>" class="btn btn-info btn-sm">Detalles</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else : ?>
+                <tr>
+                    <td colspan="4" class="text-center">No hay competiciones finalizadas.</td>
+                </tr>
+            <?php endif; ?>
         </tbody>
     </table>
 </div>
 
-<?php $this->endSection() ?>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Cargar localidades si hay una provincia seleccionada previamente
+        var provinciaSeleccionada = '<?= $provinciaSeleccionada ?>';
+        var localidadSeleccionada = '<?= $localidadSeleccionada ?>';
+
+        if (provinciaSeleccionada) {
+            cargarLocalidades(provinciaSeleccionada, localidadSeleccionada);
+        }
+
+        // Evento al cambiar de provincia
+        $('#provincia').change(function() {
+            var provincia = $(this).val();
+            cargarLocalidades(provincia);
+        });
+
+        function cargarLocalidades(provincia, localidadSeleccionada = null) {
+            $('#localidad').empty(); // Limpiar el select de localidades
+            $('#localidad').append('<option value="" selected disabled>Selecciona una localidad</option>'); // Opción predeterminada
+
+            if (provincia) {
+                // Hacer una petición AJAX
+                $.ajax({
+                    url: '<?= site_url("/user/zonasPesca/get_localidades") ?>',
+                    type: 'POST',
+                    data: {
+                        provincia: provincia
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        // Si hay localidades, añadirlas al select
+                        if (data.length > 0) {
+                            // Primero añadir la localidad seleccionada, si existe en los datos
+                            if (localidadSeleccionada) {
+                                // Comprobar si la localidad seleccionada está en los datos
+                                var localidadEncontrada = data.find(localidad => localidad.nombre === localidadSeleccionada);
+                                if (localidadEncontrada) {
+                                    $('#localidad').append('<option value="' + localidadEncontrada.nombre + '" selected>' + localidadEncontrada.nombre + '</option>');
+                                    // Filtrar las localidades para excluir la seleccionada ya que ya se añadió
+                                    data = data.filter(localidad => localidad.nombre !== localidadSeleccionada);
+                                }
+                            }
+
+                            // Añadir las demás localidades
+                            $.each(data, function(index, localidad) {
+                                $('#localidad').append('<option value="' + localidad.nombre + '">' + localidad.nombre + '</option>');
+                            });
+                        } else {
+                            $('#localidad').append('<option value="">No hay localidades disponibles</option>');
+                        }
+                    },
+                    error: function() {
+                        alert('Error al cargar las localidades');
+                    }
+                });
+            }
+        }
+    });
+</script>
+
+
+<?= $this->endSection() ?>

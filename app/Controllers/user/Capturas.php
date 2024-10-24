@@ -5,6 +5,8 @@ namespace App\Controllers\user;
 use App\Models\EspecieModel;
 use App\Models\ImagenCapturaModel;
 use App\Models\ImagenModel;
+use App\Models\LocalidadModel;
+use App\Models\ZonaPescaModel;
 use CodeIgniter\RESTful\ResourceController;
 
 class Capturas extends ResourceController
@@ -18,31 +20,70 @@ class Capturas extends ResourceController
     }
     public function show($id = null)
     {
+        // Intenta obtener la captura por ID
         $captura = $this->model->find($id);
+        $zonaPescaModel = new ZonaPescaModel();
+        $localidadModel = new LocalidadModel();
+        $userModel = model('UserModel');
+        $user = $userModel->find($captura->usuario_id);
+        $zonaPesca = $zonaPescaModel->find($captura->zona_id);
+        $localidad = $localidadModel->where('id',$zonaPesca->localidad_id)->first();
+
+        // Verifica si la captura fue encontrada
+        if (!$captura) {
+            // Maneja el caso donde no se encuentra la captura
+            return redirect()->to('/user/capturas')->with('error', 'Captura no encontrada.');
+        }
+
+        // Inicializa modelos
         $imagenModel = new ImagenModel();
         $especieModel = new EspecieModel();
+
+        // Obtiene imágenes de la captura
         $imagenes = $imagenModel->getImagenesCaptura($id);
         $especie = null;
         $imagenesEspecie = null;
-        if (!$captura->especie_id == null) {
+
+        // Verifica si especie_id está presente y no es nulo
+        if ($captura->especie_id != null) {
             $especie = $especieModel->find($captura->especie_id);
             $imagenesEspecie = $imagenModel->getImagenesEspecie($captura->especie_id);
         }
 
-        return view('/user/capturas/show', ['captura' => $captura, 'imagenes' => $imagenes, 'especie' => $especie, 'imagenes_especie' => $imagenesEspecie]);
+        // Devuelve la vista con los datos
+        return view('/user/capturas/show', [
+            'captura' => $captura,
+            'imagenes' => $imagenes,
+            'especie' => $especie,
+            'autor'=>$user,
+            'zona'=>$zonaPesca,
+            'localidad'=>$localidad,
+            'imagenes_especie' => $imagenesEspecie
+        ]);
     }
+
     public function new()
     {
         return view('/user/capturas/new');
     }
     public function edit($id = null)
     {
+        $zonaPescaModel = new ZonaPescaModel();
+        $localidadModel = new LocalidadModel();
         $imagenesModel = new ImagenModel();
         $captura = $this->model->find($id);
+        $zonaPesca = $zonaPescaModel->find($captura->zona_id);
+        $localidad = $localidadModel->find($zonaPesca->localidad_id);
+        $localidades = $localidadModel->where('PROVINCIA', $localidad->PROVINCIA)->findAll();
+        $zonasPesca = $zonaPescaModel->where('localidad_id', $localidad->id)->findAll();
         $imagenes = $imagenesModel->getImagenesCaptura($id);
         return view('/user/capturas/edit', [
             'captura' => $captura,
-            'imagenes' => $imagenes
+            'imagenes' => $imagenes,
+            'zonaPesca' => $zonaPesca,
+            'localidad' => $localidad,
+            'localidades' => $localidades,
+            'zonasPesca' => $zonasPesca,
         ]);
     }
     public function create()
@@ -59,6 +100,7 @@ class Capturas extends ResourceController
             $descripcion = $this->request->getPost('descripcion');
             $peso = $this->request->getPost('peso');
             $tamano = $this->request->getPost('tamano');
+            $zonaPesca = $this->request->getPost('zonaPesca');
             $especies = $especieModel->findAll();
             // $userId = auth()->user()->id;
             $especieId = null;
@@ -75,7 +117,8 @@ class Capturas extends ResourceController
                 'peso' => $peso,
                 'tamano' => $tamano,
                 'usuario_id' => auth()->user()->id,
-                'especie_id' => $especieId
+                'especie_id' => $especieId,
+                'zona_id' => $zonaPesca,
             ]);
             // Manejar la subida de imágenes
 
@@ -124,6 +167,8 @@ class Capturas extends ResourceController
             $peso = $this->request->getPost('peso');
             $tamano = $this->request->getPost('tamano');
             $especies = $especieModel->findAll();
+            $zonaPesca = $this->request->getPost('zonaPesca');
+
             // $userId = auth()->user()->id;
             $especieId = null;
             foreach ($especies as $especie) {
@@ -139,7 +184,8 @@ class Capturas extends ResourceController
                 'peso' => $peso,
                 'tamano' => $tamano,
                 'usuario_id' => 1,
-                'especie_id' => $especieId
+                'especie_id' => $especieId,
+                'zona_id' => $zonaPesca,
             ]);
             // Manejar la subida de imágenes
 

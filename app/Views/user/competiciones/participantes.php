@@ -5,6 +5,9 @@
 <?= view('/user/partials/_error') ?>
 
 <div class="container mt-4">
+<div class="d-flex justify-content-left">
+    <a href="javascript:history.back()" class="btn btn-secondary mx-2">Volver</a>
+</div>
     <h1 class="text-center mb-4">Participantes</h1>
 
     <div class="list-group">
@@ -26,8 +29,7 @@
                                         break;
                                     }
                                 }
-                                ?>
-                            ><?= esc($l->nombre) ?></option>
+                                ?>><?= esc($l->nombre) ?></option>
                         <?php endforeach ?>
                     </select>
                     <button type="submit" class="btn btn-success btn-sm">Conceder premio</button>

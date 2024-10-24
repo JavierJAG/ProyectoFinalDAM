@@ -1,8 +1,8 @@
-<?php $this->extend("/dashboard/layout/template") ?>
+<?php $this->extend("/user/layout/template") ?>
 <?php $this->section('body') ?>
 
-<?= view('/dashboard/partials/_mensaje') ?>
-<?= view('/dashboard/partials/_error') ?>
+<?= view('/user/partials/_mensaje') ?>
+<?= view('/user/partials/_error') ?>
 
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">

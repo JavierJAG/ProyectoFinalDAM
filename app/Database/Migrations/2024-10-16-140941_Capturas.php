@@ -9,20 +9,20 @@ class Capturas extends Migration
     public function up()
     {
         $this->forge->addField([
-            'id'=>[
-                'type'=>'INT',
+            'id' => [
+                'type' => 'INT',
                 'constraint' => 10,
                 'unsigned' => TRUE,
-                'auto_increment'=>TRUE
+                'auto_increment' => TRUE
             ],
-            'fecha_captura'=>[
-                'type'=>'DATETIME',
-                'null'=>FALSE
+            'fecha_captura' => [
+                'type' => 'DATETIME',
+                'null' => FALSE
             ],
             'nombre' => [
-                'type'=>'VARCHAR',
-                'constraint'=>255,
-                'null'=>FALSE
+                'type' => 'VARCHAR',
+                'constraint' => 255,
+                'null' => FALSE
             ],
             'descripcion' => [
                 'type' => 'TEXT'
@@ -37,19 +37,25 @@ class Capturas extends Migration
             'usuario_id' => [
                 'type' => 'INT',
                 'constraint' => 10,
-                'unsigned'=>TRUE,
+                'unsigned' => TRUE,
                 'null' => false,
             ],
             'especie_id' => [
                 'type' => 'INT',
                 'constraint' => 10,
-                'unsigned'=>TRUE,
-                'null'=>TRUE
-            ]
+                'unsigned' => TRUE,
+                'null' => TRUE
+            ],
+            'zona_id' => [
+                'type' => 'INT',
+                'constraint' => 10,
+                'unsigned' => TRUE
+            ],
         ]);
         $this->forge->addPrimaryKey('id');
         $this->forge->addForeignKey('usuario_id', 'users', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('especie_id', 'especies', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('zona_id', 'zonas_pesca', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('capturas');
     }
 

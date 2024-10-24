@@ -8,6 +8,7 @@ use App\Models\ImagenModel;
 use App\Models\LocalidadModel;
 use App\Models\LogroModel;
 use App\Models\ParticipacionModel;
+use App\Models\ParticipanteModel;
 use App\Models\UsuarioLogroModel;
 use App\Models\ZonaPescaModel;
 use CodeIgniter\RESTful\ResourceController;
@@ -30,16 +31,33 @@ class Competiciones extends ResourceController
 
         $zonaPescaModel = new ZonaPescaModel();
         $localidadModel = new LocalidadModel();
+        $usuarioLogroModel = new UsuarioLogroModel();
         $imagenModel = new ImagenModel();
+        $participanteModel = new ParticipanteModel();
         $imagenes = $imagenModel->getImagenesCompeticion($id);
         $competicion = $this->model->find($id);
         $zonaPesca = $zonaPescaModel->find($competicion->zona_id);
         $localidad = $localidadModel->find($zonaPesca->localidad_id);
+        $participa = false;
+        $participante = $participanteModel->where('competicion_id', $id)->where('usuario_id', auth()->user()->id)->first();
+        if($participante!=null){
+            $participa=true;
+        }
+
+        $logros = $usuarioLogroModel
+            ->select('usuarios_logros.*, logros.nombre AS logro_nombre,users.id as user_id,users.username as user_username, usuarios_logros.fecha_obtencion AS fecha_obtencion')
+            ->join('logros', 'logros.id = usuarios_logros.logro_id')
+            ->join('competiciones', 'competiciones.id = usuarios_logros.competicion_id')
+            ->join('users', 'users.id = usuarios_logros.usuario_id')
+            ->where('usuarios_logros.competicion_id', $id)
+            ->findAll();
         return view('/user/competiciones/show', [
             'competicion' => $competicion,
             'zonaPesca' => $zonaPesca,
             'localidad' => $localidad,
-            'imagenes' => $imagenes
+            'imagenes' => $imagenes,
+            'logros' => $logros,
+            'participa'=>$participa
         ]);
     }
     public function new()
@@ -221,11 +239,11 @@ class Competiciones extends ResourceController
     {
         $participacionModel = new ParticipacionModel();
         $usuarioLogroModel = new UsuarioLogroModel();
-        $usuariosLogros = $usuarioLogroModel->where('competicion_id',$id)->findAll();
+        $usuariosLogros = $usuarioLogroModel->where('competicion_id', $id)->findAll();
         $logroModel = new LogroModel();
         $logros = $logroModel->findAll();
         $participantes = $participacionModel->getParticipantes($id);
-        return view('/user/competiciones/participantes', ['participantes' => $participantes, 'competicion_id' => $id, 'logros' => $logros,'usuariosLogros'=>$usuariosLogros]);
+        return view('/user/competiciones/participantes', ['participantes' => $participantes, 'competicion_id' => $id, 'logros' => $logros, 'usuariosLogros' => $usuariosLogros]);
     }
 
     public function verParticipaciones($competicionId, $usuarioId)
@@ -265,11 +283,11 @@ class Competiciones extends ResourceController
             return redirect()->back()->with('error', 'Ese premio ya ha sido asignado');
         }
         $usuarioLogro = $usuarioLogroModel->where('competicion_id', $competicionId)
-        ->where('usuario_id', $usuarioId)
-        ->first();
-    if (!$usuarioLogro == null) {
-        return redirect()->back()->with('error', 'El usuario ya tiene un premio asignado');
-    }
+            ->where('usuario_id', $usuarioId)
+            ->first();
+        if (!$usuarioLogro == null) {
+            return redirect()->back()->with('error', 'El usuario ya tiene un premio asignado');
+        }
         $usuarioLogroModel->insert([
             'usuario_id' => $usuarioId,
             'logro_id' => $logroId,
@@ -277,10 +295,10 @@ class Competiciones extends ResourceController
         ]);
         return redirect()->back()->with('mensaje', 'Premio otorgado con éxito');
     }
-    public function eliminarLogro($competicionId, $usuarioId,$logroId)
+    public function eliminarLogro($competicionId, $usuarioId, $logroId)
     {
         $usuarioLogroModel = new UsuarioLogroModel();
-       
+
         $usuarioLogro = $usuarioLogroModel->where('competicion_id', $competicionId)
             ->where('usuario_id', $usuarioId)
             ->where('logro_id', $logroId)
@@ -288,7 +306,30 @@ class Competiciones extends ResourceController
         if ($usuarioLogro == null) {
             return redirect()->back()->with('error', 'El usuario no posee premio asignado');
         }
-       $usuarioLogroModel->delete($usuarioLogro->id);
+        $usuarioLogroModel->delete($usuarioLogro->id);
         return redirect()->back()->with('mensaje', 'Premio eliminado con éxito');
+    }
+    public function participarCompeticion($competicionId)
+    {
+        $participanteModel = new ParticipanteModel();
+        $participante = $participanteModel->where('competicion_id', $competicionId)->where('usuario_id', auth()->user()->id)->first();
+        if ($participante != null) {
+            return redirect()->back()->with('error', 'Ya estás inscrito a esta competición');
+        }
+        $participanteModel->insert([
+            'usuario_id' => auth()->user()->id,
+            'competicion_id' => $competicionId
+        ]);
+        return redirect()->to("/user/competiciones/".$competicionId)->with('mensaje', 'Te has inscrito a esta competición');
+    }
+    public function eliminarParticipacionCompeticion($competicionId)
+    {
+        $participanteModel = new ParticipanteModel();
+        $participante = $participanteModel->where('competicion_id', $competicionId)->where('usuario_id', auth()->user()->id)->first();
+        if ($participante == null) {
+            return redirect()->back()->with('error', 'No estás inscrito a esta competición');
+        }
+        $participanteModel->delete($participante->id);
+        return redirect()->back()->with('mensaje', 'Te has desinscrito a esta competición');
     }
 }

@@ -7,7 +7,7 @@
 <div class="container mt-4">
     <h2 class="text-center mb-4">Actualizar Captura</h2>
 
-    <form action="<?= site_url('/user/capturas/'.$captura->id) ?>" method="post" enctype="multipart/form-data">
+    <form action="<?= site_url('/user/capturas/' . $captura->id) ?>" method="post" enctype="multipart/form-data">
         <input type="hidden" name="_method" value="PATCH">
 
         <div class="mb-3">
@@ -33,6 +33,45 @@
         <div class="mb-3">
             <label for="peso" class="form-label">Peso (g)</label>
             <input type="number" name="peso" id="peso" class="form-control" value="<?= old('peso', $captura->peso) ?>" placeholder="Peso en g" required>
+        </div>
+
+        <div class="form-group">
+            <label for="provincia">Provincia</label>
+            <select name="PROVINCIA" id="provincia" class="form-control" required>
+                <option value="" selected></option>
+                <option value="A CORUÑA" <?= old('provincia', $localidad->PROVINCIA) == 'A CORUÑA' ? 'selected' : '' ?>>A CORUÑA</option>
+                <option value="LUGO" <?= old('provincia', $localidad->PROVINCIA) == 'LUGO' ? 'selected' : '' ?>>LUGO</option>
+                <option value="OURENSE" <?= old('provincia', $localidad->PROVINCIA) == 'OURENSE' ? 'selected' : '' ?>>OURENSE</option>
+                <option value="PONTEVEDRA" <?= old('provincia', $localidad->PROVINCIA) == 'PONTEVEDRA' ? 'selected' : '' ?>>PONTEVEDRA</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="localidad">Localidad</label>
+            <select name="localidad" id="localidad" class="form-control" required>
+                <option value="" selected>Selecciona una localidad</option>
+                <?php if (isset($localidad)) : ?>
+                    <?php foreach ($localidades as $l) : ?>
+                        <option value="<?= $l->nombre ?>" <?= ($l->nombre == $localidad->nombre) ? 'selected' : '' ?>>
+                            <?= $l->nombre ?>
+                        </option>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="zonaPesca">Zona de Pesca</label>
+            <select name="zonaPesca" id="zonaPesca" class="form-control" required>
+                <option value="" selected>Selecciona una zona de pesca</option>
+                <?php if (isset($zonaPesca)) : ?>
+                    <?php foreach ($zonasPesca as $zona) : ?>
+                        <option value="<?= $zona->id ?>" <?= ($zona->id == $zonaPesca->id) ? 'selected' : '' ?>>
+                            <?= $zona->nombre ?>
+                        </option>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </select>
         </div>
 
         <div class="mb-3">
@@ -62,13 +101,83 @@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script>
     $(document).ready(function() {
+        var provincia;
+
+        $('#provincia').change(function() {
+            provincia = $(this).val();
+            $('#localidad').empty();
+            $('#localidad').append('<option value="" selected>Selecciona una localidad</option>');
+            $('#zonaPesca').empty();
+            $('#zonaPesca').append('<option value="" selected>Selecciona una zona de pesca</option>');
+
+            if (provincia) {
+                $.ajax({
+                    url: '<?= site_url("user/zonasPesca/get_localidades") ?>',
+                    type: 'POST',
+                    data: {
+                        provincia: provincia
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.length > 0) {
+                            $.each(data, function(index, localidad) {
+                                $('#localidad').append('<option value="' + localidad.nombre + '">' + localidad.nombre + '</option>');
+                            });
+                        } else {
+                            $('#localidad').append('<option value="">No hay localidades disponibles</option>');
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error('Error:', textStatus, errorThrown);
+                        alert('Error al cargar las localidades');
+                    }
+                });
+            }
+        });
+
+        $('#localidad').change(function() {
+            var localidad = $(this).val();
+            $('#zonaPesca').empty();
+            $('#zonaPesca').append('<option value="" selected>Selecciona una zona de pesca</option>');
+
+            if (localidad) {
+                $.ajax({
+                    url: '<?= site_url("/user/competiciones/get_zonasPesca") ?>',
+                    type: 'POST',
+                    data: {
+                        provincia: provincia,
+                        localidad: localidad
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.length > 0) {
+                            $.each(data, function(index, zonaPesca) {
+                                $('#zonaPesca').append('<option value="' + zonaPesca.id + '">' + zonaPesca.nombre + '</option>');
+                            });
+                        } else {
+                            $('#zonaPesca').append('<option value="">No hay zonas de pesca disponibles</option>');
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error('Error:', textStatus, errorThrown);
+                        alert('Error al cargar las zonas de pesca');
+                    }
+                });
+            }
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
         // Implementación del autocompletado usando jQuery UI
         $('#nombre_especie').autocomplete({
             source: function(request, response) {
                 $.ajax({
                     url: '<?= site_url("/user/capturas/get_especies") ?>',
                     dataType: 'json',
-                    data: { term: request.term },
+                    data: {
+                        term: request.term
+                    },
                     success: function(data) {
                         response($.map(data, function(item) {
                             return {
@@ -104,7 +213,7 @@
             reader.onload = function(event) {
                 const div = document.createElement('div');
                 div.className = 'image-item position-relative me-3 mb-2';
-                
+
                 const img = document.createElement('img');
                 img.src = event.target.result;
                 img.style.width = '100px'; // Ajusta el tamaño de la imagen

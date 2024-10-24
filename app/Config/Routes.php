@@ -26,10 +26,19 @@ $routes->group('user', ['namespace' => "App\Controllers\user"], function ($route
         $routes->get('misCapturas', 'User::misCapturas');
         $routes->post('misCapturas', 'User::misCapturas');
         $routes->get('misLogros', 'User::misLogros');
+     
         $routes->get('misCompeticiones', 'User::misCompeticiones');
         $routes->get('misParticipaciones', 'User::misParticipaciones');
         $routes->get('', 'User::index');
     });
+    // app/Config/Routes.php
+    $routes->post('competiciones/participarCompeticion', 'Competiciones::participarCompeticion');
+    $routes->post('competiciones/eliminarParticipacionCompeticion', 'Competiciones::eliminarParticipacionCompeticion');
+    $routes->get('buscarCapturas/(:num)', 'User::buscarCapturas/$1');
+    $routes->post('buscarCapturas/(:num)', 'User::buscarCapturas/$1');
+    $routes->get('buscarLogros/(:num)', 'User::buscarLogros/$1');
+    $routes->get('buscar', 'User::buscar');
+    $routes->get('perfil/(:num)', 'User::perfil/$1'); 
     $routes->get('salidas', 'Salidas::index');
     $routes->get('salidas/events', 'Salidas::events');
     $routes->post('salidas/saveEvent', 'Salidas::saveEvent');

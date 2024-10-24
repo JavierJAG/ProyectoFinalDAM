@@ -25,8 +25,8 @@
             </ul>
 
 
-            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-                <input type="search" class="form-control form-control-light" placeholder="Buscar usuario..." aria-label="Search">
+            <form action="/user/buscar" method="GET" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+                <input type="search" name="buscar" class="form-control form-control-light" placeholder="Buscar usuario..." aria-label="Search">
             </form>
 
 

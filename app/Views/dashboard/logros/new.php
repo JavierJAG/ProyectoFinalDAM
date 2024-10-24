@@ -1,7 +1,7 @@
-<?php $this->extend("/dashboard/layout/template") ?>
+<?php $this->extend("/user/layout/template") ?>
 <?php $this->section('body') ?>
-<?= view('/dashboard/partials/_mensaje') ?>
-<?= view('/dashboard/partials/_error') ?>
+<?= view('/user/partials/_mensaje') ?>
+<?= view('/user/partials/_error') ?>
 
 <div class="container mt-5">
     <h2 class="text-primary mb-4">Crear Logro</h2>
