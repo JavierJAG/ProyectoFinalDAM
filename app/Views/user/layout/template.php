@@ -11,7 +11,10 @@
 
 <body class="d-flex flex-column min-vh-100">
     <?= view("/user/layout/header") ?>
+    <div class="mb-1">
     <?php $this->renderSection('body') ?>
+    </div>
+   
     <?= view("/user/layout/footer") ?>
 
     <script src="<?= base_url("/bootstrap/js/bootstrap.min.js") ?>"></script>

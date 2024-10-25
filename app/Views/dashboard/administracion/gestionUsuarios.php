@@ -25,7 +25,7 @@
                                     <label class="form-check-label" for="permiso-<?= $u->id ?>">Admin</label>
                                 </div>
 
-                                <a href="/dashboard/usuario/<?= $u->id ?>" class="btn btn-sm btn-info">Ver Datos</a>
+                                <a href="/user/perfil/<?= $u->id ?>" class="btn btn-sm btn-info">Ver Datos</a>
                                 <form action="/dashboard/usuario/eliminar/<?= $u->id ?>" method="post" class="d-inline">
                                     <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
                                 </form>

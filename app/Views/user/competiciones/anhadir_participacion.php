@@ -5,10 +5,9 @@
 <?= view('/user/partials/_error') ?>
 
 <div class="container mt-4">
-    <h2 class="text-center mb-4">Crear Nueva Captura</h2>
+    <h2 class="text-center mb-4">Añadir participación</h2>
 
     <form action="<?= site_url('/user/competiciones/anhadirParticipacion/'.$competicion_id) ?>" method="post" enctype="multipart/form-data">
-
         <div class="mb-3">
             <label for="fecha_captura" class="form-label">Fecha de Captura</label>
             <input type="datetime-local" name="fecha_captura" id="fecha_captura" class="form-control" value="<?= old('fecha_captura') ?>" required>
@@ -73,7 +72,6 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
         var provincia; // Declara la variable para la provincia

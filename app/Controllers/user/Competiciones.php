@@ -3,6 +3,8 @@
 namespace App\Controllers\user;
 
 use App\Models\CapturaModel;
+use App\Models\EspecieModel;
+use App\Models\ImagenCapturaModel;
 use App\Models\ImagenCompeticionModel;
 use App\Models\ImagenModel;
 use App\Models\LocalidadModel;
@@ -12,6 +14,7 @@ use App\Models\ParticipanteModel;
 use App\Models\UsuarioLogroModel;
 use App\Models\ZonaPescaModel;
 use CodeIgniter\RESTful\ResourceController;
+use DateTime;
 
 class Competiciones extends ResourceController
 {
@@ -112,6 +115,21 @@ class Competiciones extends ResourceController
             $zonaPesca = $this->request->getPost('zonaPesca');
             $descripcion = $this->request->getPost('descripcion');
 
+            // Convertir las fechas a objetos DateTime para realizar comparaciones
+            $fechaActual = new \DateTime();
+            $fechaInicioObj = new \DateTime($fechaInicio);
+            $fechaFinObj = new \DateTime($fechaFin);
+
+            // Validar que la fecha de inicio es posterior a la fecha actual
+            if ($fechaInicioObj <= $fechaActual) {
+                return redirect()->back()->with("error", "La fecha de inicio debe ser posterior a la fecha actual.")->withInput();
+            }
+
+            // Validar que la fecha de fin es posterior a la fecha de inicio
+            if ($fechaFinObj <= $fechaInicioObj) {
+                return redirect()->back()->with("error", "La fecha de fin debe ser posterior a la fecha de inicio.")->withInput();
+            }
+
             $competicionId = $this->model->insert([
                 'nombre' => $nombre,
                 'descripcion' => $descripcion,
@@ -160,6 +178,21 @@ class Competiciones extends ResourceController
             $fechaFin = $this->request->getPost('fecha_fin');
             $zonaPesca = $this->request->getPost('zonaPesca');
             $descripcion = $this->request->getPost('descripcion');
+
+            // Convertir las fechas a objetos DateTime para realizar comparaciones
+            $fechaActual = new \DateTime();
+            $fechaInicioObj = new \DateTime($fechaInicio);
+            $fechaFinObj = new \DateTime($fechaFin);
+
+            // Validar que la fecha de inicio es posterior a la fecha actual
+            if ($fechaInicioObj <= $fechaActual) {
+                return redirect()->back()->with("error", "La fecha de inicio debe ser posterior a la fecha actual.")->withInput();
+            }
+
+            // Validar que la fecha de fin es posterior a la fecha de inicio
+            if ($fechaFinObj <= $fechaInicioObj) {
+                return redirect()->back()->with("error", "La fecha de fin debe ser posterior a la fecha de inicio.")->withInput();
+            }
 
             $competicionId = $this->model->update($id, [
                 'nombre' => $nombre,
@@ -240,27 +273,48 @@ class Competiciones extends ResourceController
         $provincia = $this->request->getPost('provincia');
         $localidad = $this->request->getPost('localidad');
         $localidadData = $localidadModel->where('PROVINCIA', $provincia)->where('nombre', $localidad)->first();
-        $zonasPescaData = $zonaPescaModel->where('localidad_id', $localidadData->id)->findAll();
+        $zonasPescaData = $zonaPescaModel->where('localidad_id', $localidadData->id)->where('usuario_id', auth()->user()->id)->findAll();
         return $this->response->setJSON($zonasPescaData);
     }
 
     public function verParticipantes($id)
     {
         $usuarioLogroModel = new UsuarioLogroModel();
-
         $participanteModel = new ParticipanteModel();
+        $competicion = $this->model->find($id);
+        $fecha_inicio = new DateTime($competicion->fecha_inicio);
+        $fecha_fin = new DateTime($competicion->fecha_fin);
+        $fecha_actual = new DateTime();
         $participantes = $participanteModel->getAllParticipantes($id);
         $usuariosLogros = $usuarioLogroModel->where('competicion_id', $id)->findAll();
         $logroModel = new LogroModel();
         $logros = $logroModel->findAll();
-        return view('/user/competiciones/participantes', ['participantes' => $participantes, 'competicion_id' => $id, 'logros' => $logros, 'usuariosLogros' => $usuariosLogros]);
+        $puedeParticipar = false;
+        $mensajeParticipacion = '';
+
+        if ($fecha_actual < $fecha_inicio) {
+            $mensajeParticipacion = 'El envío de capturas se abre el ' . $fecha_inicio->format('d/m/Y') . '.';
+        } elseif ($fecha_actual > $fecha_fin) {
+            $mensajeParticipacion = 'El periodo de envío se ha cerrado el ' . $fecha_fin->format('d/m/Y') . '.';
+        } else {
+            $puedeParticipar = true; 
+        }
+
+        return view('/user/competiciones/participantes', [
+            'participantes' => $participantes,
+            'competicion_id' => $id,
+            'logros' => $logros,
+            'usuariosLogros' => $usuariosLogros,
+            'puedeParticipar' => $puedeParticipar,
+            'mensajeParticipacion' => $mensajeParticipacion
+        ]);
     }
 
     public function verParticipaciones($competicionId, $usuarioId)
     {
         $participacionModel = new ParticipacionModel();
         $capturas = $participacionModel->getParticipaciones($competicionId, $usuarioId);
-        return view('/user/competiciones/participaciones', ['capturas' => $capturas, 'usuario_id' => $usuarioId,'competicion_id'=>$competicionId]);
+        return view('/user/competiciones/participaciones', ['capturas' => $capturas, 'usuario_id' => $usuarioId, 'competicion_id' => $competicionId]);
     }
     public function participar($competicionId, $capturaId)
     {
@@ -342,9 +396,79 @@ class Competiciones extends ResourceController
         $participanteModel->delete($participante->id);
         return redirect()->back()->with('mensaje', 'Te has desinscrito a esta competición');
     }
-    public function crearParticipacion() {}
-    public function anhadirParticipacion($competicionId) {
+    public function crearParticipacion($competicionId)
+    {
 
-        return view('/user/competiciones/anhadir_participacion',['competicion_id'=>$competicionId]);
+        if ($this->validate('captura')) {
+
+            $especieModel = new EspecieModel();
+            $participacionModel = new ParticipacionModel();
+            $capturaModel = new CapturaModel();
+
+            $fecha_captura = $this->request->getPost('fecha_captura');
+            $nombre = $this->request->getPost('nombre');
+            $descripcion = $this->request->getPost('descripcion');
+            $peso = $this->request->getPost('peso');
+            $tamano = $this->request->getPost('tamano');
+            $zonaPesca = $this->request->getPost('zonaPesca');
+            $especies = $especieModel->findAll();
+            // $userId = auth()->user()->id;
+            $especieId = null;
+            foreach ($especies as $especie) {
+                if ($especie->nombre_comun == $nombre || $especie->nombre_cientifico == $nombre) {
+                    $especieId = $especie->id;
+                    break;
+                }
+            }
+            $capturaId = $capturaModel->insert([
+                'fecha_captura' => $fecha_captura,
+                'nombre' => $nombre,
+                'descripcion' => $descripcion,
+                'peso' => $peso,
+                'tamano' => $tamano,
+                'usuario_id' => auth()->user()->id,
+                'especie_id' => $especieId,
+                'zona_id' => $zonaPesca,
+            ]);
+            // Manejar la subida de imágenes
+
+            $imagenesModel = new ImagenModel();
+            $imagenCapturaModel = new ImagenCapturaModel();
+            $imagenes = $this->request->getFiles('imagenes');
+            foreach ($imagenes['imagenes'] as $file) {
+                if ($file->isValid() && !$file->hasMoved()) {
+                    $nombreImagen = $file->getRandomName();
+                    $extension = $file->guessExtension();
+                    $ruta = '../public/uploads/capturas';
+                    $file->move($ruta, $nombreImagen);
+
+                    // Guardar la imagen en la base de datos
+                    $imagenId = $imagenesModel->insert([
+                        'imagen' => $nombreImagen,
+                        'extension' => $extension
+                    ]);
+
+                    // Asociar la imagen con la captura
+                    $imagenCapturaModel->insert([
+                        'imagen_id' => $imagenId,
+                        'captura_id' => $capturaId,
+                    ]);
+                }
+            }
+            $participacionModel->insert([
+                'usuario_id' => auth()->user()->id,
+                'captura_id' => $capturaId,
+                'competicion_id' => $competicionId
+            ]);
+
+            return redirect()->back()->with('mensaje', "Participación ingresada con éxito");
+        } else {
+            return redirect()->back()->with("error", $this->validator->listErrors())->withInput();
+        }
+    }
+    public function anhadirParticipacion($competicionId)
+    {
+
+        return view('/user/competiciones/anhadir_participacion', ['competicion_id' => $competicionId]);
     }
 }

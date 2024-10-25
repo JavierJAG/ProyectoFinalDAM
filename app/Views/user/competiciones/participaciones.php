@@ -26,9 +26,6 @@
             <?php endforeach ?>
         <?php endif; ?>
     </div>
-    <?php if($usuario_id==auth()->user()->id) : ?>
-        <a href="/user/competiciones/anhadirParticipacion/<?= $competicion_id ?>">Añadir participación</a>
-        <?php endif ?>
 </div>
 
 <?php $this->endSection() ?>

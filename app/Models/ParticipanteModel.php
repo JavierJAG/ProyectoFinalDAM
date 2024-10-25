@@ -47,7 +47,7 @@ class ParticipanteModel extends Model
    
     public function getParticipantes($usuarioId)
     {
-        return $this->select('competiciones.fecha_inicio as fecha_inicio, competiciones.fecha_fin as fecha_fin, competiciones.nombre as nombre,participantes.usuario_id as id')
+        return $this->select('competiciones.id as competicion_id,competiciones.fecha_inicio as fecha_inicio, competiciones.fecha_fin as fecha_fin, competiciones.nombre as nombre,participantes.usuario_id as id')
             ->join('competiciones', 'competiciones.id = participantes.competicion_id')
             ->where('participantes.usuario_id', $usuarioId)
             ->findAll();

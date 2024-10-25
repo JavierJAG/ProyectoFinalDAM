@@ -32,7 +32,7 @@
 
     <!-- Botón para crear una nueva captura -->
     <div class="mb-3">
-        <a href="/user/capturas/new" class="btn btn-primary">Añadir Captura</a>
+        <a href="/user/capturas/new" class="btn btn-primary">Añadir nueva captura</a>
     </div>
 
     <!-- Tabla de capturas -->

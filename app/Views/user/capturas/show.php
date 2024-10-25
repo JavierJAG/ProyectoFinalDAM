@@ -70,29 +70,30 @@
         <h4>No se han encontrado detalles de la especie</h4>
     <?php endif ?>
 
-    <!-- Sección de imágenes de la captura -->
-    <h5 class="mt-4">Imágenes de la Captura</h5>
-    <?php if (!empty($imagenes)): ?>
-        <div id="carouselCaptura" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
-                <?php foreach ($imagenes as $index => $imagen): ?>
-                    <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
-                        <img src="<?= base_url('../uploads/capturas/' . $imagen->imagen) ?>" class="d-block w-50 mx-auto" alt="Imagen de <?= $captura->nombre ?>">
-                    </div>
-                <?php endforeach; ?>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselCaptura" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Anterior</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselCaptura" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Siguiente</span>
-            </button>
+<!-- Sección de imágenes de la captura -->
+<h5 class="mt-4 text-center">Imágenes de la Captura</h5>
+<?php if (!empty($imagenes)): ?>
+    <div id="carouselCaptura" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <?php foreach ($imagenes as $index => $imagen): ?>
+                <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
+                    <img src="<?= base_url('../uploads/capturas/' . $imagen->imagen) ?>" class="d-block mx-auto" alt="Imagen de <?= htmlspecialchars($captura->nombre) ?>" style="width: 60%; max-height: 300px; object-fit: cover;">
+                </div>
+            <?php endforeach; ?>
         </div>
-    <?php else: ?>
-        <p>No hay imágenes asociadas a esta captura.</p>
-    <?php endif; ?>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselCaptura" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
+            <span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselCaptura" data-bs-slide="next">
+            <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
+            <span class="visually-hidden">Siguiente</span>
+        </button>
+    </div>
+<?php else: ?>
+    <p class="text-center mt-3">No hay imágenes asociadas a esta captura.</p>
+<?php endif; ?>
+
 
     <!-- Botón para regresar -->
     <div class="mt-4">

@@ -3,6 +3,8 @@
 namespace App\Controllers\user;
 
 use App\Controllers\BaseController;
+use App\Models\EspecieModel;
+use App\Models\ImagenModel;
 
 class Normativa extends BaseController
 {
@@ -66,5 +68,17 @@ class Normativa extends BaseController
             $tableContent = '<p>No se encontró la tabla.</p>';
         }
         return $tableContent;
+    }
+    public function listarEspecies(){
+        $especieModel = new EspecieModel();
+        $especies = $especieModel->findAll();
+        return view('/user/especies/lista', ['especies' => $especies]);
+    }
+    public function detalleEspecie($especieId){
+        $especieModel = new EspecieModel();
+        $especie = $especieModel->find($especieId);
+        $imagenModel = new ImagenModel();
+        $imagenes = $imagenModel->getImagenesEspecie($especieId);
+        return view('/user/especies/detalles', ['especie' => $especie, 'imagenes' => $imagenes]);
     }
 }

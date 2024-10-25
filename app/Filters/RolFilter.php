@@ -29,7 +29,7 @@ class RolFilter implements FilterInterface
 
         // Verifica si el usuario está logueado
         if (!$auth->loggedIn()) {
-            return redirect()->to('/'); // Redirige al índice si no está logueado
+            return redirect()->to('/')->with('error','Debes iniciar sesión primero'); // Redirige al índice si no está logueado
         }
 
         $user = auth()->user(); // Obtiene el usuario actual

@@ -20,16 +20,15 @@ class Salidas extends ResourceController
     {
         $zonaModel = new ZonaPescaModel();
         // Obtén todos los eventos de la base de datos
-        $events = $this->model->findAll(); // Asegúrate de que este método esté implementado correctamente en tu modelo
+        $events = $this->model->where('usuario_id',auth()->user()->id)->findAll(); 
 
         // Arreglo para almacenar los eventos formateados
         $formattedEvents = [];
 
         foreach ($events as $event) {
-            // Asegúrate de que 'fecha_inicio' y 'fecha_fin' tengan el formato adecuado (ISO 8601)
-            // También asegúrate de que estás accediendo correctamente a la zona de pesca relacionada con el evento.
+         
     
-            $zona = $zonaModel->find($event->zona_id); // Método que necesitas implementar para obtener la zona
+            $zona = $zonaModel->find($event->zona_id); 
 
             $formattedEvents[] = [
                 'id' => $event->id, // Incluye el ID del evento para poder borrarlo después

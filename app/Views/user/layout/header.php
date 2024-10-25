@@ -15,20 +15,26 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/user/salidas">Planificar Salida</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/user/normativa">Normativa</a>
-                </li>
+
                 <li class="nav-item">
                     <a class="nav-link" href="/user/buscarCompeticiones">Competiciones</a>
+                </li>
+                <!-- Menú desplegable para Normativa -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="normativaDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Normativa
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="normativaDropdown">
+                        <li><a class="dropdown-item" href="/user/normativa">Zonas</a></li>
+                        <li><a class="dropdown-item" href="/user/especies">Especies</a></li>
+                    </ul>
                 </li>
 
             </ul>
 
-
             <form action="/user/buscar" method="GET" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
                 <input type="search" name="buscar" class="form-control form-control-light" placeholder="Buscar usuario..." aria-label="Search">
             </form>
-
 
             <div class="dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">

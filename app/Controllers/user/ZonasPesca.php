@@ -76,7 +76,7 @@ class ZonasPesca extends ResourceController
                 'usuario_id'=>auth()->user()->id
             ]);
 
-            return redirect()->to('/user/zonasPesca')->with('mensaje', "Zona de pesca creada con éxito");
+            return redirect()->to('/user/perfil/misZonasPesca')->with('mensaje', "Zona de pesca creada con éxito");
         } else {
             return redirect()->back()->with("error", "Las coordenadas deben ser números válidos en el rango correcto.")->withInput();
         }
@@ -128,7 +128,7 @@ class ZonasPesca extends ResourceController
                 'localidad_id' => $localidadData->id,
             ]);
 
-            return redirect()->to('/user/zonasPesca')->with('mensaje', "Zona de pesca creada con éxito");
+            return redirect()->to('/user/perfil/misZonasPesca')->with('mensaje', "Zona de pesca actualizada con éxito");
         } else {
             return redirect()->back()->with("error", "Las coordenadas deben ser números válidos en el rango correcto.")->withInput();
         }
@@ -142,7 +142,7 @@ class ZonasPesca extends ResourceController
         $especie = $this->model->find($id);
         if ($especie) {
             $this->model->delete($id);
-            return redirect()->to('/user/zonasPesca')->with('mensaje', "zonaPesca eliminada con éxito");
+            return redirect()->to('/user/perfil/misZonasPesca')->with('mensaje', "zonaPesca eliminada con éxito");
         } else {
             return redirect()->back()->with('error', "Error al eliminar la especie");
         }

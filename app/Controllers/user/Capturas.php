@@ -32,7 +32,7 @@ class Capturas extends ResourceController
         // Verifica si la captura fue encontrada
         if (!$captura) {
             // Maneja el caso donde no se encuentra la captura
-            return redirect()->to('/user/capturas')->with('error', 'Captura no encontrada.');
+            return redirect()->back()->with('error', 'Captura no encontrada.');
         }
 
         // Inicializa modelos
@@ -146,7 +146,7 @@ class Capturas extends ResourceController
                 }
             }
 
-            return redirect()->to('/user/capturas')->with('mensaje', "Captura actualizada con éxito");
+            return redirect()->to('/user/perfil/misCapturas')->with('mensaje', "Captura creada con éxito");
         } else {
             return redirect()->back()->with("error", $this->validator->listErrors())->withInput();
         }
@@ -222,7 +222,7 @@ class Capturas extends ResourceController
                     ]);
                 }
             }
-            return redirect()->to('/user/capturas')->with('mensaje', "Captura actualizada con éxito");
+            return redirect()->to('/user/perfil/misCapturas')->with('mensaje', "Captura actualizada con éxito");
         } else {
             return redirect()->back()->with("error", $this->validator->listErrors())->withInput();
         }
@@ -242,7 +242,7 @@ class Capturas extends ResourceController
             }
             $imagenesModel->deleteImagenesCaptura($id);
             $this->model->delete($id);
-            return redirect()->to('/user/capturas')->with('mensaje', "Captura eliminada con éxito");
+            return redirect()->to('/user/perfil/misCapturas')->with('mensaje', "Captura eliminada con éxito");
         } else {
             return redirect()->back()->with('error', "Error al eliminar la captura");
         }

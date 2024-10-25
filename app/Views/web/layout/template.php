@@ -9,7 +9,7 @@
 
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
     <?php if(auth()->isLoggedIn()) : ?>
     <?= view("/user/layout/header") ?>
     <?php else :?>

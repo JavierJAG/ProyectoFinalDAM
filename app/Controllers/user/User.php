@@ -9,6 +9,7 @@ use App\Models\ParticipanteModel;
 use App\Models\UsuarioLogroModel;
 use App\Models\ZonaPescaModel;
 use CodeIgniter\RESTful\ResourceController;
+use DateTime;
 
 class User extends ResourceController
 {
@@ -73,7 +74,7 @@ class User extends ResourceController
 
         // Obtener los resultados paginados
         $data = [
-            'capturas' => $capturasQuery->paginate(10), // Cambia el número de capturas por página según sea necesario
+            'capturas' => $capturasQuery->where('usuario_id',auth()->user()->id)->paginate(10), // Cambia el número de capturas por página según sea necesario
             'pager' => $capturaModel->pager,
             'search' => $search,
             'order' => $order
@@ -126,7 +127,7 @@ class User extends ResourceController
 
         // Realiza la consulta para obtener los logros junto con la competición y fecha
         $logrosUsuario = $usuarioLogroModel
-            ->select('usuarios_logros.*,logros.descripcion AS logro_descripcion, logros.nombre AS logro_nombre, competiciones.nombre AS competicion_nombre, usuarios_logros.fecha_obtencion AS fecha_logro')
+            ->select('usuarios_logros.*,logros.descripcion AS logro_descripcion, logros.nombre AS logro_nombre, competiciones.id as competicion_id,competiciones.nombre AS competicion_nombre, usuarios_logros.fecha_obtencion AS fecha_logro')
             ->join('logros', 'logros.id = usuarios_logros.logro_id')
             ->join('competiciones', 'competiciones.id = usuarios_logros.competicion_id')
             ->where('usuarios_logros.usuario_id', auth()->user()->id)
@@ -159,7 +160,9 @@ class User extends ResourceController
     {
         $participanteModel = new ParticipanteModel();
         $participaciones = $participanteModel->getParticipantes(auth()->user()->id);
-        return view('/user/competiciones/participacionesUser', ['participaciones' => $participaciones, 'pager' => $participanteModel->pager]);
+        $fecha_actual = new DateTime();
+        
+        return view('/user/competiciones/participacionesUser', ['participaciones' => $participaciones,'fecha_actual'=>$fecha_actual, 'pager' => $participanteModel->pager]);
     }
 
     public function verTodasCapturas()

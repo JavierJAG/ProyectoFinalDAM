@@ -90,6 +90,14 @@
     </form>
 </div>
 
+<script src="https://cdn.ckeditor.com/ckeditor5/30.0.0/classic/ckeditor.js"></script>
+<script>
+    ClassicEditor
+        .create(document.querySelector('#descripcion'))
+        .catch(error => {
+            console.error(error);
+        });
+</script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {

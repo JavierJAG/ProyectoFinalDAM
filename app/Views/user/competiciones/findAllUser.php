@@ -7,7 +7,9 @@
     <h2 class="text-left mb-4">Lista de Competiciones</h2>
 
     <div class="d-flex justify-content-between mb-3">
-        <a href="/user/competiciones/new" class="btn btn-primary d-flex align-items-center">Crear Competición</a>
+        <?php if (auth()->user()->inGroup('admin') || auth()->user()->inGroup('superadmin')) : ?>
+            <a href="/user/competiciones/new" class="btn btn-primary d-flex align-items-center">Crear Competición</a>
+        <?php endif; ?>
         <form action="/user/buscarCompeticiones" method="get" class="d-flex">
             <div class="me-3">
                 <label for="provincia" class="form-label">Provincia</label>

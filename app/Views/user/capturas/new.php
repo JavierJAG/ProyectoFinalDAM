@@ -70,10 +70,17 @@
     </form>
 </div>
 
+<script src="https://cdn.ckeditor.com/ckeditor5/30.0.0/classic/ckeditor.js"></script>
+<script>
+    ClassicEditor
+        .create(document.querySelector('#descripcion'))
+        .catch(error => {
+            console.error(error);
+        });
+</script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
         var provincia; // Declara la variable para la provincia
@@ -154,16 +161,16 @@
         $('#nombre_especie').autocomplete({
             source: function(request, response) {
                 $.ajax({
-                    url: '<?= site_url("/user/capturas/get_especies") ?>', // URL que maneja la petición
+                    url: '<?= site_url("/user/capturas/get_especies") ?>',
                     dataType: 'json',
                     data: {
-                        term: request.term // Lo que el usuario escribe
+                        term: request.term
                     },
                     success: function(data) {
                         response($.map(data, function(item) {
                             return {
-                                label: item.nombre, // Lo que se muestra en la lista
-                                value: item.nombre // El valor que se rellena en el campo de texto
+                                label: item.nombre,
+                                value: item.nombre
                             };
                         }));
                     },
@@ -172,9 +179,9 @@
                     }
                 });
             },
-            minLength: 2, // Número mínimo de caracteres antes de que se haga la petición
+            minLength: 2,
             select: function(event, ui) {
-                $('#nombre_especie').val(ui.item.value); // Cuando el usuario selecciona un valor
+                $('#nombre_especie').val(ui.item.value);
             }
         });
     });
