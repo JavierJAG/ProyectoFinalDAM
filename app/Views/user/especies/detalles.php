@@ -4,7 +4,6 @@
 <?= view('/user/partials/_error') ?>
 <div class="container mt-5">
     <h2 class="text-primary mb-4">Información de la Especie</h2>
-
     <div class="bg-light p-4 shadow-sm rounded mb-4">
         <p><strong>Nombre Común:</strong> <?= esc($especie->nombre_comun) ?></p>
         <p><strong>Nombre Científico:</strong> <?= esc($especie->nombre_cientifico) ?></p>

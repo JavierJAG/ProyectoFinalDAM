@@ -2,6 +2,7 @@
 
 namespace App\Controllers\user;
 
+use App\Models\CapturaModel;
 use App\Models\LocalidadModel;
 use App\Models\zonaPescaModel;
 use CodeIgniter\RESTful\ResourceController;
@@ -13,7 +14,16 @@ class ZonasPesca extends ResourceController
     public function index()
     {
         $zonasPesca = $this->model->paginate(10);
-        return view('/user/zonasPesca/index', ['zonasPesca' => $zonasPesca, 'pager' => $this->model->pager]);
+        $capturaModel = new CapturaModel();
+
+        $capturas = []; // Inicializar un array para acumular capturas
+
+        // Iterar sobre cada zona de pesca
+        foreach ($zonasPesca as $zp) {
+            $capturasZona = $capturaModel->getCapturasZona(auth()->user()->id, $zp->id);
+            $capturas = array_merge($capturas, $capturasZona); // Acumular capturas
+        }
+        return view('/user/zonasPesca/index', ['zonasPesca' => $zonasPesca,'capturas'=>$capturas, 'pager' => $this->model->pager]);
     }
     public function show($id = null)
     {

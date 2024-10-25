@@ -26,6 +26,39 @@
                        
                     </td>
                 </tr>
+                 <td>
+                        <button class="btn btn-primary btn-sm" data-bs-toggle="collapse" data-bs-target="#capturas-<?= $zonaPesca->id ?>" aria-expanded="false" aria-controls="capturas-<?= $zonaPesca->id ?>">
+                            Ver Capturas
+                        </button>
+                        <div class="collapse" id="capturas-<?= $zonaPesca->id ?>">
+                            <div class="card card-body mt-2">
+                                <ul class="list-unstyled">
+                                    <?php
+                                    $hayCapturas = false; // Variable para controlar si hay capturas
+                                    foreach ($capturas as $captura) :
+                                        if ($captura->zona_id == $zonaPesca->id) :
+                                            $hayCapturas = true; // Hay al menos una captura
+                                    ?>
+                                            <li class="mb-3">
+                                                <a href="/user/capturas/<?= $captura->id ?>" class="text-decoration-none fw-bold"><?= htmlspecialchars($captura->nombre) ?></a>
+                                                <div>
+                                                    <small class="text-muted">Pescado el: <?= htmlspecialchars($captura->fecha_captura) ?></small><br>
+                                                    <small class="text-muted">Tamaño: <?= htmlspecialchars($captura->tamano) ?> cm</small><br>
+                                                    <small class="text-muted">Peso: <?= htmlspecialchars($captura->peso) ?> kg</small>
+                                                </div>
+                                            </li>
+                                        <?php
+                                        endif;
+                                    endforeach;
+                                    if (!$hayCapturas) : // Mensaje si no hay capturas
+                                        ?>
+                                        <li class="text-muted">No hay capturas registradas para esta zona.</li>
+                                    <?php endif; ?>
+                                </ul>
+                            </div>
+                        </div>
+</div>
+</td>
             <?php endforeach; ?>
         </tbody>
     </table>

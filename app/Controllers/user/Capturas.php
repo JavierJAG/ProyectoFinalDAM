@@ -27,7 +27,7 @@ class Capturas extends ResourceController
         $userModel = model('UserModel');
         $user = $userModel->find($captura->usuario_id);
         $zonaPesca = $zonaPescaModel->find($captura->zona_id);
-        $localidad = $localidadModel->where('id',$zonaPesca->localidad_id)->first();
+        $localidad = $localidadModel->where('id', $zonaPesca->localidad_id)->first();
 
         // Verifica si la captura fue encontrada
         if (!$captura) {
@@ -55,9 +55,9 @@ class Capturas extends ResourceController
             'captura' => $captura,
             'imagenes' => $imagenes,
             'especie' => $especie,
-            'autor'=>$user,
-            'zona'=>$zonaPesca,
-            'localidad'=>$localidad,
+            'autor' => $user,
+            'zona' => $zonaPesca,
+            'localidad' => $localidad,
             'imagenes_especie' => $imagenesEspecie
         ]);
     }
@@ -183,7 +183,7 @@ class Capturas extends ResourceController
                 'descripcion' => $descripcion,
                 'peso' => $peso,
                 'tamano' => $tamano,
-                'usuario_id' => 1,
+                'usuario_id' => auth()->user()->id,
                 'especie_id' => $especieId,
                 'zona_id' => $zonaPesca,
             ]);
