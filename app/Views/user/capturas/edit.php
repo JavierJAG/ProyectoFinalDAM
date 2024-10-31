@@ -16,7 +16,7 @@
         </div>
 
         <div class="mb-3">
-            <label for="nombre" class="form-label">Nombre de la Especie</label>
+            <label for="nombre_especie" class="form-label">Nombre de la Especie</label>
             <input type="text" name="nombre" id="nombre_especie" class="form-control" value="<?= old('nombre', $captura->nombre) ?>" placeholder="Nombre de la especie capturada" required>
         </div>
 
@@ -24,50 +24,50 @@
             <label for="descripcion" class="form-label">Descripción</label>
             <textarea name="descripcion" id="descripcion" class="form-control" placeholder="Descripción de la captura"><?= old('descripcion', $captura->descripcion) ?></textarea>
         </div>
+        <div class="row">
+        <div class="col-md-6 mb-3">
+                <label for="tamano" class="form-label">Tamaño (cm)</label>
+                <input type="number" step="5" name="tamano" id="tamano" class="form-control" value="<?= old('tamano', $captura->tamano) ?>" placeholder="Tamaño en cm" required>
+            </div>
 
-        <div class="mb-3">
-            <label for="tamano" class="form-label">Tamaño (cm)</label>
-            <input type="number" step="0.01" name="tamano" id="tamano" class="form-control" value="<?= old('tamano', $captura->tamano) ?>" placeholder="Tamaño en cm" required>
+            <div class="col-md-6 mb-3">
+                <label for="peso" class="form-label">Peso (Kg)</label>
+                <input type="number" step="0.250" name="peso" id="peso" class="form-control" value="<?= old('peso', $captura->peso) ?>" placeholder="Peso en Kg" required>
+            </div>
         </div>
 
         <div class="mb-3">
-            <label for="peso" class="form-label">Peso (g)</label>
-            <input type="number" name="peso" id="peso" class="form-control" value="<?= old('peso', $captura->peso) ?>" placeholder="Peso en g" required>
-        </div>
-
-        <div class="form-group">
-            <label for="provincia">Provincia</label>
-            <select name="PROVINCIA" id="provincia" class="form-control" required>
-                <option value="" selected></option>
-                <option value="A CORUÑA" <?= old('provincia', $localidad->PROVINCIA) == 'A CORUÑA' ? 'selected' : '' ?>>A CORUÑA</option>
-                <option value="LUGO" <?= old('provincia', $localidad->PROVINCIA) == 'LUGO' ? 'selected' : '' ?>>LUGO</option>
-                <option value="OURENSE" <?= old('provincia', $localidad->PROVINCIA) == 'OURENSE' ? 'selected' : '' ?>>OURENSE</option>
-                <option value="PONTEVEDRA" <?= old('provincia', $localidad->PROVINCIA) == 'PONTEVEDRA' ? 'selected' : '' ?>>PONTEVEDRA</option>
+            <label for="provincia" class="form-label">Provincia</label>
+            <select name="provincia" id="provincia" class="form-control" required>
+                <option value="" selected>Selecciona una provincia</option>
+                <?php foreach (['A CORUÑA', 'LUGO', 'OURENSE', 'PONTEVEDRA'] as $provincia): ?>
+                    <option value="<?= $provincia ?>" <?= old('provincia', $localidad->PROVINCIA) == $provincia ? 'selected' : '' ?>><?= $provincia ?></option>
+                <?php endforeach; ?>
             </select>
         </div>
 
-        <div class="form-group">
-            <label for="localidad">Localidad</label>
+        <div class="mb-3">
+            <label for="localidad" class="form-label">Localidad</label>
             <select name="localidad" id="localidad" class="form-control" required>
                 <option value="" selected>Selecciona una localidad</option>
-                <?php if (isset($localidad)) : ?>
-                    <?php foreach ($localidades as $l) : ?>
+                <?php if (isset($localidades)): ?>
+                    <?php foreach ($localidades as $l): ?>
                         <option value="<?= $l->nombre ?>" <?= ($l->nombre == $localidad->nombre) ? 'selected' : '' ?>>
-                            <?= $l->nombre ?>
+                            <?= esc($l->nombre) ?>
                         </option>
                     <?php endforeach; ?>
                 <?php endif; ?>
             </select>
         </div>
 
-        <div class="form-group">
-            <label for="zonaPesca">Zona de Pesca</label>
+        <div class="mb-3">
+            <label for="zonaPesca" class="form-label">Zona de Pesca</label>
             <select name="zonaPesca" id="zonaPesca" class="form-control" required>
                 <option value="" selected>Selecciona una zona de pesca</option>
-                <?php if (isset($zonaPesca)) : ?>
-                    <?php foreach ($zonasPesca as $zona) : ?>
+                <?php if (isset($zonasPesca)): ?>
+                    <?php foreach ($zonasPesca as $zona): ?>
                         <option value="<?= $zona->id ?>" <?= ($zona->id == $zonaPesca->id) ? 'selected' : '' ?>>
-                            <?= $zona->nombre ?>
+                            <?= esc($zona->nombre) ?>
                         </option>
                     <?php endforeach; ?>
                 <?php endif; ?>
@@ -84,7 +84,7 @@
             <ul class="list-unstyled d-flex flex-wrap">
                 <?php foreach ($imagenes as $imagen): ?>
                     <li class="me-3 mb-2">
-                        <img src="<?= base_url('uploads/capturas/' . $imagen->imagen) ?>" alt="Imagen de <?= esc($captura->nombre) ?>" width="100" class="img-thumbnail">
+                        <img src="<?= base_url('uploads/capturas/' . esc($imagen->imagen)) ?>" alt="Imagen de <?= esc($captura->nombre) ?>" width="100" class="img-thumbnail">
                     </li>
                 <?php endforeach; ?>
             </ul>

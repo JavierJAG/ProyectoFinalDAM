@@ -9,20 +9,20 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Nombre</th>
                 <th>Descripción</th>
                 <th>Provincia</th>
                 <th>Localidad</th>
+                <th>Autor</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td><?= $zonaPesca->id ?></td>
                 <td><?= $zonaPesca->nombre ?></td>
                 <td><?= $zonaPesca->descripcion ?></td>
                 <td><?= $localidad->PROVINCIA ?></td>
                 <td><?= $localidad->nombre ?></td>
+                <td><a href="/user/perfil/<?=$usuario->id?>"><?= $usuario->username ?></td></a>
             </tr>
         </tbody>
     </table>

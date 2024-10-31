@@ -12,7 +12,7 @@ class CapturaModel extends Model
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['fecha_captura','nombre','peso','tamano','descripcion','usuario_id','especie_id','imagen_id','zona_id'];
+    protected $allowedFields    = ['fecha_captura', 'nombre', 'peso', 'tamano', 'descripcion', 'usuario_id', 'especie_id', 'imagen_id', 'zona_id'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -44,11 +44,12 @@ class CapturaModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    public function getCapturasZona($userId,$zonaPescaId){
+    public function getCapturasZona($userId, $zonaPescaId)
+    {
         return $this->select('capturas.*')
-        ->join('zonas_pesca','zonas_pesca.id=capturas.zona_id')
-        ->where('capturas.usuario_id',$userId)
-        ->where('capturas.zona_id',$zonaPescaId)
-        ->findAll();
+            ->join('zonas_pesca', 'zonas_pesca.id=capturas.zona_id')
+            ->where('capturas.usuario_id', $userId)
+            ->where('capturas.zona_id', $zonaPescaId)
+            ->findAll();
     }
 }

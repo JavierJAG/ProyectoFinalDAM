@@ -26,12 +26,13 @@ $routes->group('user', ['namespace' => "App\Controllers\user"], function ($route
         $routes->get('misCapturas', 'User::misCapturas');
         $routes->post('misCapturas', 'User::misCapturas');
         $routes->get('misLogros', 'User::misLogros');
-     
         $routes->get('misCompeticiones', 'User::misCompeticiones');
         $routes->get('misParticipaciones', 'User::misParticipaciones');
         $routes->get('', 'User::index');
     });
-    // app/Config/Routes.php
+    $routes->get('change-password', 'User::changePasswordForm'); 
+    $routes->post('change-password', 'User::changePassword');   
+    $routes->post('updateProfile','User::updateProfile');
     $routes->get('especies/(:num)', 'Normativa::detalleEspecie/$1');
     $routes->get('especies', 'Normativa::listarEspecies');
     $routes->get('competiciones/anhadirParticipacion/(:num)', 'Competiciones::anhadirParticipacion/$1');
@@ -42,7 +43,7 @@ $routes->group('user', ['namespace' => "App\Controllers\user"], function ($route
     $routes->post('buscarCapturas/(:num)', 'User::buscarCapturas/$1');
     $routes->get('buscarLogros/(:num)', 'User::buscarLogros/$1');
     $routes->get('buscar', 'User::buscar');
-    $routes->get('perfil/(:num)', 'User::perfil/$1'); 
+    $routes->get('perfil/(:num)', 'User::verPerfil/$1');
     $routes->get('salidas', 'Salidas::index');
     $routes->get('salidas/events', 'Salidas::events');
     $routes->post('salidas/saveEvent', 'Salidas::saveEvent');

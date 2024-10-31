@@ -56,8 +56,8 @@ class Validation extends BaseConfig
         'descripcion' => 'required|alpha_numeric_space'
     ];
     public $zonaPesca = [
-        'nombre' => 'required|alpha_numeric_space',
-        'descripcion' => 'permit_empty|alpha_numeric_space',
+        'nombre' => 'required|regex_match[/^[a-zA-ZÀ-ÿ0-9\s.\-]+$/]', //Permite letras, numeros, espacios, tildes, puntos y guiones
+        'descripcion' => 'permit_empty|regex_match[/^[a-zA-ZÀ-ÿ0-9\s.\-]+$/]',
     ];
     public $captura = [
         'fecha_captura' => 'required',

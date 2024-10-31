@@ -3,22 +3,28 @@
 <?= view('/user/partials/_mensaje') ?>
 <?= view('/user/partials/_error') ?>
 
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Resultados de la Búsqueda</h2>
 
-<div class="container">
     <?php if (!empty($usuarios)): ?>
-        <h3>Resultados de la búsqueda:</h3>
-        <ul class="list-group">
+        <div class="list-group mx-auto" style="max-width: 700px;">
             <?php foreach ($usuarios as $usuario): ?>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <?= htmlspecialchars($usuario->username) ?>
-                    <a href="/user/perfil/<?= $usuario->id ?>" class="btn btn-info">Ver Perfil</a>
-                </li>
+                <div class="list-group-item d-flex justify-content-between align-items-center shadow-sm rounded ">
+                    <div>
+                        <h5 class="mb-1"><?= htmlspecialchars($usuario->username) ?></h5>
+                    </div>
+                    <a href="/user/perfil/<?= $usuario->id ?>" class="btn btn-outline-primary">
+                        Ver Perfil
+                    </a>
+                </div>
             <?php endforeach; ?>
-        </ul>
+        </div>
     <?php else: ?>
-        <p>No se encontraron usuarios.</p>
+        <div class="alert alert-warning text-center mt-4" role="alert">
+            <h5 class="alert-heading">No se encontraron usuarios.</h5>
+            <p>Intenta ajustar tu búsqueda o verifica la información ingresada.</p>
+        </div>
     <?php endif; ?>
 </div>
-
 
 <?php $this->endSection() ?>

@@ -16,21 +16,23 @@ class ZonasPesca extends ResourceController
         $zonasPesca = $this->model->paginate(10);
         $capturaModel = new CapturaModel();
 
-        $capturas = []; // Inicializar un array para acumular capturas
+        $capturas = []; 
 
-        // Iterar sobre cada zona de pesca
+       
         foreach ($zonasPesca as $zp) {
             $capturasZona = $capturaModel->getCapturasZona(auth()->user()->id, $zp->id);
-            $capturas = array_merge($capturas, $capturasZona); // Acumular capturas
+            $capturas = array_merge($capturas, $capturasZona); 
         }
         return view('/user/zonasPesca/index', ['zonasPesca' => $zonasPesca,'capturas'=>$capturas, 'pager' => $this->model->pager]);
     }
     public function show($id = null)
     {
+        $userModel = model('UserModel');
         $zonaPesca = $this->model->find($id);
         $localidadModel = new LocalidadModel();
         $localidad = $localidadModel->find($zonaPesca->localidad_id);
-        return view('/user/zonasPesca/show', ['zonaPesca' => $zonaPesca, 'localidad' => $localidad]);
+        $usuario = $userModel->find($zonaPesca->usuario_id);
+        return view('/user/zonasPesca/show', ['zonaPesca' => $zonaPesca,'usuario'=>$usuario, 'localidad' => $localidad]);
     }
     public function new()
     {
@@ -49,24 +51,11 @@ class ZonasPesca extends ResourceController
         if ($this->validate('zonaPesca')) {
             $nombre = $this->request->getPost('nombre');
             $descripcion = $this->request->getPost('descripcion');
-            // $coordenadas = $this->request->getPost('coordenadas');
+    
 
 
             $PROVINCIA = $this->request->getPost('PROVINCIA');
             $localidad = $this->request->getPost('localidad');
-
-            // // Dividir las coordenadas en latitud y longitud
-            // list($latitud, $longitud) = explode(',', $coordenadas);
-
-            // // Validar que latitud y longitud sean números
-            // if (
-            //     is_numeric($latitud) && is_numeric($longitud) &&
-            //     $latitud >= -90 && $latitud <= 90 &&
-            //     $longitud >= -180 && $longitud <= 180
-            // ) {
-
-            //     // Asegurarse de que el formato es correcto
-            //     $coordenadasFormateadas = "POINT($longitud $latitud)"; // Longitud primero, luego latitud
 
 
 
@@ -81,14 +70,13 @@ class ZonasPesca extends ResourceController
             $this->model->insert([
                 'nombre' => $nombre,
                 'descripcion' => $descripcion,
-                // 'coordenadas' => "POINT($coordenadas)", 
                 'localidad_id' => $localidadData->id,
                 'usuario_id'=>auth()->user()->id
             ]);
 
             return redirect()->to('/user/perfil/misZonasPesca')->with('mensaje', "Zona de pesca creada con éxito");
         } else {
-            return redirect()->back()->with("error", "Las coordenadas deben ser números válidos en el rango correcto.")->withInput();
+            return redirect()->back()->with("error", $this->validator->listErrors())->withInput();
         }
 
         // Si la validación falla, redirigir con errores
@@ -101,24 +89,12 @@ class ZonasPesca extends ResourceController
         if ($this->validate('zonaPesca')) {
             $nombre = $this->request->getPost('nombre');
             $descripcion = $this->request->getPost('descripcion');
-            $coordenadas = $this->request->getPost('coordenadas');
 
 
             $PROVINCIA = $this->request->getPost('PROVINCIA');
             $localidad = $this->request->getPost('localidad');
 
-            // Dividir las coordenadas en latitud y longitud
-            // list($latitud, $longitud) = explode(',', $coordenadas);
-
-            // // Validar que latitud y longitud sean números
-            // if (
-            //     is_numeric($latitud) && is_numeric($longitud) &&
-            //     $latitud >= -90 && $latitud <= 90 &&
-            //     $longitud >= -180 && $longitud <= 180
-            // ) {
-
-            //     // Asegurarse de que el formato es correcto
-            //     $coordenadasFormateadas = "POINT($longitud $latitud)"; // Longitud primero, luego latitud
+            
 
 
 
@@ -134,7 +110,7 @@ class ZonasPesca extends ResourceController
             $this->model->update($id, [
                 'nombre' => $nombre,
                 'descripcion' => $descripcion,
-                // 'coordenadas' => "POINT($coordenadas)", 
+               
                 'localidad_id' => $localidadData->id,
             ]);
 

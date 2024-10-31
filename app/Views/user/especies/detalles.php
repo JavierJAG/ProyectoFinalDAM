@@ -16,7 +16,7 @@
         <?php if (!empty($imagenes)): ?>
             <?php foreach ($imagenes as $imagen): ?>
                 <div class="image-item m-2">
-                    <img src="<?= base_url('../uploads/especies/' . $imagen->imagen) ?>" alt="Imagen de <?= esc($especie->nombre_comun) ?>" class="img-thumbnail" style="width: 100px; height: auto;">
+                    <img src="<?= base_url('../uploads/especies/' . $imagen->imagen) ?>" alt="Imagen de <?= esc($especie->nombre_comun) ?>" class="img-thumbnail" style="width: 500px; height: auto;">
                 </div>
             <?php endforeach; ?>
         <?php else: ?>

@@ -27,7 +27,6 @@
                 <label for="localidad" class="form-label">Localidad</label>
                 <select name="localidad" id="localidad" class="form-select">
                     <option value="" selected disabled>Selecciona una localidad</option>
-                    <!-- Las localidades se cargarán aquí -->
                     <?php if (!empty($localidades)) : ?>
                         <?php foreach ($localidades as $l) : ?>
                             <option value="<?= $l->nombre ?>" <?= old('localidad', $localidadSeleccionada) == $l->nombre ? 'selected' : '' ?>>
@@ -48,21 +47,21 @@
     <table class="table table-striped table-hover">
         <thead class="table-dark">
             <tr>
-                <th>Fecha Inicio</th>
-                <th>Fecha Fin</th>
-                <th>Nombre</th>
-                <th>Acciones</th>
+                <th class="text-center">Fecha Inicio</th>
+                <th class="text-center">Fecha Fin</th>
+                <th class="text-center">Nombre</th>
+                <th class="text-center">Acciones</th>
             </tr>
         </thead>
         <tbody>
             <?php if (count($competicionesActivas) > 0) : ?>
                 <?php foreach ($competicionesActivas as $competicion) : ?>
                     <tr>
-                        <td><?= date('d/m/Y H:i', strtotime($competicion->fecha_inicio)) ?></td>
-                        <td><?= date('d/m/Y H:i', strtotime($competicion->fecha_fin)) ?></td>
-                        <td><?= htmlspecialchars($competicion->nombre) ?></td>
-                        <td>
-                            <a href="/user/competiciones/<?= $competicion->id ?>" class="btn btn-info btn-sm">Detalles</a>
+                        <td class="text-center"><?= date('d/m/Y H:i', strtotime($competicion->fecha_inicio)) ?></td>
+                        <td class="text-center"><?= date('d/m/Y H:i', strtotime($competicion->fecha_fin)) ?></td>
+                        <td class="text-center"><?= htmlspecialchars($competicion->nombre) ?></td>
+                        <td class="text-center">
+                            <a href="/user/competiciones/<?= $competicion->id ?>" class="btn btn-outline-primary btn-sm">Ver Detalles</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -79,21 +78,21 @@
     <table class="table table-striped table-hover">
         <thead class="table-dark">
             <tr>
-                <th>Fecha Inicio</th>
-                <th>Fecha Fin</th>
-                <th>Nombre</th>
-                <th>Acciones</th>
+                <th class="text-center">Fecha Inicio</th>
+                <th class="text-center">Fecha Fin</th>
+                <th class="text-center">Nombre</th>
+                <th class="text-center">Acciones</th>
             </tr>
         </thead>
         <tbody>
             <?php if (count($competicionesFinalizadas) > 0) : ?>
                 <?php foreach ($competicionesFinalizadas as $competicion) : ?>
                     <tr>
-                        <td><?= date('d/m/Y H:i', strtotime($competicion->fecha_inicio)) ?></td>
-                        <td><?= date('d/m/Y H:i', strtotime($competicion->fecha_fin)) ?></td>
-                        <td><?= htmlspecialchars($competicion->nombre) ?></td>
-                        <td>
-                            <a href="/user/competiciones/<?= $competicion->id ?>" class="btn btn-info btn-sm">Detalles</a>
+                        <td class="text-center"><?= date('d/m/Y H:i', strtotime($competicion->fecha_inicio)) ?></td>
+                        <td class="text-center"><?= date('d/m/Y H:i', strtotime($competicion->fecha_fin)) ?></td>
+                        <td class="text-center"><?= htmlspecialchars($competicion->nombre) ?></td>
+                        <td class="text-center">
+                            <a href="/user/competiciones/<?= $competicion->id ?>" class="btn btn-outline-primary btn-sm">Ver Detalles</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

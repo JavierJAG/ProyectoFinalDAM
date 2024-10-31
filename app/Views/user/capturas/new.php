@@ -7,36 +7,43 @@
 <div class="container mt-4">
     <h2 class="text-center mb-4">Crear Nueva Captura</h2>
 
+    <!-- Formulario de Captura -->
     <form action="<?= site_url('/user/capturas') ?>" method="post" enctype="multipart/form-data">
-
+        <!-- Fecha de Captura -->
         <div class="mb-3">
             <label for="fecha_captura" class="form-label">Fecha de Captura</label>
             <input type="datetime-local" name="fecha_captura" id="fecha_captura" class="form-control" value="<?= old('fecha_captura') ?>" required>
         </div>
 
+        <!-- Nombre de Especie con Autocompletado -->
         <div class="mb-3">
             <label for="nombre" class="form-label">Nombre de la Especie</label>
             <input type="text" name="nombre" id="nombre_especie" class="form-control" value="<?= old('nombre') ?>" placeholder="Nombre de la especie capturada" required>
         </div>
 
+        <!-- Descripción con CKEditor -->
         <div class="mb-3">
             <label for="descripcion" class="form-label">Descripción</label>
             <textarea name="descripcion" id="descripcion" class="form-control" placeholder="Descripción de la captura"><?= old('descripcion') ?></textarea>
         </div>
 
-        <div class="mb-3">
-            <label for="tamano" class="form-label">Tamaño (cm)</label>
-            <input type="number" step="0.01" name="tamano" id="tamano" class="form-control" value="<?= old('tamano') ?>" placeholder="Tamaño en cm" required>
+        <!-- Tamaño y Peso -->
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="tamano" class="form-label">Tamaño (cm)</label>
+                <input type="number" step="1" name="tamano" id="tamano" class="form-control" value="<?= old('tamano') ?>" placeholder="Tamaño en cm" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="peso" class="form-label">Peso (Kg)</label>
+                <input type="number" step="0.01" name="peso" id="peso" class="form-control" value="<?= old('peso') ?>" placeholder="Peso en kg" required>
+            </div>
         </div>
 
-        <div class="mb-3">
-            <label for="peso" class="form-label">Peso (g)</label>
-            <input type="number" name="peso" id="peso" class="form-control" value="<?= old('peso') ?>" placeholder="Peso en g" required>
-        </div>
+        <!-- Provincia y Localidad con Carga AJAX -->
         <div class="mb-3">
             <label for="provincia" class="form-label">Provincia</label>
             <select name="provincia" id="provincia" class="form-control" required>
-                <option value="" selected></option>
+                <option value="" selected>Selecciona una provincia</option>
                 <option value="A CORUÑA" <?= old('provincia') == 'A CORUÑA' ? 'selected' : '' ?>>A CORUÑA</option>
                 <option value="LUGO" <?= old('provincia') == 'LUGO' ? 'selected' : '' ?>>LUGO</option>
                 <option value="OURENSE" <?= old('provincia') == 'OURENSE' ? 'selected' : '' ?>>OURENSE</option>
@@ -48,22 +55,22 @@
             <label for="localidad" class="form-label">Localidad</label>
             <select name="localidad" id="localidad" class="form-control" required>
                 <option value="" selected>Selecciona una localidad</option>
-                <!-- Las localidades se cargarán aquí -->
             </select>
         </div>
 
+        <!-- Zona de Pesca con Carga AJAX -->
         <div class="mb-3">
             <label for="zonaPesca" class="form-label">Zona de Pesca</label>
             <select name="zonaPesca" id="zonaPesca" class="form-control" required>
                 <option value="" selected>Selecciona una zona de pesca</option>
-                <!-- Las zonas de pesca se cargarán aquí -->
             </select>
         </div>
+
+        <!-- Subida de Imágenes con Vista Previa -->
         <div class="mb-3">
             <label for="imagenes" class="form-label">Imágenes de la Captura</label>
             <input type="file" id="imagenes" name="imagenes[]" class="form-control" multiple accept="image/*" onchange="previewImages()">
         </div>
-
         <div id="imagePreview" class="d-flex flex-wrap"></div>
 
         <button type="submit" class="btn btn-primary mt-3">Crear</button>

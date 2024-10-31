@@ -4,65 +4,70 @@
 <?= view('/user/partials/_error') ?>
 
 <div class="container mt-5">
-    <!-- Título principal -->
-    <div class="text-center mb-5">
-        <h1 class="display-4 fw-bold text-primary">¡Hola, <?= auth()->user()->username ?>!</h1>
-        <p class="text-muted fs-5">¿Qué quieres hacer hoy?</p>
-    </div>
+    <div class="row">
+    <?= view('/user/partials/_menuPerfil') ?>
 
-    <!-- Opciones de perfil en tarjetas -->
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center">
-        <!-- Opción 1: Mis Zonas de Pesca -->
-        <div class="col">
-            <div class="card h-100 shadow border-0">
-                <div class="card-body text-center">
-                    <h5 class="card-title fw-semibold text-dark">Mis Zonas de Pesca</h5>
-                    <a href="/user/perfil/misZonasPesca" class="btn btn-outline-primary">VER</a>
-                </div>
+        <!-- Contenido del Perfil -->
+        <div class="col-md-9">
+            <div class="text-center mb-5">
+                <h1 class="display-4 fw-bold text-primary">Perfil</h1>
             </div>
-        </div>
 
-        <!-- Opción 2: Mis Capturas -->
-        <div class="col">
-            <div class="card h-100 shadow border-0">
-                <div class="card-body text-center">
-                    <h5 class="card-title fw-semibold text-dark">Mis Capturas</h5>
-                    <a href="/user/perfil/misCapturas" class="btn btn-outline-success">VER</a>
-                </div>
-            </div>
-        </div>
+            <div class="card">
+                <div class="card-body">
+                    
+                    <!-- Datos del usuario -->
+                    <div class="mb-3">
+                        <strong>Nombre de usuario:</strong> <?= esc(auth()->user()->username) ?>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Nombre real:</strong> <?= (auth()->user()->nombre!=null)?auth()->user()->nombre : "<small><em>Aún no has indicado tu nombre</em></small>" ?>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Correo electrónico:</strong> <?= esc(auth()->user()->email) ?>
+                    </div>
+                  
 
-        <!-- Opción 3: Mis Participaciones en campeonatos -->
-        <div class="col">
-            <div class="card h-100 shadow border-0">
-                <div class="card-body text-center">
-                    <h5 class="card-title fw-semibold text-dark">Mis Participaciones</h5>
-                    <a href="/user/perfil/misParticipaciones" class="btn btn-outline-warning">VER</a>
-                </div>
-            </div>
-        </div>
+                    <!-- Botón para habilitar la edición -->
+                    <div class="text-end mb-3">
+                        <button id="editButton" class="btn btn-outline-primary">
+                            <i class="bi bi-pencil"></i> Editar Perfil
+                        </button>
+                    </div>
 
-        <!-- Opción 4: Mis Logros -->
-        <div class="col">
-            <div class="card h-100 shadow border-0">
-                <div class="card-body text-center">
-                    <h5 class="card-title fw-semibold text-dark">Mis Logros</h5>
-                    <a href="/user/perfil/misLogros" class="btn btn-outline-danger">VER</a>
+                    <!-- Formulario de edición (oculto inicialmente) -->
+                    <div id="editForm" style="display: none;">
+                        <form action="/user/updateProfile" method="POST">
+                            <?= csrf_field() ?>
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Nuevoombre</label>
+                                <input type="text" name="name" class="form-control" value="<?= esc(auth()->user()->nombre) ?>" >
+                            </div>
+                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                        </form>
+                    </div>
+
+                    <!-- Opción para cambiar la contraseña -->
+                    <div class="mt-4">
+                        <a href="/user/change-password" class="btn btn-secondary">Cambiar Contraseña</a>
+                    </div>
                 </div>
             </div>
         </div>
-        <?php if (auth()->user()->inGroup('admin') || auth()->user()->inGroup('superadmin')) : ?>
-        <!-- Opción 5: Mis Competiciones -->
-        <div class="col">
-            <div class="card h-100 shadow border-0">
-                <div class="card-body text-center">
-                    <h5 class="card-title fw-semibold text-dark">Mis Competiciones</h5>
-                    <a href="/user/perfil/misCompeticiones" class="btn btn-outline-info">VER</a>
-                </div>
-            </div>
-        </div>
-        <?php endif ?>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const editButton = document.getElementById('editButton');
+        const editForm = document.getElementById('editForm');
+
+        editButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            editForm.style.display = 'block';  // Muestra el formulario de edición
+            editButton.style.display = 'none'; // Oculta el botón de edición
+        });
+    });
+</script>
 
 <?php $this->endSection() ?>

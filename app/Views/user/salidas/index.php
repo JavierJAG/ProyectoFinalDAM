@@ -120,7 +120,9 @@
         var calendarEl = document.getElementById('calendar');
 
         var calendar = new FullCalendar.Calendar(calendarEl, {
+             locale: 'es',
             initialView: 'dayGridMonth',
+            firstDay: 1,
             selectable: true,
             buttonText: {
                 today: 'Hoy' // Cambia el texto del botón "Today" a "Hoy"

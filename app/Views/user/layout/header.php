@@ -38,14 +38,24 @@
 
             <div class="dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Mi Perfil
+                    <?= auth()->user()->username ?>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                     <li><a class="dropdown-item" href="<?= base_url("/user/perfil") ?>">Ver Perfil</a></li>
+
+                    <li><a class="dropdown-item" href="/user/perfil/misZonasPesca">Mis Zonas</a></li>
+                    <li><a class="dropdown-item" href="/user/perfil/misCapturas">Mis Capturas</a></li>
+                    <li><a class="dropdown-item" href="/user/perfil/misParticipaciones">Mis Participaciones</a></li>
+                    <li><a class="dropdown-item" href="/user/perfil/misLogros">Mis Logros</a></li>
+                    <li><a class="dropdown-item" href="/logout">Salir</a></li>
+
+                    <?php if (auth()->user()->inGroup('admin') || auth()->user()->inGroup('superadmin')) : ?>
+                        <li><a class="dropdown-item" href="/user/perfil/misCompeticiones">Mis competiciones</href=>
+                        </li>
+                    <?php endif ?>
                     <?php if (auth()->user()->inGroup('superadmin')) : ?>
                         <li><a class="dropdown-item" href="<?= base_url("/dashboard/administracion") ?>">Administrar</a></li>
                     <?php endif ?>
-                    <li><a class="dropdown-item" href="/logout">Salir</a></li>
                 </ul>
             </div>
         </div>

@@ -4,7 +4,10 @@
 <?= view('/user/partials/_mensaje') ?>
 <?= view('/user/partials/_error') ?>
 
-<div class="container mt-4">
+<div class="container mt-5">
+<div class="row">
+    <?= view('/user/partials/_menuPerfil') ?>
+    <div class="col-md-9">
     <h2 class="text-center mb-4">Lista de Competiciones</h2>
 
     <div class="mb-3">
@@ -38,6 +41,8 @@
             <?php endforeach; ?>
         </tbody>
     </table>
+</div>
+</div>
 </div>
 
 <?php $this->endSection() ?>

@@ -4,7 +4,7 @@
 <?= view('/user/partials/_error') ?>
 
 <div class="container mt-4">
-    <h2 class="text-center mb-4">Capturas</h2>
+    <h2 class="text-center mb-4">Capturas globales</h2>
 
     <!-- Formulario de búsqueda y ordenación -->
     <form method="POST" action="/user/buscarCapturas" class="mb-4">
