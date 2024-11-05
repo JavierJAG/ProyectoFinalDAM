@@ -40,7 +40,7 @@
                         <form action="/user/updateProfile" method="POST">
                             <?= csrf_field() ?>
                             <div class="mb-3">
-                                <label for="name" class="form-label">Nuevoombre</label>
+                                <label for="name" class="form-label">Nuevo nombre</label>
                                 <input type="text" name="name" class="form-control" value="<?= esc(auth()->user()->nombre) ?>" >
                             </div>
                             <button type="submit" class="btn btn-primary">Guardar Cambios</button>

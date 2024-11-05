@@ -42,8 +42,8 @@ class Validation extends BaseConfig
     // Rules
     // --------------------------------------------------------------------
     public $especie = [
-        'nombre_comun' => 'required|alpha_numeric_space',
-        'nombre_cientifico' => 'permit_empty|alpha_numeric_space',
+        'nombre_comun' => 'required|regex_match[/^[a-zA-ZÀ-ÿ0-9\s.\-]+$/]',
+        'nombre_cientifico' => 'permit_empty|regex_match[/^[a-zA-ZÀ-ÿ0-9\s.\-]+$/]',
         'talla_minima' => 'permit_empty|numeric|greater_than_equal_to[0]',
         'cupo_maximo' => 'permit_empty|is_natural|greater_than_equal_to[0]'
     ];
@@ -52,8 +52,8 @@ class Validation extends BaseConfig
         'nombre' => 'required|alpha_numeric_space'
     ];
     public $logro = [
-        'nombre' => 'required|alpha_numeric_space',
-        'descripcion' => 'required|alpha_numeric_space'
+        'nombre' => 'required|regex_match[/^[a-zA-ZÀ-ÿ0-9\s.\-]+$/]',
+        'descripcion' => 'required|regex_match[/^[a-zA-ZÀ-ÿ0-9\s.\-]+$/]'
     ];
     public $zonaPesca = [
         'nombre' => 'required|regex_match[/^[a-zA-ZÀ-ÿ0-9\s.\-]+$/]', //Permite letras, numeros, espacios, tildes, puntos y guiones
@@ -61,14 +61,14 @@ class Validation extends BaseConfig
     ];
     public $captura = [
         'fecha_captura' => 'required',
-        'nombre' => 'required|min_length[3]',
-        'descripcion' => 'permit_empty',
+        'nombre' => 'required|min_length[3]|regex_match[/^[a-zA-ZÀ-ÿ0-9\s.\-]+$/]',
+        'descripcion' => 'permit_empty|regex_match[/^[a-zA-ZÀ-ÿ0-9\s.\-]+$/]',
         'tamano' => 'permit_empty|numeric|greater_than_equal_to[0]',
         'peso' => 'permit_empty|is_natural|greater_than_equal_to[0]'
     ];
     public $competicion = [
-        'nombre' => 'required|min_length[3]',
-        'descripcion' => 'required',
+        'nombre' => 'required|min_length[3]|regex_match[/^[a-zA-ZÀ-ÿ0-9\s.\-]+$/]',
+        'descripcion' => 'required|regex_match[/^[a-zA-ZÀ-ÿ0-9\s.\-]+$/]',
         'fecha_inicio' => 'required',
         'fecha_fin' => 'required',
     ];

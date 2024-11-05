@@ -7,8 +7,8 @@
     <div class="bg-light p-4 shadow-sm rounded mb-4">
         <p><strong>Nombre Común:</strong> <?= esc($especie->nombre_comun) ?></p>
         <p><strong>Nombre Científico:</strong> <?= esc($especie->nombre_cientifico) ?></p>
-        <p><strong>Talla Mínima:</strong> <?= esc($especie->tamano_minimo) ?> cm</p>
-        <p><strong>Cupo Máximo:</strong> <?= esc($especie->cupo_maximo) ?></p>
+        <p><strong>Talla Mínima:</strong> <?= $especie->tamano_minimo != 0 ? $especie->tamano_minimo . ' cm' : 'No se ha registrado' ?></p>
+        <p><strong>Cupo Máximo:</strong> <?= $especie->cupo_maximo!=0? $especie->cupo_maximo : 'No se ha registrado' ?></p>
     </div>
 
     <h3 class="text-primary">Imágenes Asociadas</h3>

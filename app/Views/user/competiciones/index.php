@@ -30,11 +30,11 @@
                     <td><?= date('d/m/Y H:i', strtotime($competicion->fecha_fin)) ?></td>
                     <td><?= htmlspecialchars($competicion->nombre) ?></td>
                     <td>
-                        <a href="/user/competiciones/<?= $competicion->id ?>" class="btn btn-info btn-sm">Detalles</a>
-                        <a href="/user/competiciones/<?= $competicion->id ?>/edit" class="btn btn-warning btn-sm">Editar</a>
+                        <a title="Mostrar" href="/user/competiciones/<?= $competicion->id ?>" class="btn btn-info btn-sm"><i class="bi bi-eye"></i></a>
+                        <a title="Editar" href="/user/competiciones/<?= $competicion->id ?>/edit" class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i></a>
                         <form action="/user/competiciones/<?= $competicion->id ?>" method="post" style="display:inline;">
                             <input type="hidden" name="_method" value="DELETE">
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que quieres eliminar esta competición?');">Eliminar</button>
+                            <button title="Eliminar" type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que quieres eliminar esta competición?');"><i class="bi bi-trash"></i></button>
                         </form>
                     </td>
                 </tr>

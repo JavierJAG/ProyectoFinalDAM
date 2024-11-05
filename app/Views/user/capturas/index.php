@@ -79,6 +79,8 @@
                                         <?php foreach ($zonasPesca as $zonaPesca) : ?>
                                             <?php if($zonaPesca->id==$captura->zona_id) :?>
                                                 <a href="/user/zonasPesca/<?= esc($zonaPesca->id) ?>"> <?= $zonaPesca->nombre ?>
+                                                <?php else : ?>
+                                                    <p>No hay información del lugar</p>
                                                 <?php endif ?>
                                         <?php endforeach ?>
                                     </td>

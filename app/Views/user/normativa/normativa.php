@@ -55,10 +55,21 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-12">
-            <h5>La normativa se actualiza anualmente. Puedes consultar toda la información en la página oficial de la Xunta de Galicia:</h5>
-            <a href="https://www.xunta.gal/dog/Publicados/2024/20240220/AnuncioG0691-300124-0001_es.html" class="btn btn-link text-decoration-none">Consultar Normativa</a>
+            <div class="info-section my-4">
+                <h4 class="fw-bold mb-3">Normativa de Pesca en Galicia 2024</h4>
+                <p class="mb-4">
+                    La normativa se actualiza cada año. Puedes consultar toda la información oficial directamente en la página de la Xunta de Galicia:
+                </p>
+                <a href="https://www.xunta.gal/dog/Publicados/2024/20240220/AnuncioG0691-300124-0001_es.html"
+                    class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+                    Consultar Normativa
+                </a>
+            </div>
 
-            <h5>Aquí podrás consultar directamente las aguas vedadas de cada provincia:</h5>
+            <div class="info-section my-4">
+                <h5 class="fw-semibold mt-4">Consulta de Aguas Vedadas por Provincia</h5>
+           
+            </div>
 
             <div class="form-container">
                 <form action="/user/normativa" method="get">

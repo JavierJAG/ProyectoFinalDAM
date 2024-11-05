@@ -47,15 +47,13 @@
                     <li><a class="dropdown-item" href="/user/perfil/misCapturas">Mis Capturas</a></li>
                     <li><a class="dropdown-item" href="/user/perfil/misParticipaciones">Mis Participaciones</a></li>
                     <li><a class="dropdown-item" href="/user/perfil/misLogros">Mis Logros</a></li>
-                    <li><a class="dropdown-item" href="/logout">Salir</a></li>
-
                     <?php if (auth()->user()->inGroup('admin') || auth()->user()->inGroup('superadmin')) : ?>
-                        <li><a class="dropdown-item" href="/user/perfil/misCompeticiones">Mis competiciones</href=>
-                        </li>
+                        <li><a class="dropdown-item" href="/user/perfil/misCompeticiones">Mis Competiciones</a></li>
                     <?php endif ?>
                     <?php if (auth()->user()->inGroup('superadmin')) : ?>
                         <li><a class="dropdown-item" href="<?= base_url("/dashboard/administracion") ?>">Administrar</a></li>
                     <?php endif ?>
+                    <li><a class="dropdown-item" href="/logout">Salir</a></li>
                 </ul>
             </div>
         </div>

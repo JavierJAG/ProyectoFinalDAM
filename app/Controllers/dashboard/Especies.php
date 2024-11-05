@@ -42,13 +42,19 @@ class Especies extends ResourceController
         if ($this->validate('especie')) {
             $nombre_comun = $this->request->getPost('nombre_comun');
             $nombre_cientifico = $this->request->getPost('nombre_cientifico');
-            $talla_minima = $this->request->getPost('talla_minima');
+            $tamano_minimo = $this->request->getPost('tamano_minimo');
             $cupo_maximo = $this->request->getPost('cupo_maximo');
+            if($tamano_minimo==null){
+                $tamano_minimo=0;
+            }
+            if($cupo_maximo==null){
+                $cupo_maximo=0;
+            }
 
             $especieId = $this->model->insert([
                 'nombre_comun' => $nombre_comun,
                 'nombre_cientifico' => $nombre_cientifico,
-                'talla_minima' => $talla_minima,
+                'tamano_minimo' => $tamano_minimo,
                 'cupo_maximo' => $cupo_maximo
             ]);
             // Manejar la subida de imágenes
@@ -88,13 +94,19 @@ class Especies extends ResourceController
         if ($this->validate('especie')) {
             $nombre_comun = $this->request->getPost('nombre_comun');
             $nombre_cientifico = $this->request->getPost('nombre_cientifico');
-            $talla_minima = $this->request->getPost('talla_minima');
+            $tamano_minimo = $this->request->getPost('tamano_minimo');
             $cupo_maximo = $this->request->getPost('cupo_maximo');
+            if($tamano_minimo==null){
+                $tamano_minimo=0;
+            }
+            if($cupo_maximo==null){
+                $cupo_maximo=0;
+            }
 
             $this->model->update($id, [
                 'nombre_comun' => $nombre_comun,
                 'nombre_cientifico' => $nombre_cientifico,
-                'talla_minima' => $talla_minima,
+                'tamano_minimo' => $tamano_minimo,
                 'cupo_maximo' => $cupo_maximo
             ]);
             // Manejar la subida de imágenes

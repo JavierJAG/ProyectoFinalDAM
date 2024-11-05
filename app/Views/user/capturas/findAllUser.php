@@ -39,24 +39,25 @@
     <table class="table table-striped table-bordered">
         <thead class="thead-dark">
             <tr>
+                <th style="width: 40px; text-align: center;"></th>
                 <th>Fecha</th>
                 <th>Nombre</th>
                 <th>Tamaño (cm)</th>
                 <th>Peso (kg)</th>
-                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
             <?php if (!empty($capturas)) : ?>
                 <?php foreach ($capturas as $captura) : ?>
                     <tr>
+                        <td>
+                            <a href="/user/capturas/<?= $captura->id ?>" class="btn btn-info btn-sm"><i class="bi bi-eye"></i></a>
+                        </td>
                         <td><?= date('d/m/Y H:i', strtotime($captura->fecha_captura)) ?></td>
                         <td><?= esc($captura->nombre) ?></td>
                         <td><?= esc($captura->tamano) ?></td>
                         <td><?= esc($captura->peso) ?></td>
-                        <td>
-                            <a href="/user/capturas/<?= $captura->id ?>" class="btn btn-info btn-sm">Detalles</a>
-                        </td>
+
                     </tr>
                 <?php endforeach ?>
             <?php else : ?>

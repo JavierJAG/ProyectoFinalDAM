@@ -7,33 +7,47 @@
 
 <div class="container mt-5">
     <div class="row">
-        <div class="col-md-8 mx-auto">
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white text-center">
-                    <h5 class="mb-0">Gestionar Usuarios</h5>
-                </div>
-                <div class="card-body">
-                    <ul class="list-group">
-                        <?php foreach ($usuarios as $u) : ?>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span><?= htmlspecialchars($u->username) ?></span>
+        <?= view('/user/partials/_menuPerfil') ?>
 
-                                <div class="form-check">
-                                    <input type="checkbox" name="permiso[]" id="permiso-<?= $u->id ?>"
-                                        class="form-check-input" <?= in_array('admin', $u->getGroups()) ? 'checked' : '' ?>
-                                        onchange="toggleAdmin(<?= $u->id ?>, this.checked)">
-                                    <label class="form-check-label" for="permiso-<?= $u->id ?>">Admin</label>
-                                </div>
+        <!-- Contenido del Perfil -->
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-10 mx-auto">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-primary text-white text-center">
+                            <h5 class="mb-0">Gestionar Usuarios</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group">
+                                <?php foreach ($usuarios as $u) : ?>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-person-circle me-2 text-primary"></i>
+                                            <span class="fw-bold"><?= htmlspecialchars($u->username) ?></span>
+                                        </div>
 
-                                <a href="/user/perfil/<?= $u->id ?>" class="btn btn-sm btn-info">Ver Datos</a>
-                                <form action="/dashboard/usuario/eliminar/<?= $u->id ?>" method="post" class="d-inline">
-                                    <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
-                                </form>
-                            </li>
-                        <?php endforeach ?>
-                    </ul>
+                                        <div class="d-flex align-items-center">
+                                            <!-- Checkbox de permisos de Admin -->
+                                            <div class="form-check me-3">
+                                                <input type="checkbox" name="permiso[]" id="permiso-<?= $u->id ?>"
+                                                    class="form-check-input" <?= in_array('admin', $u->getGroups()) ? 'checked' : '' ?>
+                                                    onchange="toggleAdmin(<?= $u->id ?>, this.checked)">
+                                                <label class="form-check-label" for="permiso-<?= $u->id ?>">Organizador</label>
+                                            </div>
 
-
+                                            <!-- Botones de acción -->
+                                            <a title="Ver Perfil" href="/user/perfil/<?= $u->id ?>" class="btn btn-sm btn-info me-2">
+                                                <i class="bi bi-eye"></i> 
+                                            </a>
+                                            <button title="Eliminar" type="button" class="btn btn-sm btn-danger" onclick="confirmDelete(<?= $u->id ?>)">
+                                                <i class="bi bi-trash"></i> 
+                                            </button>
+                                        </div>
+                                    </li>
+                                <?php endforeach ?>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
