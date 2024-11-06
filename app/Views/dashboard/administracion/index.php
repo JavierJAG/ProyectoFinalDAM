@@ -31,12 +31,12 @@
                                 <a href="/dashboard/logros" class="list-group-item list-group-item-action">
                                     Gestionar Logros
                                 </a>
-                                <a href="/user/zonasPesca" class="list-group-item list-group-item-action">
+                                <!-- <a href="/user/zonasPesca" class="list-group-item list-group-item-action">
                                     Gestionar Zonas de Pesca
                                 </a>
                                 <a href="/user/capturas" class="list-group-item list-group-item-action">
                                     Gestionar Capturas
-                                </a>
+                                </a> -->
                                 <a href="/user/competiciones" class="list-group-item list-group-item-action">
                                     Gestionar Competiciones
                                 </a>

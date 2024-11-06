@@ -71,8 +71,17 @@ class Normativa extends BaseController
     }
     public function listarEspecies(){
         $especieModel = new EspecieModel();
-        $especies = $especieModel->findAll();
-        return view('/user/especies/lista', ['especies' => $especies]);
+        $especies = $especieModel;
+        $search = $this->request->getGet("search");
+        if ($search) {
+            $especies = $especieModel
+                ->like('nombre_comun', $search)
+                ->orLike('nombre_cientifico', $search)
+                ->findAll();
+        } else {
+            $especies = $especieModel->findAll();
+        }
+        return view('/user/especies/lista', ['especies' => $especies,'search' => $search]);
     }
     public function detalleEspecie($especieId){
         $especieModel = new EspecieModel();
