@@ -51,7 +51,7 @@
                 <?php foreach ($capturas as $captura) : ?>
                     <tr>
                         <td>
-                            <a href="/user/capturas/<?= $captura->id ?>" class="btn btn-info btn-sm"><i class="bi bi-eye"></i></a>
+                            <a href="/user/capturas/<?= $captura->id ?>" class="btn btn-outline-primary btn-sm" title="Ver detalles"><i class="bi bi-eye"></i></a>
                         </td>
                         <td><?= date('d/m/Y H:i', strtotime($captura->fecha_captura)) ?></td>
                         <td><?= esc($captura->nombre) ?></td>

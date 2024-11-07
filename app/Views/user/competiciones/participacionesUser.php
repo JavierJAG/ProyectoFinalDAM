@@ -8,10 +8,7 @@
     <div class="row">
         <?= view('/user/partials/_menuPerfil') ?>
         <div class="col-md-9">
-            <div class="d-flex justify-content-start mb-3">
-                <a href="javascript:history.back()" class="btn btn-secondary"> <i class="bi bi-arrow-left"></i> Volver</a>
-            </div>
-            
+   
             <h1 class="text-center mb-4">Participaciones</h1>
 
             <div class="list-group">
@@ -29,19 +26,19 @@
                                     $fechaFin = new DateTime($p->fecha_fin);
                                 ?>
                                 <?php if ($fecha_actual < $fechaInicio) : ?>
-                                    <div class="alert alert-info p-1 m-0" role="alert">
+                                    <div class="alert alert-info p-1 m-2" role="alert">
                                         El envío de capturas se abre el <?= $fechaInicio->format('d/m/Y') ?>.
                                     </div>
                                 <?php elseif ($fecha_actual > $fechaFin) : ?>
-                                    <div class="alert alert-warning p-1 m-0" role="alert">
+                                    <div class="alert alert-warning p-1 m-2" role="alert">
                                         El periodo de envío se ha cerrado el <?= $fechaFin->format('d/m/Y') ?>.
                                     </div>
                                 <?php else : ?>
-                                    <a href="/user/competiciones/anhadirParticipacion/<?= $p->competicion_id ?>" class="btn btn-primary btn-sm me-2"> <i class="bi bi-plus-circle"></i> Añadir Captura</a>
+                                    <a href="/user/competiciones/anhadirParticipacion/<?= $p->competicion_id ?>" class="btn btn-primary btn-sm me-2"> <i class="bi bi-plus-circle mx-1"></i> Añadir Captura</a>
                                 <?php endif ?>
                             <?php endif ?>
 
-                            <a href="<?= base_url("user/participantes/" . $p->competicion_id . "/" . auth()->user()->id) ?>" class="btn btn-outline-primary btn-sm">  <i class="bi bi-list-task"></i>Capturas</a>
+                            <a href="<?= base_url("user/participantes/" . $p->competicion_id . "/" . auth()->user()->id) ?>" class="btn btn-outline-primary btn-sm">  <i class="bi bi-list-task mx-1"></i>Capturas</a>
                         </div>
                     </div>
                 <?php endforeach; ?>

@@ -9,9 +9,7 @@
             <?= view('/user/partials/_menuPerfil') ?>
         <?php endif; ?>
         <div class="col-md-9">
-            <div class="d-flex justify-content-left">
-                <a href="javascript:history.back()" class="btn btn-secondary mx-2"><i class="bi bi-arrow-left"></i> Volver</a>
-            </div>
+     
             <h1 class="text-center mb-4">Mis Logros</h1>
 
             <div class="table-responsive">

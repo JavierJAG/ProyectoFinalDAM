@@ -64,7 +64,7 @@ class Validation extends BaseConfig
         'nombre' => 'required|min_length[3]|regex_match[/^[a-zA-ZÀ-ÿ0-9\s.\-]+$/]',
         'descripcion' => 'permit_empty|regex_match[/^[a-zA-ZÀ-ÿ0-9\s.\-]+$/]',
         'tamano' => 'permit_empty|numeric|greater_than_equal_to[0]',
-        'peso' => 'permit_empty|is_natural|greater_than_equal_to[0]'
+        'peso' => 'permit_empty|numeric|greater_than_equal_to[0]'
     ];
     public $competicion = [
         'nombre' => 'required|min_length[3]|regex_match[/^[a-zA-ZÀ-ÿ0-9\s.\-]+$/]',

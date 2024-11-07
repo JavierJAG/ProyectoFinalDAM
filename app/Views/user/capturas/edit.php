@@ -1,81 +1,180 @@
 <?= $this->extend('/user/layout/template') ?>
-
 <?= $this->section('body') ?>
+
 <?= view('/user/partials/_mensaje') ?>
 <?= view('/user/partials/_error') ?>
+<style>
+    /* Aplica una altura mínima al área editable del CKEditor */
+    .ck-editor__editable[role="textbox"] {
+        min-height: 200px;
+        /* Cambia a la altura deseada, por ejemplo, 300px */
+    }
+</style>
+<style>
+    /* Estiliza el título principal */
+    h2 {
+        font-weight: 700;
+        color: #2c3e50;
+        font-size: 2rem;
+    }
+
+    /* Estiliza los labels */
+    label.form-label {
+        font-weight: bold;
+        color: #34495e;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    /* Estiliza los botones */
+    .btn {
+        font-size: 0.9rem;
+        padding: 0.5rem 1.2rem;
+        border-radius: 5px;
+    }
+
+    /* Mejora la apariencia de la vista previa de imágenes */
+    .image-item {
+        position: relative;
+        display: inline-block;
+        margin-right: 1rem;
+    }
+
+    .img-thumbnail {
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-danger {
+        padding: 0.2rem 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    /* Ajusta la posición de los botones de eliminar */
+    .image-item .btn {
+        top: -10px;
+        right: -10px;
+    }
+</style>
 
 <div class="container mt-4">
+    <div class="d-flex justify-content-start mb-3">
+        <a href="javascript:history.back()" class="btn btn-secondary"> <i class="bi bi-arrow-left"></i> Volver</a>
+    </div>
+
     <h2 class="text-center mb-4">Actualizar Captura</h2>
 
     <form action="<?= site_url('/user/capturas/' . $captura->id) ?>" method="post" enctype="multipart/form-data">
         <input type="hidden" name="_method" value="PATCH">
-
-        <div class="mb-3">
-            <label for="fecha_captura" class="form-label">Fecha de Captura</label>
-            <input type="datetime-local" name="fecha_captura" id="fecha_captura" class="form-control" value="<?= old('fecha_captura', $captura->fecha_captura) ?>" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="nombre_especie" class="form-label">Nombre de la Especie</label>
-            <input type="text" name="nombre" id="nombre_especie" class="form-control" value="<?= old('nombre', $captura->nombre) ?>" placeholder="Nombre de la especie capturada" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="descripcion" class="form-label">Descripción</label>
-            <textarea name="descripcion" id="descripcion" class="form-control" placeholder="Descripción de la captura"><?= old('descripcion', $captura->descripcion) ?></textarea>
-        </div>
-        <div class="row">
-        <div class="col-md-6 mb-3">
-                <label for="tamano" class="form-label">Tamaño (cm)</label>
-                <input type="number" step="5" name="tamano" id="tamano" class="form-control" value="<?= old('tamano', $captura->tamano) ?>" placeholder="Tamaño en cm" required>
+        <div class="row g-3 mb-4">
+            <div class="col-md-6">
+                <label for="fecha_captura" class="form-label">
+                    <i class="bi bi-calendar"></i> Fecha de Captura
+                </label>
+                <input type="datetime-local" name="fecha_captura" id="fecha_captura" class="form-control"
+                    value="<?= old('fecha_captura', $captura->fecha_captura) ?>" required>
             </div>
 
-            <div class="col-md-6 mb-3">
-                <label for="peso" class="form-label">Peso (Kg)</label>
-                <input type="number" step="0.250" name="peso" id="peso" class="form-control" value="<?= old('peso', $captura->peso) ?>" placeholder="Peso en Kg" required>
+            <div class="col-md-6">
+                <label for="nombre_especie" class="form-label">
+                    <i class="bi bi-clipboard"></i> Especie
+                </label>
+                <input type="text" name="nombre" id="nombre_especie" class="form-control"
+                    value="<?= old('nombre', $captura->nombre) ?>" placeholder="Nombre de la especie capturada" required>
             </div>
         </div>
 
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Datos de la Captura</h5>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="tamano" class="form-label">
+                            <i class="bi bi-rulers"></i> Tamaño (cm)
+                        </label>
+                        <input type="number" step="5" name="tamano" id="tamano" class="form-control"
+                            value="<?= old('tamano', $captura->tamano) ?>" placeholder="Tamaño en cm" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="peso" class="form-label">
+                            <i class="bi bi-basket"></i> Peso (Kg)
+                        </label>
+                        <input type="number" step="0.250" name="peso" id="peso" class="form-control"
+                            value="<?= old('peso', $captura->peso) ?>" placeholder="Peso en Kg" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Agrupación de Provincia, Localidad y Zona de Pesca -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Ubicación y Zona de Pesca</h5>
+
+                <div class="row g-3">
+                    <!-- Provincia -->
+                    <div class="col-md-4">
+                        <label for="provincia" class="form-label">
+                            <i class="bi bi-geo-alt"></i> Provincia
+                        </label>
+                        <select name="provincia" id="provincia" class="form-control" required>
+                            <option value="" selected>Selecciona una provincia</option>
+                            <?php foreach (['A CORUÑA', 'LUGO', 'OURENSE', 'PONTEVEDRA'] as $provincia): ?>
+                                <option value="<?= $provincia ?>" <?= old('provincia', $localidad->PROVINCIA) == $provincia ? 'selected' : '' ?>>
+                                    <?= $provincia ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="localidad" class="form-label">
+                            <i class="bi bi-building"></i> Localidad
+                        </label>
+                        <select name="localidad" id="localidad" class="form-control" required>
+                            <option value="" selected>Selecciona una localidad</option>
+                            <?php if (isset($localidades)): ?>
+                                <?php foreach ($localidades as $l): ?>
+                                    <option value="<?= $l->nombre ?>" <?= ($l->nombre == $localidad->nombre) ? 'selected' : '' ?>>
+                                        <?= esc($l->nombre) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="zonaPesca" class="form-label">
+                            <i class="bi bi-geo"></i> Zona de Pesca
+                        </label>
+                        <select name="zonaPesca" id="zonaPesca" class="form-control" required>
+                            <option value="" selected>Selecciona una zona de pesca</option>
+                            <?php if (isset($zonasPesca)): ?>
+                                <?php foreach ($zonasPesca as $zona): ?>
+                                    <option value="<?= $zona->id ?>" <?= ($zona->id == $zonaPesca->id) ? 'selected' : '' ?>>
+                                        <?= esc($zona->nombre) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="mb-3">
-            <label for="provincia" class="form-label">Provincia</label>
-            <select name="provincia" id="provincia" class="form-control" required>
-                <option value="" selected>Selecciona una provincia</option>
-                <?php foreach (['A CORUÑA', 'LUGO', 'OURENSE', 'PONTEVEDRA'] as $provincia): ?>
-                    <option value="<?= $provincia ?>" <?= old('provincia', $localidad->PROVINCIA) == $provincia ? 'selected' : '' ?>><?= $provincia ?></option>
-                <?php endforeach; ?>
-            </select>
+            <label for="descripcion" class="form-label">
+                <i class="bi bi-textarea-t"></i> Detalles
+            </label>
+            <textarea name="descripcion" id="descripcion" class="form-control"
+                placeholder="Descripción de la captura"><?= old('descripcion', $captura->descripcion) ?></textarea>
         </div>
 
         <div class="mb-3">
-            <label for="localidad" class="form-label">Localidad</label>
-            <select name="localidad" id="localidad" class="form-control" required>
-                <option value="" selected>Selecciona una localidad</option>
-                <?php if (isset($localidades)): ?>
-                    <?php foreach ($localidades as $l): ?>
-                        <option value="<?= $l->nombre ?>" <?= ($l->nombre == $localidad->nombre) ? 'selected' : '' ?>>
-                            <?= esc($l->nombre) ?>
-                        </option>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </select>
-        </div>
-
-        <div class="mb-3">
-            <label for="zonaPesca" class="form-label">Zona de Pesca</label>
-            <select name="zonaPesca" id="zonaPesca" class="form-control" required>
-                <option value="" selected>Selecciona una zona de pesca</option>
-                <?php if (isset($zonasPesca)): ?>
-                    <?php foreach ($zonasPesca as $zona): ?>
-                        <option value="<?= $zona->id ?>" <?= ($zona->id == $zonaPesca->id) ? 'selected' : '' ?>>
-                            <?= esc($zona->nombre) ?>
-                        </option>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </select>
-        </div>
-
-        <div class="mb-3">
-            <label for="imagenes" class="form-label">Imágenes de la Captura</label>
+            <label for="imagenes" class="form-label">
+                <i class="bi bi-image"></i> Imágenes de la Captura
+            </label>
             <input type="file" id="imagenes" name="imagenes[]" class="form-control" multiple accept="image/*" onchange="previewImages()">
         </div>
 
@@ -95,11 +194,19 @@
         <button type="submit" class="btn btn-primary mt-3">Actualizar</button>
     </form>
 </div>
+<br>
 
 <script src="https://cdn.ckeditor.com/ckeditor5/30.0.0/classic/ckeditor.js"></script>
 <script>
     ClassicEditor
-        .create(document.querySelector('#descripcion'))
+        .create(document.querySelector('#descripcion'), {
+            toolbar: {
+                items: [
+                    'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo'
+                ],
+            },
+            placeholder: 'Descripción del momento de la captura, detalles de la jornada, condiciones...',
+        })
         .catch(error => {
             console.error(error);
         });

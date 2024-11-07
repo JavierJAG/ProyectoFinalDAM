@@ -14,24 +14,35 @@
                     <a href="/user/zonasPesca/new" class="btn btn-success me-2">
                         <i class="bi bi-plus-circle"></i> Crear Zona de Pesca
                     </a>
-                    <a href="javascript:history.back()" class="btn btn-secondary">
-                        <i class="bi bi-arrow-left"></i> Volver
-                    </a>
+                 
                 </div>
             </div>
 
+            <p>Zonas de pesca: <?= count($zonasPesca) ?></p>
             <table class="table table-bordered table-striped align-middle">
                 <thead class="table-dark text-center">
                     <tr>
-                        <th class="col-md-3">Zona de Pesca</th>
+                    <th class="text-center col-md-1"></th>
+                        <th class="col-md-3">
+                            <a href="?sort=nombre&order=<?= (isset($_GET['order']) && $_GET['order'] === 'asc') ? 'desc' : 'asc' ?>" class="text-decoration-none text-white">
+                                Zona de Pesca
+                                <?php if (isset($_GET['order']) && $_GET['order'] === 'asc'): ?>
+                                    <i class="bi bi-arrow-up"></i>
+                                <?php elseif (isset($_GET['order']) && $_GET['order'] === 'desc'): ?>
+                                    <i class="bi bi-arrow-down"></i>
+                                <?php endif; ?>
+                            </a>
+                        </th>
                         <th class="col-md-5">Lista de Especies Capturadas</th>
-                        <th class="col-md-2">Capturas Totales</th>
-                        <th class="col-md-2">Acciones</th>
+                        <th class="text-center col-md-1"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($zonasPesca as $zonaPesca) : ?>
+                    <?php $i = 0;
+                    foreach ($zonasPesca as $zonaPesca) : ?>
+                        <?php $i++ ?>
                         <tr>
+                            <td  class="text-center col-md-1"><?= $i ?></td>
                             <td>
                                 <strong><?= htmlspecialchars($zonaPesca->nombre) ?></strong><br>
                                 <small class="text-muted"><?= htmlspecialchars($zonaPesca->descripcion) ?></small>
@@ -65,20 +76,21 @@
                                                             <small class="text-muted">Tamaño: <?= htmlspecialchars($captura->tamano) ?> cm</small><br>
                                                             <small class="text-muted">Peso: <?= htmlspecialchars($captura->peso) ?> kg</small>
                                                         </li>
-                                                <?php endif; endforeach; ?>
+                                                <?php endif;
+                                                endforeach; ?>
                                             </ul>
                                         </div>
                                     </div>
                                 <?php endif; ?>
                             </td>
-                            <td class="text-center fw-bold"><?= $capturasTotales; ?></td>
+                          
                             <td class="text-center">
-                                <a href="/user/zonasPesca/<?= $zonaPesca->id ?>/edit" class="btn btn-warning btn-sm me-1" title="Editar">
+                                <a href="/user/zonasPesca/<?= $zonaPesca->id ?>/edit" class="btn btn-sm me-1 px-2" title="Editar">
                                     <i class="bi bi-pencil"></i>
                                 </a>
                                 <form action="/user/zonasPesca/<?= $zonaPesca->id ?>" method="post" class="d-inline" style="display:inline;">
                                     <input type="hidden" name="_method" value="DELETE">
-                                    <button type="submit" class="btn btn-danger btn-sm" title="Eliminar" onclick="return confirm('¿Estás seguro de que deseas eliminar esta zona de pesca?');">
+                                    <button type="submit" class="btn btn-sm px-2" title="Eliminar" onclick="return confirm('¿Estás seguro de que deseas eliminar <?= $zonaPesca->nombre ?> y sus capturas asociadas?');">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </form>

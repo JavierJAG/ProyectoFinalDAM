@@ -50,7 +50,7 @@
                 <th class="text-center">Fecha Inicio</th>
                 <th class="text-center">Fecha Fin</th>
                 <th class="text-center">Nombre</th>
-                <th class="text-center">Acciones</th>
+                <th class="text-center"></th>
             </tr>
         </thead>
         <tbody>
@@ -81,7 +81,7 @@
                 <th class="text-center">Fecha Inicio</th>
                 <th class="text-center">Fecha Fin</th>
                 <th class="text-center">Nombre</th>
-                <th class="text-center">Acciones</th>
+                <th class="text-center"></th>
             </tr>
         </thead>
         <tbody>

@@ -9,6 +9,8 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'web\Web::index');
 
 service('auth')->routes($routes);
+$routes->get('captcha/generate', 'CaptchaController::generateCaptcha');
+$routes->post('captcha/validate', 'CaptchaController::validateCaptcha');
 
 $routes->group('dashboard', ['filter' => 'auth', 'namespace' => "App\Controllers\dashboard"], function ($routes) {
     $routes->get('usuarios', 'Administracion::gestionUsuarios');
@@ -30,6 +32,7 @@ $routes->group('user', ['namespace' => "App\Controllers\user"], function ($route
         $routes->get('misParticipaciones', 'User::misParticipaciones');
         $routes->get('', 'User::index');
     });
+    $routes->get('verModalZonaPesca/(:num)','ZonasPesca::verModalZonaPesca/$1');
     $routes->get('change-password', 'User::changePasswordForm'); 
     $routes->post('change-password', 'User::changePassword');   
     $routes->post('updateProfile','User::updateProfile');

@@ -18,7 +18,7 @@
                     
                     <!-- Datos del usuario -->
                     <div class="mb-3">
-                        <strong>Nombre de usuario:</strong> <?= esc(auth()->user()->username) ?>
+                        <strong>Usuario:</strong> <?= esc(auth()->user()->username) ?>
                     </div>
                     <div class="mb-3">
                         <strong>Nombre real:</strong> <?= (auth()->user()->nombre!=null)?auth()->user()->nombre : "<small><em>Aún no has indicado tu nombre</em></small>" ?>

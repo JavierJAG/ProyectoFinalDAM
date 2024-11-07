@@ -12,13 +12,15 @@
 
     <!-- Opciones en tarjetas -->
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center">
-        <!-- Opción 1: Registrar Capturas -->
+        <!-- Opción 1: Normativa de Pesca -->
         <div class="col">
             <div class="card h-100 shadow border-0 text-center">
                 <div class="card-body">
-                    <h2 class="card-title text-dark fw-semibold">Registrar Capturas</h2>
-                    <p class="card-text text-muted">Documenta tus mejores capturas y mantén un registro de tus aventuras de pesca.</p>
-                    <a href="<?= site_url('/user/capturas/new') ?>" class="btn btn-outline-primary">Registrar Captura</a>
+                <h2 class="card-title text-dark fw-semibold">Normativa de Pesca</h2>
+                    <p class="card-text text-muted">Infórmate sobre las normativas y regulaciones de pesca para disfrutar de manera responsable.</p>
+                    <a href="<?= site_url('/user/normativa') ?>" class="btn btn-outline-primary">Ver Normativa</a>
+
+                  
                 </div>
             </div>
         </div>
@@ -29,7 +31,7 @@
                 <div class="card-body">
                     <h2 class="card-title text-dark fw-semibold">Planificar Jornadas</h2>
                     <p class="card-text text-muted">Organiza tus jornadas de pesca en tus lugares favoritos.</p>
-                    <a href="<?= site_url('/user/salidas') ?>" class="btn btn-outline-success">Planificar Jornada</a>
+                    <a href="<?= site_url('/user/salidas') ?>" class="btn btn-outline-primary">Planificar Jornada</a>
                 </div>
             </div>
         </div>
@@ -40,20 +42,20 @@
                 <div class="card-body">
                     <h2 class="card-title text-dark fw-semibold">Ver Competiciones</h2>
                     <p class="card-text text-muted">Participa en competiciones de pesca y demuestra tus habilidades en el agua.</p>
-                    <a href="<?= site_url('/user/buscarCompeticiones') ?>" class="btn btn-outline-secondary">Ver Competiciones</a> <!-- Cambiado a btn-outline-secondary -->
+                    <a href="<?= site_url('/user/buscarCompeticiones') ?>" class="btn btn-outline-primary">Ver Competiciones</a> <!-- Cambiado a btn-outline-secondary -->
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Opción extra: Normativa de Pesca -->
+    <!-- Opción extra: Registrar Capturas -->
     <div class="row mt-4">
         <div class="col-md-12 text-center">
             <div class="card h-100 shadow border-0 text-center">
                 <div class="card-body">
-                    <h2 class="card-title text-dark fw-semibold">Normativa de Pesca</h2>
-                    <p class="card-text text-muted">Infórmate sobre las normativas y regulaciones de pesca para disfrutar de manera responsable.</p>
-                    <a href="<?= site_url('/user/normativa') ?>" class="btn btn-outline-info">Ver Normativa</a>
+                <h2 class="card-title text-dark fw-semibold">Registrar Capturas</h2>
+                    <p class="card-text text-muted">Documenta tus mejores capturas y mantén un registro de tus aventuras de pesca.</p>
+                    <a href="<?= site_url('/user/capturas/new') ?>" class="btn btn-outline-primary">Registrar Captura</a>
                 </div>
             </div>
         </div>

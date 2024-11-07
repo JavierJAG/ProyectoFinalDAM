@@ -147,4 +147,28 @@ class ZonasPesca extends ResourceController
         // Devolver como JSON
         return $this->response->setJSON($localidad);
     }
+    public function verModalZonaPesca($id)
+{
+    $zona = $this->model->find($id); 
+    $localidadModel= new LocalidadModel();
+    $localidad= $localidadModel->where('id',$zona->localidad_id)->first();
+
+    if ($zona) {
+        return $this->response->setJSON([
+            'success' => true,
+            'zona' => [
+                'nombre' => $zona->nombre,
+                'descripcion' => $zona->descripcion,
+                'provincia' => $localidad->PROVINCIA,
+                'localidad'=>$localidad->nombre
+            ]
+        ]);
+    } else {
+        return $this->response->setJSON([
+            'success' => false,
+            'message' => 'Zona no encontrada'
+        ]);
+    }
+}
+
 }

@@ -6,9 +6,9 @@ use CodeIgniter\Config\BaseConfig;
 
 class Email extends BaseConfig
 {
-    public string $fromEmail  = '';
-    public string $fromName   = '';
-    public string $recipients = '';
+    public string $fromEmail  = 'javier.araujo@teconsite.com'; // Dirección de correo de origen
+    public string $fromName   = 'PescadoresDaRia';              // Nombre del remitente
+    public string $recipients = '';                             // Destinatarios predeterminados (si es necesario)
 
     /**
      * The "user agent"
@@ -18,32 +18,27 @@ class Email extends BaseConfig
     /**
      * The mail sending protocol: mail, sendmail, smtp
      */
-    public string $protocol = 'mail';
-
-    /**
-     * The server path to Sendmail.
-     */
-    public string $mailPath = '/usr/sbin/sendmail';
+    public string $protocol = 'smtp';  // Usamos SMTP para enviar correos
 
     /**
      * SMTP Server Hostname
      */
-    public string $SMTPHost = '';
+    public string $SMTPHost = 'teconsite.com';  // Servidor SMTP de destino
 
     /**
      * SMTP Username
      */
-    public string $SMTPUser = '';
+    public string $SMTPUser = 'javier.araujo@teconsite.com';  // Nombre de usuario SMTP (el correo electrónico)
 
     /**
      * SMTP Password
      */
-    public string $SMTPPass = '';
+    public string $SMTPPass = 'IGF]9*CW[_$4';  // La contraseña de tu cuenta de correo
 
     /**
      * SMTP Port
      */
-    public int $SMTPPort = 25;
+    public int $SMTPPort = 465;  // Puerto SMTP para conexiones seguras SSL
 
     /**
      * SMTP Timeout (in seconds)
@@ -60,9 +55,9 @@ class Email extends BaseConfig
      *
      * @var string '', 'tls' or 'ssl'. 'tls' will issue a STARTTLS command
      *             to the server. 'ssl' means implicit SSL. Connection on port
-     *             465 should set this to ''.
+     *             465 should set this to 'ssl'.
      */
-    public string $SMTPCrypto = 'tls';
+    public string $SMTPCrypto = 'ssl';  // Usamos SSL para la conexión segura
 
     /**
      * Enable word-wrap

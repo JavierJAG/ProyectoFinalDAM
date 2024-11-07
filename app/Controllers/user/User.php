@@ -25,6 +25,16 @@ class User extends ResourceController
     {
         $zonaPescaModel = new ZonaPescaModel();
         $capturaModel = new CapturaModel();
+        $sort = $this->request->getGet('sort') === 'nombre' ? 'nombre' : null;
+        $order = $this->request->getGet('order') === 'asc' ? 'asc' : 'desc'; // Valor predeterminado a 'desc'
+
+        // Obtener el modelo de zonas de pesca y seleccionar las columnas necesarias
+        $zonasPesca = $zonaPescaModel;
+
+        // Aplica ordenación si se solicita
+        if ($sort != null) {
+            $zonasPesca = $zonasPesca->orderBy($sort, $order);
+        }
 
         // Obtener las zonas de pesca del usuario
         $zonasPesca = $zonaPescaModel->where('usuario_id', auth()->user()->id)->paginate(10);
@@ -47,49 +57,56 @@ class User extends ResourceController
     {
         $capturaModel = new CapturaModel();
         $zonaPescaModel = new ZonaPescaModel();
-        $zonasPesca = $zonaPescaModel->where('usuario_id',auth()->user()->id)->findAll();
-
+        
+        // Obtener el parámetro 'sort' y 'order' desde la URL (GET)
+        $sort = $this->request->getGet('sort') ?: 'fecha_captura'; // Si no se especifica, por defecto ordena por 'fecha_captura'
+        $order = $this->request->getGet('order') === 'asc' ? 'asc' : 'desc'; // Si no se especifica, por defecto es 'desc'
+    
+        // Obtener las zonas de pesca
+        $zonasPesca = $zonaPescaModel->where('usuario_id', auth()->user()->id)->findAll();
+    
+        // Obtener los parámetros de búsqueda y filtro
         $search = $this->request->getPost('search'); // Obtener el término de búsqueda
-        $order = $this->request->getPost('order'); // Obtener el criterio de ordenación
         $zona = $this->request->getPost('zona');
-
-        // Base de la consulta
-        $capturasQuery = $capturaModel;
-
+    
+        // Crear la consulta base
+        $capturasQuery = $capturaModel->where('capturas.usuario_id', auth()->user()->id);
+    
         // Filtrar por nombre si hay un término de búsqueda
         if (!empty($search)) {
             $capturasQuery = $capturasQuery->like('nombre', $search);
         }
-
-        // Aplicar ordenación según el criterio seleccionado
-        switch ($order) {
-            case 'peso':
-                $capturasQuery = $capturasQuery->orderBy('peso', 'DESC');
-                break;
-            case 'tamano':
-                $capturasQuery = $capturasQuery->orderBy('tamano', 'DESC');
-                break;
-            default:
-                // Ordenar por fecha por defecto
-                $capturasQuery = $capturasQuery->orderBy('fecha_captura', 'DESC');
-                break;
+    
+        // Filtrar por zona si se seleccionó alguna
+        if (!empty($zona)) {
+            $capturasQuery = $capturasQuery->where('zona_id', $zona);
         }
-        if(!$zona==""){
-            $capturasQuery = $capturasQuery->where('zona_id',$zona);
+        if ($sort === 'zona') {
+            $capturasQuery = $capturasQuery->join('zonas_pesca', 'capturas.zona_id = zonas_pesca.id');
+            $capturasQuery = $capturasQuery->orderBy('zonas_pesca.nombre', $order);
+        } else {
+            // Ordenar por el campo indicado por el parámetro 'sort'
+            $capturasQuery = $capturasQuery->orderBy($sort, $order);
         }
-
+        
+    
         // Obtener los resultados paginados
+        $capturas = $capturasQuery->paginate(10);
+    
+        // Pasar los datos a la vista
         $data = [
-            'capturas' => $capturasQuery->where('usuario_id', auth()->user()->id)->paginate(10), // Cambia el número de capturas por página según sea necesario
+            'capturas' => $capturas,
             'pager' => $capturaModel->pager,
             'search' => $search,
             'order' => $order,
-            'zona'=>$zona,
-            'zonasPesca'=>$zonasPesca
+            'zona' => $zona,
+            'zonasPesca' => $zonasPesca,
+            'sort' => $sort,
         ];
-
+    
         return view('/user/capturas/index', $data);
     }
+    
     public function buscarCapturas($id)
     {
         $capturaModel = new CapturaModel();
@@ -142,7 +159,7 @@ class User extends ResourceController
             ->where('usuarios_logros.usuario_id', auth()->user()->id)
             ->paginate(10);
 
-        return view('/user/user/logros', ['logros' => $logrosUsuario, 'usuario_id'=>$usuario_id, 'pager' => $usuarioLogroModel->pager]);
+        return view('/user/user/logros', ['logros' => $logrosUsuario, 'usuario_id' => $usuario_id, 'pager' => $usuarioLogroModel->pager]);
     }
 
     public function buscarLogros($id)
@@ -157,7 +174,7 @@ class User extends ResourceController
             ->where('usuarios_logros.usuario_id', $id)
             ->paginate(10);
 
-        return view('/user/user/logros', ['logros' => $logrosUsuario, 'usuario_id'=>$id, 'pager' => $usuarioLogroModel->pager]);
+        return view('/user/user/logros', ['logros' => $logrosUsuario, 'usuario_id' => $id, 'pager' => $usuarioLogroModel->pager]);
     }
     public function misCompeticiones()
     {
@@ -371,7 +388,7 @@ class User extends ResourceController
 
         // Actualizar la contraseña
         $user->password_hash = $passwords->hash($this->request->getPost('new_password'));
-            $userModel->save($user);
+        $userModel->save($user);
 
         return redirect()->to('/user/perfil')->with('mensaje', 'Contraseña cambiada exitosamente.');
     }
