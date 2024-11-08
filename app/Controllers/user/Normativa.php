@@ -69,20 +69,36 @@ class Normativa extends BaseController
         }
         return $tableContent;
     }
-    public function listarEspecies(){
+    public function listarEspecies()
+    {
         $especieModel = new EspecieModel();
-        $especies = $especieModel;
+        
+        // Obtener los parámetros de ordenación desde la URL (GET)
+        $sort = $this->request->getGet('sort') ?: 'nombre_comun'; // Si no se especifica, por defecto ordena por 'nombre_comun'
+        $order = $this->request->getGet('order') === 'asc' ? 'asc' : 'desc'; // Si no se especifica, por defecto es 'desc'
+        
         $search = $this->request->getGet("search");
+        
         if ($search) {
             $especies = $especieModel
                 ->like('nombre_comun', $search)
                 ->orLike('nombre_cientifico', $search)
+                ->orderBy($sort, $order) // Aplicar la ordenación
                 ->findAll();
         } else {
-            $especies = $especieModel->findAll();
+            $especies = $especieModel
+                ->orderBy($sort, $order) // Aplicar la ordenación
+                ->findAll();
         }
-        return view('/user/especies/lista', ['especies' => $especies,'search' => $search]);
+    
+        return view('/user/especies/lista', [
+            'especies' => $especies,
+            'search' => $search,
+            'sort' => $sort,
+            'order' => $order
+        ]);
     }
+    
     public function detalleEspecie($especieId){
         $especieModel = new EspecieModel();
         $especie = $especieModel->find($especieId);

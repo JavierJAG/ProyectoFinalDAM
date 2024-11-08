@@ -20,11 +20,66 @@
             <thead class="table-primary">
                 <tr>
                     <th scope="col" style="width: 40px; text-align: center;"></th>
-                    <th scope="col">ID</th>
-                    <th scope="col">Nombre Común</th>
-                    <th scope="col">Nombre Científico</th>
-                    <th scope="col">Talla mínima (cm)</th>
-                    <th scope="col">Cupo máximo</th>
+                    <th scope="col">
+                        <a href="?sort=id&order=<?= ($sort === 'id' && $order === 'asc') ? 'desc' : 'asc' ?>&search=<?= esc($search) ?>" class="text-decoration-none text-dark">
+                            ID
+                            <?php if ($sort === 'id') : ?>
+                                <?php if ($order === 'asc') : ?>
+                                    <i class="bi bi-arrow-up"></i>
+                                <?php else : ?>
+                                    <i class="bi bi-arrow-down"></i>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                        </a>
+                    </th>
+                    <th scope="col">
+                        <a href="?sort=nombre_comun&order=<?= ($sort === 'nombre_comun' && $order === 'asc') ? 'desc' : 'asc' ?>&search=<?= esc($search) ?>" class="text-decoration-none text-dark">
+                            Nombre Común
+                            <?php if ($sort === 'nombre_comun') : ?>
+                                <?php if ($order === 'asc') : ?>
+                                    <i class="bi bi-arrow-up"></i>
+                                <?php else : ?>
+                                    <i class="bi bi-arrow-down"></i>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                        </a>
+                    </th>
+                    <th scope="col">
+                        <a href="?sort=nombre_cientifico&order=<?= ($sort === 'nombre_cientifico' && $order === 'asc') ? 'desc' : 'asc' ?>&search=<?= esc($search) ?>" class="text-decoration-none text-dark">
+                            Nombre Científico
+                            <?php if ($sort === 'nombre_cientifico') : ?>
+                                <?php if ($order === 'asc') : ?>
+                                    <i class="bi bi-arrow-up"></i>
+                                <?php else : ?>
+                                    <i class="bi bi-arrow-down"></i>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                        </a>
+                    </th>
+                    <th scope="col">
+                        <a href="?sort=tamano_minimo&order=<?= ($sort === 'tamano_minimo' && $order === 'asc') ? 'desc' : 'asc' ?>&search=<?= esc($search) ?>" class="text-decoration-none text-dark">
+                            Talla mínima (cm)
+                            <?php if ($sort === 'tamano_minimo') : ?>
+                                <?php if ($order === 'asc') : ?>
+                                    <i class="bi bi-arrow-up"></i>
+                                <?php else : ?>
+                                    <i class="bi bi-arrow-down"></i>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                        </a>
+                    </th>
+                    <th scope="col">
+                        <a href="?sort=cupo_maximo&order=<?= ($sort === 'cupo_maximo' && $order === 'asc') ? 'desc' : 'asc' ?>&search=<?= esc($search) ?>" class="text-decoration-none text-dark">
+                            Cupo máximo
+                            <?php if ($sort === 'cupo_maximo') : ?>
+                                <?php if ($order === 'asc') : ?>
+                                    <i class="bi bi-arrow-up"></i>
+                                <?php else : ?>
+                                    <i class="bi bi-arrow-down"></i>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                        </a>
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -32,7 +87,7 @@
                     <?php foreach ($especies as $especie) : ?>
                         <tr>
                             <td>
-                                <a title="Detalles" href="/user/especies/<?= $especie->id ?>" class="btn btn-info btn-sm">
+                                <a title="Detalles" href="/user/especies/<?= $especie->id ?>" class="btn btn-outline-primary btn-sm">
                                     <i class="bi bi-eye"></i>
                                 </a>
                             </td>

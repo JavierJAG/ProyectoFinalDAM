@@ -57,42 +57,40 @@ class User extends ResourceController
     {
         $capturaModel = new CapturaModel();
         $zonaPescaModel = new ZonaPescaModel();
-        
-        // Obtener el parámetro 'sort' y 'order' desde la URL (GET)
-        $sort = $this->request->getGet('sort') ?: 'fecha_captura'; // Si no se especifica, por defecto ordena por 'fecha_captura'
-        $order = $this->request->getGet('order') === 'asc' ? 'asc' : 'desc'; // Si no se especifica, por defecto es 'desc'
-    
+
+        // Obtener los parámetros de ordenación y búsqueda desde la URL o formulario
+        $sort = $this->request->getGet('sort') ?: 'fecha_captura';
+        $order = $this->request->getGet('order') === 'asc' ? 'asc' : 'desc';
+        $search = $this->request->getVar('search');  // Obtener el término de búsqueda desde cualquier fuente
+        $zona = $this->request->getVar('zona');      // Obtener la zona desde cualquier fuente
+
         // Obtener las zonas de pesca
         $zonasPesca = $zonaPescaModel->where('usuario_id', auth()->user()->id)->findAll();
-    
-        // Obtener los parámetros de búsqueda y filtro
-        $search = $this->request->getPost('search'); // Obtener el término de búsqueda
-        $zona = $this->request->getPost('zona');
-    
+
         // Crear la consulta base
         $capturasQuery = $capturaModel->where('capturas.usuario_id', auth()->user()->id);
-    
+
         // Filtrar por nombre si hay un término de búsqueda
         if (!empty($search)) {
             $capturasQuery = $capturasQuery->like('nombre', $search);
         }
-    
+
         // Filtrar por zona si se seleccionó alguna
         if (!empty($zona)) {
             $capturasQuery = $capturasQuery->where('zona_id', $zona);
         }
+
+        // Ordenar según el campo y la dirección especificados
         if ($sort === 'zona') {
             $capturasQuery = $capturasQuery->join('zonas_pesca', 'capturas.zona_id = zonas_pesca.id');
             $capturasQuery = $capturasQuery->orderBy('zonas_pesca.nombre', $order);
         } else {
-            // Ordenar por el campo indicado por el parámetro 'sort'
             $capturasQuery = $capturasQuery->orderBy($sort, $order);
         }
-        
-    
+
         // Obtener los resultados paginados
         $capturas = $capturasQuery->paginate(10);
-    
+
         // Pasar los datos a la vista
         $data = [
             'capturas' => $capturas,
@@ -103,16 +101,18 @@ class User extends ResourceController
             'zonasPesca' => $zonasPesca,
             'sort' => $sort,
         ];
-    
+
         return view('/user/capturas/index', $data);
     }
-    
+
+
     public function buscarCapturas($id)
     {
         $capturaModel = new CapturaModel();
 
-        $search = $this->request->getPost('search'); // Obtener el término de búsqueda
-        $order = $this->request->getPost('order'); // Obtener el criterio de ordenación
+        $sort = $this->request->getGet('sort') ?: 'fecha_captura';
+        $order = $this->request->getGet('order') === 'asc' ? 'asc' : 'desc';
+        $search = $this->request->getVar('search');
 
         // Base de la consulta
         $capturasQuery = $capturaModel;
@@ -123,58 +123,71 @@ class User extends ResourceController
         }
 
         // Aplicar ordenación según el criterio seleccionado
-        switch ($order) {
-            case 'peso':
-                $capturasQuery = $capturasQuery->orderBy('peso', 'DESC');
-                break;
-            case 'tamano':
-                $capturasQuery = $capturasQuery->orderBy('tamano', 'DESC');
-                break;
-            default:
-                // Ordenar por fecha por defecto
-                $capturasQuery = $capturasQuery->orderBy('fecha_captura', 'DESC');
-                break;
-        }
+      
 
         // Obtener los resultados paginados
         $data = [
-            'capturas' => $capturasQuery->where('usuario_id', $id)->paginate(10), // Cambia el número de capturas por página según sea necesario
+            'capturas' => $capturasQuery->where('usuario_id', $id)->orderBy($sort,$order)->paginate(10),
             'pager' => $capturaModel->pager,
+            'usuario_id'=>$id,
             'search' => $search,
-            'order' => $order
+            'order' => $order,
+            'sort'=>$sort
         ];
 
         return view('/user/user/capturas', $data);
     }
+
     public function misLogros()
     {
         $usuario_id = auth()->user()->id;
         $usuarioLogroModel = new UsuarioLogroModel();
 
+        // Obtener los parámetros de ordenación desde la URL (GET)
+        $sort = $this->request->getGet('sort') ?: 'fecha_obtencion'; // Si no se especifica, por defecto ordena por 'fecha_obtencion'
+        $order = $this->request->getGet('order') === 'asc' ? 'asc' : 'desc'; // Si no se especifica, por defecto es 'desc'
+
         // Realiza la consulta para obtener los logros junto con la competición y fecha
         $logrosUsuario = $usuarioLogroModel
-            ->select('usuarios_logros.*,logros.descripcion AS logro_descripcion, logros.nombre AS logro_nombre, competiciones.id as competicion_id,competiciones.nombre AS competicion_nombre, usuarios_logros.fecha_obtencion AS fecha_logro')
+            ->select('usuarios_logros.*, logros.descripcion AS logro_descripcion, logros.nombre AS logro_nombre, competiciones.id as competicion_id, competiciones.nombre AS competicion_nombre, usuarios_logros.fecha_obtencion AS fecha_logro')
             ->join('logros', 'logros.id = usuarios_logros.logro_id')
             ->join('competiciones', 'competiciones.id = usuarios_logros.competicion_id')
             ->where('usuarios_logros.usuario_id', auth()->user()->id)
+            ->orderBy($sort, $order)
             ->paginate(10);
 
-        return view('/user/user/logros', ['logros' => $logrosUsuario, 'usuario_id' => $usuario_id, 'pager' => $usuarioLogroModel->pager]);
+        return view('/user/user/logros', [
+            'logros' => $logrosUsuario,
+            'usuario_id' => $usuario_id,
+            'pager' => $usuarioLogroModel->pager,
+            'sort' => $sort,
+            'order' => $order
+        ]);
     }
+
 
     public function buscarLogros($id)
     {
         $usuarioLogroModel = new UsuarioLogroModel();
-
+        // Obtener los parámetros de ordenación desde la URL (GET)
+        $sort = $this->request->getGet('sort') ?: 'fecha_obtencion'; // Si no se especifica, por defecto ordena por 'fecha_obtencion'
+        $order = $this->request->getGet('order') === 'asc' ? 'asc' : 'desc'; // Si no se especifica, por defecto es 'desc'
         // Realiza la consulta para obtener los logros junto con la competición y fecha
         $logrosUsuario = $usuarioLogroModel
             ->select('usuarios_logros.*,logros.descripcion AS logro_descripcion, logros.nombre AS logro_nombre, competiciones.nombre AS competicion_nombre, usuarios_logros.fecha_obtencion AS fecha_logro')
             ->join('logros', 'logros.id = usuarios_logros.logro_id')
             ->join('competiciones', 'competiciones.id = usuarios_logros.competicion_id')
             ->where('usuarios_logros.usuario_id', $id)
+            ->orderBy($sort, $order)
             ->paginate(10);
 
-        return view('/user/user/logros', ['logros' => $logrosUsuario, 'usuario_id' => $id, 'pager' => $usuarioLogroModel->pager]);
+        return view('/user/user/logros', [
+            'logros' => $logrosUsuario,
+            'usuario_id' => $id,
+            'sort' => $sort,
+            'order' => $order,
+            'pager' => $usuarioLogroModel->pager
+        ]);
     }
     public function misCompeticiones()
     {
@@ -194,8 +207,13 @@ class User extends ResourceController
     public function verTodasCapturas()
     {
         $capturaModel = new CapturaModel();
-        $search = $this->request->getPost('search'); // Obtener el término de búsqueda
-        $order = $this->request->getPost('order'); // Obtener el criterio de ordenación
+
+        // Obtener el término de búsqueda desde el formulario o la URL
+        $search = $this->request->getVar('search');
+
+        // Obtener los parámetros de orden y dirección desde la URL (GET)
+        $sort = $this->request->getGet('sort') ?: 'fecha_captura'; // Orden predeterminado: 'fecha_captura'
+        $order = $this->request->getGet('order') ?: 'desc'; // Dirección predeterminada: 'desc'
 
         // Base de la consulta
         $capturasQuery = $capturaModel;
@@ -205,29 +223,24 @@ class User extends ResourceController
             $capturasQuery = $capturasQuery->like('nombre', $search);
         }
 
-        // Aplicar ordenación según el criterio seleccionado
-        switch ($order) {
-            case 'peso':
-                $capturasQuery = $capturasQuery->orderBy('peso', 'DESC');
-                break;
-            case 'tamano':
-                $capturasQuery = $capturasQuery->orderBy('tamano', 'DESC');
-                break;
-            default:
-                // Ordenar por fecha por defecto
-                $capturasQuery = $capturasQuery->orderBy('fecha_captura', 'DESC');
-                break;
-        }
+        // Aplicar la ordenación seleccionada antes de paginar
+        $capturasQuery = $capturasQuery->orderBy($sort, $order);
 
         // Obtener los resultados paginados
+        $capturas = $capturasQuery->paginate(10);
+
+        // Preparar los datos para la vista
         $data = [
-            'capturas' => $capturasQuery->paginate(10), // Cambia el número de capturas por página según sea necesario
+            'capturas' => $capturas,
             'pager' => $capturaModel->pager,
             'search' => $search,
-            'order' => $order
+            'order' => $order,
+            'sort' => $sort,
         ];
-        return view('user/capturas/findAllUser', $data);
+
+        return view('/user/capturas/findAllUser', $data);
     }
+
     public function verTodasCompeticiones()
     {
         $competicionModel = new CompeticionModel();

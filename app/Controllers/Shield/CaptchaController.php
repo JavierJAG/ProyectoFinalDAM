@@ -3,64 +3,43 @@
 namespace App\Controllers;
 
 use CodeIgniter\Controller;
-use CodeIgniter\Images\ImageResource;
+use CodeIgniter\Config\Services;
 
 class CaptchaController extends Controller
 {
     public function generateCaptcha()
     {
-        // Generar dos números aleatorios para la suma
-        $num1 = rand(1, 10);
-        $num2 = rand(1, 10);
-        $answer = $num1 + $num2;
+        helper('captcha');
+        $vals = array(
+            'word'          => 'Random word',
+            'img_path'      => './captcha-images/',
+            'img_url'       => base_url() . 'captcha-images/',
+            'font_path'     => './path/to/fonts/texb.ttf',
+            'img_width'     => '150',
+            'img_height'    => 30,
+            'expiration'    => 7200,
+            'word_length'   => 8,
+            'font_size'     => 16,
+            'img_id'        => 'Imageid',
+            'pool'          => '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
 
-        // Almacenar la respuesta en la sesión para validarla luego
-        session()->set('captcha_answer', $answer);
+            // White background and border, black text and red grid
+            'colors'        => array(
+                'background' => array(255, 255, 255),
+                'border' => array(255, 255, 255),
+                'text' => array(0, 0, 0),
+                'grid' => array(255, 40, 40)
+            )
+        );
 
-        // Crear la imagen en blanco con un tamaño de 200x60 píxeles
-        $width = 200;
-        $height = 60;
-        $image = imagecreatetruecolor($width, $height);
+        $cap = create_captcha($vals);
+        $data = array(
+            'captcha_time'  => $cap['time'],
+            'word'          => $cap['word']
+        );
 
-        // Colores
-        $backgroundColor = imagecolorallocate($image, 255, 255, 255); // Blanco
-        $textColor = imagecolorallocate($image, 0, 0, 0); // Negro
-
-        // Rellenar el fondo de la imagen
-        imagefill($image, 0, 0, $backgroundColor);
-
-        // Escribir el texto en la imagen
-        $fontSize = 20;
-        $fontPath = FCPATH . 'path_to_your_font_file.ttf'; // Asegúrate de tener una fuente .ttf en tu proyecto
-        $text = "$num1 + $num2 = ?";
-
-        // Centrar el texto
-        $bbox = imagettfbbox($fontSize, 0, $fontPath, $text);
-        $x = ($width - ($bbox[2] - $bbox[0])) / 2;
-        $y = ($height - ($bbox[5] - $bbox[3])) / 2 + $fontSize;
-
-        imagettftext($image, $fontSize, 0, $x, $y, $textColor, $fontPath, $text);
-
-        // Guardar la imagen en el directorio público
-        $captchaImagePath = WRITEPATH . 'uploads/captcha.png';
-        imagepng($image, $captchaImagePath); // Guardar la imagen como PNG
-        imagedestroy($image); // Liberar recursos
-
-        // Establecer la respuesta como una imagen PNG
-        return $this->response->setContentType('image/png')
-                             ->setBody(file_get_contents($captchaImagePath));
-    }
-
-    // Método para validar la respuesta del captcha
-    public function validateCaptcha()
-    {
-        $input = $this->request->getPost('captcha_answer');
-        $captcha_answer = session()->get('captcha_answer');
-
-        if ($input == $captcha_answer) {
-            return redirect()->to('/success');  // Si la respuesta es correcta
-        } else {
-            return redirect()->back()->with('error', 'Respuesta incorrecta.');
-        }
+        echo 'Submit the word you see below:';
+        echo $cap['image'];
+        echo '<input type="text" name="captcha" value="" />';
     }
 }

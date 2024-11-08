@@ -1,26 +1,17 @@
-<?php $this->extend("/user/layout/template") ?>
+<?php $this->extend('/user/layout/template') ?>
 <?php $this->section('body') ?>
+
 <?= view('/user/partials/_mensaje') ?>
 <?= view('/user/partials/_error') ?>
 
 <div class="container mt-4">
     <h2 class="text-center mb-4">Capturas globales</h2>
-
     <!-- Formulario de búsqueda y ordenación -->
     <form method="POST" action="/user/buscarCapturas" class="mb-4">
         <div class="row">
             <!-- Cuadro de búsqueda -->
             <div class="col-md-6">
                 <input type="text" name="search" class="form-control" placeholder="Buscar por nombre de especie" value="<?= isset($search) ? esc($search) : '' ?>">
-            </div>
-
-            <!-- Menú desplegable para ordenar -->
-            <div class="col-md-4">
-                <select name="order" class="form-select">
-                    <option value="fecha" <?= isset($order) && $order === 'fecha' ? 'selected' : '' ?>>Ordenar por Fecha</option>
-                    <option value="peso" <?= isset($order) && $order === 'peso' ? 'selected' : '' ?>>Ordenar por Peso</option>
-                    <option value="tamano" <?= isset($order) && $order === 'tamano' ? 'selected' : '' ?>>Ordenar por Tamaño</option>
-                </select>
             </div>
 
             <!-- Botón de envío -->
@@ -40,10 +31,30 @@
         <thead class="thead-dark">
             <tr>
                 <th style="width: 40px; text-align: center;"></th>
-                <th>Fecha</th>
-                <th>Nombre</th>
-                <th>Tamaño (cm)</th>
-                <th>Peso (kg)</th>
+                <th>
+                    <a href="?sort=fecha_captura&order=<?= (isset($sort) && $sort === 'fecha_captura' && isset($order) && $order === 'asc') ? 'desc' : 'asc' ?>&search=<?= isset($search) ? urlencode($search) : '' ?>" class="text-decoration-none text-black">Fecha</a>
+                    <?php if (isset($sort) && $sort === 'fecha_captura'): ?>
+                        <i class="bi <?= (isset($order) && $order === 'asc') ? 'bi-arrow-up' : 'bi-arrow-down' ?>"></i>
+                    <?php endif; ?>
+                </th>
+                <th>
+                    <a href="?sort=nombre&order=<?= (isset($sort) && $sort === 'nombre' && isset($order) && $order === 'asc') ? 'desc' : 'asc' ?>&search=<?= isset($search) ? urlencode($search) : '' ?>" class="text-decoration-none text-black">Especie</a>
+                    <?php if (isset($sort) && $sort === 'nombre'): ?>
+                        <i class="bi <?= (isset($order) && $order === 'asc') ? 'bi-arrow-up' : 'bi-arrow-down' ?>"></i>
+                    <?php endif; ?>
+                </th>
+                <th>
+                    <a href="?sort=tamano&order=<?= (isset($sort) && $sort === 'tamano' && isset($order) && $order === 'asc') ? 'desc' : 'asc' ?>&search=<?= isset($search) ? urlencode($search) : '' ?>" class="text-decoration-none text-black">Tamaño (cm)</a>
+                    <?php if (isset($sort) && $sort === 'tamano'): ?>
+                        <i class="bi <?= (isset($order) && $order === 'asc') ? 'bi-arrow-up' : 'bi-arrow-down' ?>"></i>
+                    <?php endif; ?>
+                </th>
+                <th>
+                    <a href="?sort=peso&order=<?= (isset($sort) && $sort === 'peso' && isset($order) && $order === 'asc') ? 'desc' : 'asc' ?>&search=<?= isset($search) ? urlencode($search) : '' ?>" class="text-decoration-none text-black">Peso (kg)</a>
+                    <?php if (isset($sort) && $sort === 'peso'): ?>
+                        <i class="bi <?= (isset($order) && $order === 'asc') ? 'bi-arrow-up' : 'bi-arrow-down' ?>"></i>
+                    <?php endif; ?>
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -51,13 +62,14 @@
                 <?php foreach ($capturas as $captura) : ?>
                     <tr>
                         <td>
-                            <a href="/user/capturas/<?= $captura->id ?>" class="btn btn-outline-primary btn-sm" title="Ver detalles"><i class="bi bi-eye"></i></a>
+                            <a href="/user/capturas/<?= $captura->id ?>" class="btn btn-outline-primary btn-sm" title="Ver detalles">
+                                <i class="bi bi-eye"></i>
+                            </a>
                         </td>
                         <td><?= date('d/m/Y H:i', strtotime($captura->fecha_captura)) ?></td>
                         <td><?= esc($captura->nombre) ?></td>
                         <td><?= esc($captura->tamano) ?></td>
                         <td><?= esc($captura->peso) ?></td>
-
                     </tr>
                 <?php endforeach ?>
             <?php else : ?>

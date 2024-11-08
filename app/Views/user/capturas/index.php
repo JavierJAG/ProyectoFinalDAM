@@ -3,7 +3,6 @@
 <?= view('/user/partials/_mensaje') ?>
 <?= view('/user/partials/_error') ?>
 <style>
-
     .modal-content {
         border-radius: 25px;
     }
@@ -59,50 +58,39 @@
                     <thead class="table-dark text-center">
                         <tr>
                             <th>
-                                <a href="?sort=fecha_captura&order=<?= (isset($_GET['sort']) && $_GET['sort'] === 'fecha_captura' && $_GET['order'] === 'asc') ? 'desc' : 'asc' ?>" class="text-decoration-none text-white">Fecha</a>
-                                <?php if (isset($_GET['sort']) && $_GET['sort'] === 'fecha_captura' && isset($_GET['order']) && $_GET['order'] === 'asc'): ?>
-                                    <i class="bi bi-arrow-up"></i>
-                                <?php elseif (isset($_GET['sort']) && $_GET['sort'] === 'fecha_captura' && isset($_GET['order']) && $_GET['order'] === 'desc'): ?>
-                                    <i class="bi bi-arrow-down"></i>
+                                <a href="?sort=fecha_captura&order=<?= ($sort === 'fecha_captura' && $order === 'asc') ? 'desc' : 'asc' ?>&search=<?= urlencode($search) ?>&zona=<?= urlencode($zona) ?>" class="text-decoration-none text-white">Fecha</a>
+                                <?php if ($sort === 'fecha_captura'): ?>
+                                    <i class="bi <?= ($order === 'asc') ? 'bi-arrow-up' : 'bi-arrow-down' ?>"></i>
                                 <?php endif; ?>
                             </th>
                             <th>
-                                <a href="?sort=nombre&order=<?= (isset($_GET['sort']) && $_GET['sort'] === 'nombre' && $_GET['order'] === 'asc') ? 'desc' : 'asc' ?>" class="text-decoration-none text-white">Especie</a>
-                                <?php if (isset($_GET['sort']) && $_GET['sort'] === 'nombre' && isset($_GET['order']) && $_GET['order'] === 'asc'): ?>
-                                    <i class="bi bi-arrow-up"></i>
-                                <?php elseif (isset($_GET['sort']) && $_GET['sort'] === 'nombre' && isset($_GET['order']) && $_GET['order'] === 'desc'): ?>
-                                    <i class="bi bi-arrow-down"></i>
+                                <a href="?sort=nombre&order=<?= ($sort === 'nombre' && $order === 'asc') ? 'desc' : 'asc' ?>&search=<?= urlencode($search) ?>&zona=<?= urlencode($zona) ?>" class="text-decoration-none text-white">Especie</a>
+                                <?php if ($sort === 'nombre'): ?>
+                                    <i class="bi <?= ($order === 'asc') ? 'bi-arrow-up' : 'bi-arrow-down' ?>"></i>
                                 <?php endif; ?>
                             </th>
                             <th>
-                                <a href="?sort=tamano&order=<?= (isset($_GET['sort']) && $_GET['sort'] === 'tamano' && $_GET['order'] === 'asc') ? 'desc' : 'asc' ?>" class="text-decoration-none text-white">Tamaño (cm)</a>
-                                <?php if (isset($_GET['sort']) && $_GET['sort'] === 'tamano' && isset($_GET['order']) && $_GET['order'] === 'asc'): ?>
-                                    <i class="bi bi-arrow-up"></i>
-                                <?php elseif (isset($_GET['sort']) && $_GET['sort'] === 'tamano' && isset($_GET['order']) && $_GET['order'] === 'desc'): ?>
-                                    <i class="bi bi-arrow-down"></i>
+                                <a href="?sort=tamano&order=<?= ($sort === 'tamano' && $order === 'asc') ? 'desc' : 'asc' ?>&search=<?= urlencode($search) ?>&zona=<?= urlencode($zona) ?>" class="text-decoration-none text-white">Tamaño (cm)</a>
+                                <?php if ($sort === 'tamano'): ?>
+                                    <i class="bi <?= ($order === 'asc') ? 'bi-arrow-up' : 'bi-arrow-down' ?>"></i>
                                 <?php endif; ?>
                             </th>
                             <th>
-                                <a href="?sort=peso&order=<?= (isset($_GET['sort']) && $_GET['sort'] === 'peso' && $_GET['order'] === 'asc') ? 'desc' : 'asc' ?>" class="text-decoration-none text-white">Peso (kg)</a>
-                                <?php if (isset($_GET['sort']) && $_GET['sort'] === 'peso' && isset($_GET['order']) && $_GET['order'] === 'asc'): ?>
-                                    <i class="bi bi-arrow-up"></i>
-                                <?php elseif (isset($_GET['sort']) && $_GET['sort'] === 'peso' && isset($_GET['order']) && $_GET['order'] === 'desc'): ?>
-                                    <i class="bi bi-arrow-down"></i>
+                                <a href="?sort=peso&order=<?= ($sort === 'peso' && $order === 'asc') ? 'desc' : 'asc' ?>&search=<?= urlencode($search) ?>&zona=<?= urlencode($zona) ?>" class="text-decoration-none text-white">Peso (kg)</a>
+                                <?php if ($sort === 'peso'): ?>
+                                    <i class="bi <?= ($order === 'asc') ? 'bi-arrow-up' : 'bi-arrow-down' ?>"></i>
                                 <?php endif; ?>
                             </th>
-
                             <th>
-                                <a href="?sort=zona&order=<?= isset($_GET['sort']) && $_GET['sort'] === 'zona' && $_GET['order'] === 'asc' ? 'desc' : 'asc' ?>" class="text-decoration-none text-white">Lugar de captura</a>
-                                <?php if (isset($_GET['sort']) && $_GET['sort'] === 'zona' && $_GET['order'] === 'asc'): ?>
-                                    <i class="bi bi-arrow-up"></i>
-                                <?php elseif (isset($_GET['sort']) && $_GET['sort'] === 'zona' && $_GET['order'] === 'desc'): ?>
-                                    <i class="bi bi-arrow-down"></i>
+                                <a href="?sort=zona&order=<?= ($sort === 'zona' && $order === 'asc') ? 'desc' : 'asc' ?>&search=<?= urlencode($search) ?>&zona=<?= urlencode($zona) ?>" class="text-decoration-none text-white">Lugar de captura</a>
+                                <?php if ($sort === 'zona'): ?>
+                                    <i class="bi <?= ($order === 'asc') ? 'bi-arrow-up' : 'bi-arrow-down' ?>"></i>
                                 <?php endif; ?>
                             </th>
-
                             <th></th>
                         </tr>
                     </thead>
+
                     <tbody>
                         <?php if (empty($capturas)) : ?>
                             <tr>
