@@ -25,6 +25,7 @@ class Validation extends BaseConfig
         FormatRules::class,
         FileRules::class,
         CreditCardRules::class,
+        \Denis303\ReCaptcha\Validation\ReCaptchaRules::class
     ];
 
     /**
@@ -41,6 +42,7 @@ class Validation extends BaseConfig
     // --------------------------------------------------------------------
     // Rules
     // --------------------------------------------------------------------
+    
     public $especie = [
         'nombre_comun' => 'required|regex_match[/^[a-zA-ZÀ-ÿ0-9\s.\-]+$/]',
         'nombre_cientifico' => 'permit_empty|regex_match[/^[a-zA-ZÀ-ÿ0-9\s.\-]+$/]',

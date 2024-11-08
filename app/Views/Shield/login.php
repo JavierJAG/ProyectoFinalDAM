@@ -23,10 +23,7 @@
                     <?php endif ?>
                 </div>
             <?php endif ?>
-
-            <?php if (session('message') !== null) : ?>
-                <div class="alert alert-success" role="alert"><?= session('message') ?></div>
-            <?php endif ?>
+            <?= helper(['form', 'reCaptcha']); ?>
 
             <form action="<?= url_to('login') ?>" method="post">
                 <?= csrf_field() ?>
@@ -43,26 +40,14 @@
                     <label for="floatingPasswordInput"><?= lang('Auth.password') ?></label>
                 </div>
 
-                <!-- Captcha -->
-                <div class="captcha-container mb-3">
-                    <img src="<?= site_url('/captcha/generate') ?>" alt="Captcha" class="captcha-image">
-                    <input type="text" name="captcha_answer" class="form-control" placeholder="Resuelve la suma" >
+                <!-- reCAPTCHA -->
+                <div class="mb-3">
+                    <?= reCaptcha2('reCaptcha2', ['id' => 'recaptcha_v2'], ['theme' => 'light']) ?>
                 </div>
-
-                <!-- Remember me -->
-                <?php if (setting('Auth.sessionConfig')['allowRemembering']): ?>
-                    <div class="form-check">
-                        <label class="form-check-label">
-                            <input type="checkbox" name="remember" class="form-check-input" <?php if (old('remember')): ?> checked<?php endif ?>>
-                            <?= lang('Auth.rememberMe') ?>
-                        </label>
-                    </div>
-                <?php endif; ?>
 
                 <div class="d-grid col-12 col-md-8 mx-auto m-3">
                     <button type="submit" class="btn btn-primary btn-block"><?= lang('Auth.login') ?></button>
                 </div>
-
                 <?php if (setting('Auth.allowMagicLinkLogins')) : ?>
                     <p class="text-center"><?= lang('Auth.forgotPassword') ?> <a href="<?= url_to('magic-link') ?>"><?= lang('Auth.useMagicLink') ?></a></p>
                 <?php endif ?>
