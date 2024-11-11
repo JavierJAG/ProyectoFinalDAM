@@ -13,6 +13,9 @@
         <div class="col-md-9">
             <div class="row">
                 <div class="col-md-10 mx-auto">
+                <div class="d-flex justify-content-end mb-3">
+                <a href="javascript:history.back()" class="btn btn-secondary"> <i class="bi bi-arrow-left"></i> Atrás</a>
+            </div>
                     <div class="card shadow-sm">
                         <div class="card-header bg-primary text-white text-center">
                             <h5 class="mb-0">Gestionar Usuarios</h5>
@@ -36,12 +39,15 @@
                                             </div>
 
                                             <!-- Botones de acción -->
-                                            <a title="Ver Perfil" href="/user/perfil/<?= $u->id ?>" class="btn btn-sm btn-info me-2">
-                                                <i class="bi bi-eye"></i> 
+                                            <a title="Ver Perfil" href="/user/perfil/<?= $u->id ?>" class="btn btn-sm btn-primary me-2">
+                                                <i class="bi bi-eye"></i>
                                             </a>
-                                            <button title="Eliminar" type="button" class="btn btn-sm btn-danger" onclick="confirmDelete(<?= $u->id ?>)">
-                                                <i class="bi bi-trash"></i> 
-                                            </button>
+                                            <form action="/dashboard/usuario/eliminar/<?= $u->id ?>" method="post" onsubmit="return confirm('¿Estás seguro de que quieres eliminar el perfil de <?= htmlspecialchars($u->username) ?>?');">
+                                                <button type="submit" class="btn btn-danger btn-sm" title="Eliminar usuario">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+
                                         </div>
                                     </li>
                                 <?php endforeach ?>
@@ -69,7 +75,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert(`Usuario ${isChecked ? 'añadido a' : 'eliminado de'} grupo admin.`);
+                    alert(`Usuario ${isChecked ? 'añadido a' : 'eliminado de'} organizadores de eventos.`);
                 } else {
                     alert('Hubo un error al actualizar los permisos.');
                 }

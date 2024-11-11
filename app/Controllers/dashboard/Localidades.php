@@ -11,9 +11,22 @@ class Localidades extends ResourceController
 
     public function index()
     {
-        $localidades = $this->model->orderBy('provincia DESC')->paginate(10);
-        return view('/dashboard/localidades/index', ['localidades' => $localidades, 'pager' => $this->model->pager]);
+        // Obtener el campo y la dirección de ordenación desde la URL o usar valores predeterminados
+        $campoOrden = $this->request->getGet('campo') ?? 'id'; // Campo de orden por defecto
+        $direccionOrden = $this->request->getGet('orden') === 'desc' ? 'desc' : 'asc'; // Dirección de orden por defecto
+    
+        // Realizar la consulta de localidades aplicando ordenación
+        $localidades = $this->model->orderBy($campoOrden, $direccionOrden)->paginate(10);
+    
+        // Pasar los valores de ordenación a la vista
+        return view('/dashboard/localidades/index', [
+            'localidades' => $localidades,
+            'campoOrden' => $campoOrden,
+            'direccionOrden' => $direccionOrden,
+            'pager' => $this->model->pager
+        ]);
     }
+    
     public function show($id = null)
     {
         $localidad = $this->model->find($id);

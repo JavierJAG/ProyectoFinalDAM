@@ -64,13 +64,13 @@ class Validation extends BaseConfig
     public $captura = [
         'fecha_captura' => 'required',
         'nombre' => 'required|min_length[3]|regex_match[/^[a-zA-ZÀ-ÿ0-9\s.\-]+$/]',
-        'descripcion' => 'permit_empty|regex_match[/^[a-zA-ZÀ-ÿ0-9\s.\-]+$/]',
+        'descripcion' => 'permit_empty',
         'tamano' => 'permit_empty|numeric|greater_than_equal_to[0]',
         'peso' => 'permit_empty|numeric|greater_than_equal_to[0]'
     ];
     public $competicion = [
         'nombre' => 'required|min_length[3]|regex_match[/^[a-zA-ZÀ-ÿ0-9\s.\-]+$/]',
-        'descripcion' => 'required|regex_match[/^[a-zA-ZÀ-ÿ0-9\s.\-]+$/]',
+        'descripcion' => 'required',
         'fecha_inicio' => 'required',
         'fecha_fin' => 'required',
     ];

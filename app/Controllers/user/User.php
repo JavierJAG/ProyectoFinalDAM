@@ -192,9 +192,24 @@ class User extends ResourceController
     public function misCompeticiones()
     {
         $competicionModel = new CompeticionModel();
-        $competiciones = $competicionModel->where('usuario_id', auth()->user()->id)->paginate(10);
-        return view('/user/competiciones/index', ['competiciones' => $competiciones, 'pager' => $competicionModel->pager]);
+        
+        // Obtenemos el campo y el orden de la solicitud, o asignamos valores predeterminados
+        $campoOrden = $this->request->getGet('campo') ?? 'fecha_inicio';
+        $direccionOrden = $this->request->getGet('orden') ?? 'asc';
+    
+        // Ajustamos la consulta con el orden seleccionado
+        $competiciones = $competicionModel->where('usuario_id', auth()->user()->id)
+            ->orderBy($campoOrden, $direccionOrden)
+            ->paginate(10);
+    
+        return view('/user/competiciones/index', [
+            'competiciones' => $competiciones,
+            'pager' => $competicionModel->pager,
+            'campoOrden' => $campoOrden,
+            'direccionOrden' => $direccionOrden
+        ]);
     }
+    
     public function misParticipaciones()
     {
         $participanteModel = new ParticipanteModel();
@@ -246,87 +261,83 @@ class User extends ResourceController
         $competicionModel = new CompeticionModel();
         $localidadModel = new LocalidadModel();
         $zonaPescaModel = new ZonaPescaModel();
-
-        $today = date('Y-m-d H:i:s'); // Fecha y hora actual
+    
+        $today = date('Y-m-d H:i:s');
         $provincia = $this->request->getGet('PROVINCIA');
         $localidadSeleccionada = $this->request->getGet('localidad');
-
-        // Obtener todas las provincias y localidades
+        $sort = $this->request->getGet('sort') ?? 'fecha_inicio'; // Campo de orden por defecto
+        $order = $this->request->getGet('order') === 'desc' ? 'desc' : 'asc'; // Dirección de ordenación por defecto
+    
         $todasProvincias = ['A CORUÑA', 'LUGO', 'OURENSE', 'PONTEVEDRA'];
-
-        // Aplicar filtros sobre localidades si se ha seleccionado una provincia
+    
         $localidadesCompeticion = $localidadModel;
         if (!empty($provincia)) {
             $localidadesCompeticion = $localidadesCompeticion->where('PROVINCIA', $provincia);
         }
-
+    
         if (!empty($localidadSeleccionada)) {
             $localidadesCompeticion = $localidadesCompeticion->where('nombre', $localidadSeleccionada);
         }
-
-        // Obtener localidades filtradas
+    
         $localidadesCompeticion = $localidadesCompeticion->findAll();
-
+    
         if (empty($localidadesCompeticion)) {
-            // Si no hay localidades, no hay competiciones
             return view('user/competiciones/findAllUser', [
                 'competicionesActivas' => [],
                 'competicionesFinalizadas' => [],
                 'localidades' => [],
                 'provinciaSeleccionada' => $provincia,
                 'localidadSeleccionada' => $localidadSeleccionada,
-                'todasProvincias' => $todasProvincias
+                'todasProvincias' => $todasProvincias,
+                'sort' => $sort,
+                'order' => $order
             ]);
         }
-
-        // Extraer los IDs de las localidades
+    
         $localidadIds = array_column($localidadesCompeticion, 'id');
-
-        // Obtener zonas de pesca asociadas a esas localidades
         $zonasPesca = $zonaPescaModel->whereIn('localidad_id', $localidadIds)->findAll();
-
+    
         if (empty($zonasPesca)) {
-            // Si no hay zonas de pesca, no hay competiciones
             return view('user/competiciones/findAllUser', [
                 'competicionesActivas' => [],
                 'competicionesFinalizadas' => [],
                 'localidades' => $localidadesCompeticion,
                 'provinciaSeleccionada' => $provincia,
                 'localidadSeleccionada' => $localidadSeleccionada,
-                'todasProvincias' => $todasProvincias
+                'todasProvincias' => $todasProvincias,
+                'sort' => $sort,
+                'order' => $order
             ]);
         }
-
-        // Extraer los IDs de las zonas de pesca
+    
         $zonaPescaIds = array_column($zonasPesca, 'id');
-
-        // Obtener competiciones asociadas a esas zonas de pesca
-        $competiciones = $competicionModel->whereIn('zona_id', $zonaPescaIds)->findAll();
-
-        // Arreglos para competiciones activas y finalizadas
+        $competiciones = $competicionModel->whereIn('zona_id', $zonaPescaIds)
+            ->orderBy($sort, $order) // Ordenar por el campo y dirección seleccionados
+            ->findAll();
+    
         $competicionesActivas = [];
         $competicionesFinalizadas = [];
-
+    
         foreach ($competiciones as $competicion) {
             if ($competicion->fecha_fin > $today) {
-                // Competición activa
                 $competicionesActivas[] = $competicion;
             } else {
-                // Competición finalizada
                 $competicionesFinalizadas[] = $competicion;
             }
         }
-
-        // Pasar los datos a la vista, incluyendo la provincia y localidad seleccionadas
+    
         return view('user/competiciones/findAllUser', [
             'competicionesActivas' => $competicionesActivas,
             'competicionesFinalizadas' => $competicionesFinalizadas,
             'localidades' => $localidadesCompeticion,
             'provinciaSeleccionada' => $provincia,
             'localidadSeleccionada' => $localidadSeleccionada,
-            'todasProvincias' => $todasProvincias
+            'todasProvincias' => $todasProvincias,
+            'sort' => $sort,
+            'order' => $order
         ]);
     }
+    
     public function buscar()
     {
         $nombre = $this->request->getGet('buscar');

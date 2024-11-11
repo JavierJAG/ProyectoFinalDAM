@@ -11,9 +11,22 @@ class Logros extends ResourceController
 
     public function index()
     {
-        $logros = $this->model->paginate(10);
-        return view('/dashboard/logros/index', ['logros' => $logros, 'pager' => $this->model->pager]);
+        // Obtener el campo y la dirección de ordenación desde la URL, con valores predeterminados
+        $campoOrden = $this->request->getGet('campo') ?? 'id'; // Campo de orden predeterminado
+        $direccionOrden = $this->request->getGet('orden') === 'desc' ? 'desc' : 'asc'; // Dirección de orden predeterminada
+    
+        // Consulta de logros con la ordenación seleccionada
+        $logros = $this->model->orderBy($campoOrden, $direccionOrden)->paginate(10);
+    
+        // Pasar la ordenación a la vista
+        return view('/dashboard/logros/index', [
+            'logros' => $logros,
+            'campoOrden' => $campoOrden,
+            'direccionOrden' => $direccionOrden,
+            'pager' => $this->model->pager
+        ]);
     }
+    
     public function show($id = null)
     {
         $logro = $this->model->find($id);

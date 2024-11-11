@@ -123,10 +123,10 @@
                         </label>
                         <select name="provincia" id="provincia" class="form-control form-control-sm" required>
                             <option value="" selected>Selecciona una provincia</option>
-                            <option value="A CORUÑA" <?= old('provincia') == 'A CORUÑA' ? 'selected' : '' ?>>A CORUÑA</option>
-                            <option value="LUGO" <?= old('provincia') == 'LUGO' ? 'selected' : '' ?>>LUGO</option>
-                            <option value="OURENSE" <?= old('provincia') == 'OURENSE' ? 'selected' : '' ?>>OURENSE</option>
-                            <option value="PONTEVEDRA" <?= old('provincia') == 'PONTEVEDRA' ? 'selected' : '' ?>>PONTEVEDRA</option>
+                            <option value="A CORUÑA" >A CORUÑA</option>
+                            <option value="LUGO" >LUGO</option>
+                            <option value="OURENSE" >OURENSE</option>
+                            <option value="PONTEVEDRA" >PONTEVEDRA</option>
                         </select>
                     </div>
 

@@ -13,9 +13,21 @@ class Especies extends ResourceController
 
     public function index()
     {
-        $especies = $this->model->findAll();
-        return view('/dashboard/especies/index', ['especies' => $especies]);
+        // Obtener el campo y la dirección de ordenamiento de los parámetros de la URL
+        $campoOrden = $this->request->getGet('campo') ?? 'id'; // Campo de orden por defecto
+        $direccionOrden = $this->request->getGet('orden') === 'desc' ? 'desc' : 'asc'; // Dirección de orden por defecto
+    
+        // Consultar las especies ordenadas según los parámetros
+        $especies = $this->model->orderBy($campoOrden, $direccionOrden)->findAll();
+    
+        // Pasar los datos a la vista
+        return view('/dashboard/especies/index', [
+            'especies' => $especies,
+            'campoOrden' => $campoOrden,
+            'direccionOrden' => $direccionOrden
+        ]);
     }
+    
     public function show($id = null)
     {
         $especie = $this->model->find($id);

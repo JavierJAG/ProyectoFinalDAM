@@ -7,15 +7,23 @@
 <div class="container mt-5">
     <div class="row">
         <!-- Barra lateral del perfil -->
-            <?= view('/user/partials/_menuPerfil') ?>
+        <?= view('/user/partials/_menuPerfil') ?>
 
         <!-- Contenido del perfil -->
         <div class="col-md-9">
-            <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex justify-content-center align-items-center mb-4">
                 <h2 class="text-primary">Gestión de Localidades</h2>
-                <a href="/dashboard/localidades/new" class="btn btn-success">
-                    <i class="bi bi-plus-circle"></i> Crear Localidad
-                </a>
+            </div>
+
+            <div class="row">
+                <div class="col d-flex justify-content-start mb-3">
+                    <a href="/dashboard/localidades/new" class="btn btn-success">
+                        <i class="bi bi-plus-circle"></i> Crear Localidad
+                    </a>
+                </div>
+                <div class="col d-flex justify-content-end mb-3">
+                    <a href="javascript:history.back()" class="btn btn-secondary"> <i class="bi bi-arrow-left"></i> Atrás</a>
+                </div>
             </div>
 
             <!-- Tabla de localidades -->
@@ -23,10 +31,22 @@
                 <table class="table table-hover table-bordered align-middle">
                     <thead class="table-primary">
                         <tr class="text-center">
-                            <th style="width: 5%;">ID</th>
-                            <th style="width: 30%;">Provincia</th>
-                            <th style="width: 40%;">Localidad</th>
-                            <th style="width: 25%;">Acciones</th>
+                            <th style="width: 10%;">
+                                <a href="?campo=id&orden=<?= $campoOrden === 'id' && $direccionOrden === 'asc' ? 'desc' : 'asc' ?>">
+                                    ID <?= $campoOrden === 'id' ? ($direccionOrden === 'asc' ? '▲' : '▼') : '' ?>
+                                </a>
+                            </th>
+                            <th style="width: 30%;">
+                                <a href="?campo=PROVINCIA&orden=<?= $campoOrden === 'PROVINCIA' && $direccionOrden === 'asc' ? 'desc' : 'asc' ?>">
+                                    Provincia <?= $campoOrden === 'PROVINCIA' ? ($direccionOrden === 'asc' ? '▲' : '▼') : '' ?>
+                                </a>
+                            </th>
+                            <th style="width: 35%;">
+                                <a href="?campo=nombre&orden=<?= $campoOrden === 'nombre' && $direccionOrden === 'asc' ? 'desc' : 'asc' ?>">
+                                    Localidad <?= $campoOrden === 'nombre' ? ($direccionOrden === 'asc' ? '▲' : '▼') : '' ?>
+                                </a>
+                            </th>
+                            <th style="width: 25%;"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -37,14 +57,13 @@
                                     <td><?= esc($localidad->PROVINCIA) ?></td>
                                     <td><?= esc($localidad->nombre) ?></td>
                                     <td class="text-center">
-                                       
-                                        <a href="/dashboard/localidades/<?= $localidad->id ?>/edit" class="btn btn-warning btn-sm" title="Editar localidad">
-                                            <i class="bi bi-pencil-square"></i> 
+                                        <a href="/dashboard/localidades/<?= $localidad->id ?>/edit" class="btn btn-sm" title="Editar localidad">
+                                            <i class="bi bi-pencil-square"></i>
                                         </a>
                                         <form action="/dashboard/localidades/<?= $localidad->id ?>" method="post" class="d-inline" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta localidad?');">
                                             <input type="hidden" name="_method" value="DELETE">
-                                            <button type="submit" class="btn btn-danger btn-sm" title="Eliminar localidad">
-                                                <i class="bi bi-trash"></i> 
+                                            <button type="submit" class="btn btn-sm" title="Eliminar localidad">
+                                                <i class="bi bi-trash"></i>
                                             </button>
                                         </form>
                                     </td>

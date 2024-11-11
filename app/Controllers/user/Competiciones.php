@@ -22,13 +22,27 @@ class Competiciones extends ResourceController
 
     public function index()
     {
-
+        // Verificación de permisos
         if (!auth()->user()->inGroup('superadmin') && !auth()->user()->inGroup('admin')) {
             return redirect()->to('/')->with('error', 'Acceso no permitido'); // Solo admin o superadmin pueden acceder
         }
-        $competiciones = $this->model->paginate(10);
-        return view('/user/competiciones/index', ['competiciones' => $competiciones, 'pager' => $this->model->pager]);
+    
+        // Obtener los parámetros de ordenamiento de la URL
+        $campoOrden = $this->request->getGet('campo') ?? 'fecha_inicio'; // Campo de orden por defecto
+        $direccionOrden = $this->request->getGet('orden') === 'desc' ? 'desc' : 'asc'; // Dirección de ordenación por defecto
+    
+        // Consultar competiciones aplicando el ordenamiento
+        $competiciones = $this->model->orderBy($campoOrden, $direccionOrden)->paginate(10);
+    
+        // Pasar los datos a la vista, incluyendo el estado del ordenamiento
+        return view('/user/competiciones/index', [
+            'competiciones' => $competiciones,
+            'campoOrden' => $campoOrden,
+            'direccionOrden' => $direccionOrden,
+            'pager' => $this->model->pager
+        ]);
     }
+    
     public function show($id = null)
     {
 
@@ -297,7 +311,7 @@ class Competiciones extends ResourceController
         } elseif ($fecha_actual > $fecha_fin) {
             $mensajeParticipacion = 'El periodo de envío se ha cerrado el ' . $fecha_fin->format('d/m/Y') . '.';
         } else {
-            $puedeParticipar = true; 
+            $puedeParticipar = true;
         }
 
         return view('/user/competiciones/participantes', [

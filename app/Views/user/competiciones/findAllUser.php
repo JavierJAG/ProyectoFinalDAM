@@ -45,14 +45,29 @@
     <!-- Competiciones Activas -->
     <h3 class="mt-4">Competiciones Activas</h3>
     <table class="table table-striped table-hover">
-        <thead class="table-dark">
-            <tr>
-                <th class="text-center">Fecha Inicio</th>
-                <th class="text-center">Fecha Fin</th>
-                <th class="text-center">Nombre</th>
-                <th class="text-center"></th>
-            </tr>
-        </thead>
+    <thead class="table-dark">
+        <tr>
+            <th class="text-center">
+                <a href="<?= current_url() . '?PROVINCIA=' . $provinciaSeleccionada . '&localidad=' . $localidadSeleccionada . '&sort=fecha_inicio&order=' . ($sort == 'fecha_inicio' && $order == 'asc' ? 'desc' : 'asc') ?>" class="text-decoration-none text-white">
+                    Fecha Inicio
+                    <?= $sort == 'fecha_inicio' ? ($order == 'asc' ? '↑' : '↓') : '' ?>
+                </a>
+            </th>
+            <th class="text-center">
+                <a href="<?= current_url() . '?PROVINCIA=' . $provinciaSeleccionada . '&localidad=' . $localidadSeleccionada . '&sort=fecha_fin&order=' . ($sort == 'fecha_fin' && $order == 'asc' ? 'desc' : 'asc') ?>" class="text-decoration-none text-white">
+                    Fecha Fin
+                    <?= $sort == 'fecha_fin' ? ($order == 'asc' ? '↑' : '↓') : '' ?>
+                </a>
+            </th>
+            <th class="text-center">
+                <a href="<?= current_url() . '?PROVINCIA=' . $provinciaSeleccionada . '&localidad=' . $localidadSeleccionada . '&sort=nombre&order=' . ($sort == 'nombre' && $order == 'asc' ? 'desc' : 'asc') ?>" class="text-decoration-none text-white">
+                    Nombre
+                    <?= $sort == 'nombre' ? ($order == 'asc' ? '↑' : '↓') : '' ?>
+                </a>
+            </th>
+            <th class="text-center"></th>
+        </tr>
+    </thead>
         <tbody>
             <?php if (count($competicionesActivas) > 0) : ?>
                 <?php foreach ($competicionesActivas as $competicion) : ?>
@@ -76,14 +91,30 @@
     <!-- Competiciones Finalizadas -->
     <h3 class="mt-4">Competiciones Finalizadas</h3>
     <table class="table table-striped table-hover">
-        <thead class="table-dark">
-            <tr>
-                <th class="text-center">Fecha Inicio</th>
-                <th class="text-center">Fecha Fin</th>
-                <th class="text-center">Nombre</th>
-                <th class="text-center"></th>
-            </tr>
-        </thead>
+    <table class="table table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th class="text-center">
+                <a href="<?= current_url() . '?PROVINCIA=' . $provinciaSeleccionada . '&localidad=' . $localidadSeleccionada . '&sort=fecha_inicio&order=' . ($sort == 'fecha_inicio' && $order == 'asc' ? 'desc' : 'asc') ?>" class="text-decoration-none text-white">
+                    Fecha Inicio
+                    <?= $sort == 'fecha_inicio' ? ($order == 'asc' ? '↑' : '↓') : '' ?>
+                </a>
+            </th>
+            <th class="text-center">
+                <a href="<?= current_url() . '?PROVINCIA=' . $provinciaSeleccionada . '&localidad=' . $localidadSeleccionada . '&sort=fecha_fin&order=' . ($sort == 'fecha_fin' && $order == 'asc' ? 'desc' : 'asc') ?>" class="text-decoration-none text-white">
+                    Fecha Fin
+                    <?= $sort == 'fecha_fin' ? ($order == 'asc' ? '↑' : '↓') : '' ?>
+                </a>
+            </th>
+            <th class="text-center">
+                <a href="<?= current_url() . '?PROVINCIA=' . $provinciaSeleccionada . '&localidad=' . $localidadSeleccionada . '&sort=nombre&order=' . ($sort == 'nombre' && $order == 'asc' ? 'desc' : 'asc') ?>" class="text-decoration-none text-white">
+                    Nombre
+                    <?= $sort == 'nombre' ? ($order == 'asc' ? '↑' : '↓') : '' ?>
+                </a>
+            </th>
+            <th class="text-center"></th>
+        </tr>
+    </thead>
         <tbody>
             <?php if (count($competicionesFinalizadas) > 0) : ?>
                 <?php foreach ($competicionesFinalizadas as $competicion) : ?>
