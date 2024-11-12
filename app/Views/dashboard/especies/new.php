@@ -5,7 +5,10 @@
 <?= view('/user/partials/_error') ?>
 
 <div class="container mt-5">
-    <h2 class="text-primary mb-4">Crear Especie</h2>
+    <div class="col d-flex justify-content-start mb-3">
+        <a href="javascript:history.back()" class="btn btn-secondary"> <i class="bi bi-arrow-left"></i> Volver</a>
+    </div>
+    <h2 class="text-primary mb-4">Nueva Especie</h2>
 
     <!-- Formulario de creación de especie -->
     <form action="<?= site_url('/dashboard/especies') ?>" method="post" enctype="multipart/form-data" class="bg-light p-4 shadow-sm rounded">

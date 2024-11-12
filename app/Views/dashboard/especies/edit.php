@@ -6,6 +6,9 @@
 <?= view('/user/partials/_error') ?>
 
 <div class="container mt-5">
+    <div class="col d-flex justify-content-start mb-3">
+        <a href="javascript:history.back()" class="btn btn-secondary"> <i class="bi bi-arrow-left"></i> Volver</a>
+    </div>
     <h2 class="text-primary mb-4">Editar Especie</h2>
 
     <!-- Formulario de edición de especie -->

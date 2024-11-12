@@ -5,7 +5,10 @@
 <?= view('/user/partials/_error') ?>
 
 <div class="container mt-5">
-    <h2 class="text-primary mb-4">Crear Localidad</h2>
+    <div class="col d-flex justify-content-start mb-3">
+        <a href="javascript:history.back()" class="btn btn-secondary"> <i class="bi bi-arrow-left"></i> Volver</a>
+    </div>
+    <h2 class="text-primary mb-4">Nueva Localidad</h2>
 
     <form action="<?= site_url('/dashboard/localidades') ?>" method="post" class="bg-light p-4 rounded shadow-sm">
 

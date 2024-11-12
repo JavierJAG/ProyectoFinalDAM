@@ -16,6 +16,7 @@
             <p><strong>Lugar:</strong>
                 <a href="<?= base_url("user/zonasPesca/" . $zonaPesca->id) ?>" class="link-primary"><?= esc($zonaPesca->nombre) ?></a>
             </p>
+            <p><strong>Organizador: </strong><a href="/user/perfil/<?= $competicion->usuario_id ?>"><?= $organizador->username ?></a></p>
             <p><strong>Descripción:</strong> <?= $competicion->descripcion ?></p>
         </div>
     </div>

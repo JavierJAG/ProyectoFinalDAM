@@ -55,10 +55,10 @@
 
 <div class="overlay" id="overlay"></div> <!-- Overlay para el modal -->
 <div id="eventModal" class="p-4 border rounded shadow-lg bg-light">
-    <h5 class="modal-title">Crear Evento</h5>
+    <h5 class="modal-title">Nueva Salida</h5>
     <form id="eventForm">
         <div class="mb-3">
-            <label for="title" class="form-label">Título del Evento:</label>
+            <label for="title" class="form-label">Objetivo de la salida:</label>
             <input type="text" class="form-control" name="title" id="title" required>
         </div>
 
@@ -99,14 +99,14 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="eventDetailsLabel">Detalles del Evento</h5>
+                <h5 class="modal-title" id="eventDetailsLabel">Detalles de la salida</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p id="eventDetails"></p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" id="deleteEvent">Eliminar Evento</button>
+                <button type="button" class="btn btn-danger" id="deleteEvent">Eliminar Salida</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
@@ -135,8 +135,8 @@
                 var zonaLink = '<a href="/user/zonasPesca/' + event.extendedProps.zonaId + '" target="_blank">' + event.extendedProps.zonaNombre + '</a>';
 
                 $('#eventDetails').html(
-                    'Título: ' + event.title + '<br>' +
-                    'Fecha de Inicio: ' + event.start.toISOString().slice(0, 10) + '<br>' +
+                    'Objetivo: ' +event.title + '<br>' +
+                    'Fecha: ' + event.start.toISOString().slice(0, 10) + '<br>' +
                     'Zona de Pesca: ' + zonaLink // Cambiado para incluir el enlace
                 );
                 $('#deleteEvent').data('eventId', event.id); // Guarda el ID del evento en el botón de borrar

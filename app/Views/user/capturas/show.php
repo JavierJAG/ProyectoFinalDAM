@@ -67,7 +67,7 @@
     <!-- Información de la especie -->
     <?php if ($especie != null) : ?>
         <div class="text-center mb-3">
-            <button id="verEspecieBtn" class="btn btn-info">Ver información de la Especie</button>
+            <button id="verEspecieBtn" class="btn btn-success">Ver información de la Especie</button>
         </div>
         
         <div id="infoEspecie" class="card shadow-sm mb-4" style="display: none;">

@@ -16,7 +16,7 @@
                     <div class="list-group-item d-flex justify-content-between align-items-center">
                         <div>
                             <strong>Fecha de Inicio:</strong> <?= esc($p->fecha_inicio) ?><br>
-                            <strong>Evento:</strong> <?= esc($p->nombre) ?>
+                            <strong>Evento: </strong><a href="/user/competiciones/<?= $p->competicion_id ?>"> <?= esc($p->nombre) ?></a>
                         </div>
                         
                         <div class="d-flex align-items-center">

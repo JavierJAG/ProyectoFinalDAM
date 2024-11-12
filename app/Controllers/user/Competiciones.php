@@ -11,6 +11,7 @@ use App\Models\LocalidadModel;
 use App\Models\LogroModel;
 use App\Models\ParticipacionModel;
 use App\Models\ParticipanteModel;
+use App\Models\UserModel;
 use App\Models\UsuarioLogroModel;
 use App\Models\ZonaPescaModel;
 use CodeIgniter\RESTful\ResourceController;
@@ -51,6 +52,7 @@ class Competiciones extends ResourceController
         $usuarioLogroModel = new UsuarioLogroModel();
         $imagenModel = new ImagenModel();
         $participanteModel = new ParticipanteModel();
+        $userModel = new UserModel();
         $imagenes = $imagenModel->getImagenesCompeticion($id);
         $competicion = $this->model->find($id);
         $zonaPesca = $zonaPescaModel->find($competicion->zona_id);
@@ -60,7 +62,7 @@ class Competiciones extends ResourceController
         if ($participante != null) {
             $participa = true;
         }
-
+        $organizador = $userModel->where('id',$competicion->usuario_id)->first();
         $logros = $usuarioLogroModel
             ->select('usuarios_logros.*, logros.nombre AS logro_nombre,users.id as user_id,users.username as user_username, usuarios_logros.fecha_obtencion AS fecha_obtencion')
             ->join('logros', 'logros.id = usuarios_logros.logro_id')
@@ -83,7 +85,8 @@ class Competiciones extends ResourceController
             'imagenes' => $imagenes,
             'logros' => $logros,
             'participa' => $participa,
-            'competicionFinalizada' => $competicionFinalizada
+            'competicionFinalizada' => $competicionFinalizada,
+            'organizador'=>$organizador
         ]);
     }
     public function new()
