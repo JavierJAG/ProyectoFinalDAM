@@ -68,18 +68,7 @@
                             <?php endif; ?>
                         </a>
                     </th>
-                    <th scope="col">
-                        <a href="?sort=cupo_maximo&order=<?= ($sort === 'cupo_maximo' && $order === 'asc') ? 'desc' : 'asc' ?>&search=<?= esc($search) ?>" class="text-decoration-none text-dark">
-                            Cupo máximo
-                            <?php if ($sort === 'cupo_maximo') : ?>
-                                <?php if ($order === 'asc') : ?>
-                                    <i class="bi bi-arrow-up"></i>
-                                <?php else : ?>
-                                    <i class="bi bi-arrow-down"></i>
-                                <?php endif; ?>
-                            <?php endif; ?>
-                        </a>
-                    </th>
+
                 </tr>
             </thead>
             <tbody>
@@ -95,7 +84,6 @@
                             <td><?= esc($especie->nombre_comun) ?></td>
                             <td><?= esc($especie->nombre_cientifico) ?></td>
                             <td><?= $especie->tamano_minimo != 0 ? esc($especie->tamano_minimo) . ' cm' : 'No se ha registrado' ?></td>
-                            <td><?= $especie->cupo_maximo != 0 ? esc($especie->cupo_maximo) : 'No se ha registrado' ?></td>
                         </tr>
                     <?php endforeach ?>
                 <?php else : ?>

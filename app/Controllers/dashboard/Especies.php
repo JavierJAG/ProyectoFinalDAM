@@ -54,7 +54,7 @@ class Especies extends ResourceController
         if ($this->validate('especie')) {
             $nombre_comun = $this->request->getPost('nombre_comun');
             $nombre_cientifico = $this->request->getPost('nombre_cientifico');
-            $tamano_minimo = $this->request->getPost('tamano_minimo');
+            $tamano_minimo = $this->request->getPost('talla_minima');
             $cupo_maximo = $this->request->getPost('cupo_maximo');
             if($tamano_minimo==null){
                 $tamano_minimo=0;
