@@ -59,7 +59,7 @@
     <form id="eventForm">
         <div class="mb-3">
             <label for="title" class="form-label">Objetivo de la salida:</label>
-            <input type="text" class="form-control" name="title" id="title" required>
+            <input type="text" oninput="limitDigits(this, 30)" class="form-control" name="title" id="title" required>
         </div>
 
         <div class="mb-3">
@@ -120,7 +120,7 @@
         var calendarEl = document.getElementById('calendar');
 
         var calendar = new FullCalendar.Calendar(calendarEl, {
-             locale: 'es',
+            locale: 'es',
             initialView: 'dayGridMonth',
             firstDay: 1,
             selectable: true,
@@ -135,7 +135,7 @@
                 var zonaLink = '<a href="/user/zonasPesca/' + event.extendedProps.zonaId + '" target="_blank">' + event.extendedProps.zonaNombre + '</a>';
 
                 $('#eventDetails').html(
-                    'Objetivo: ' +event.title + '<br>' +
+                    'Objetivo: ' + event.title + '<br>' +
                     'Fecha: ' + event.start.toISOString().slice(0, 10) + '<br>' +
                     'Zona de Pesca: ' + zonaLink // Cambiado para incluir el enlace
                 );
@@ -197,7 +197,7 @@
                             document.getElementById('overlay').style.display = 'none'; // Oculta el overlay
                         },
                         error: function() {
-                            alert("Error al guardar el evento.");
+                            alert("No se ha podido guardar el evento. Introduce un título y una zona de pesca válida.");
                         }
                     });
                 };
@@ -253,7 +253,7 @@
                     },
                     dataType: 'json',
                     success: function(data) {
-                        console.log(data); // Para depurar la respuesta
+                        // console.log(data); // Para depurar la respuesta
                         if (data.length > 0) {
                             $.each(data, function(index, localidad) {
                                 $('#localidad').append('<option value="' + localidad.nombre + '">' + localidad.nombre + '</option>');
@@ -263,7 +263,7 @@
                         }
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
-                        console.error('Error:', textStatus, errorThrown);
+                        // console.error('Error:', textStatus, errorThrown);
                         alert('Error al cargar las localidades');
                     }
                 });
@@ -304,6 +304,13 @@
             }
         });
     });
+</script>
+<script>
+    function limitDigits(input, maxDigits) {
+        if (input.value.length > maxDigits) {
+            input.value = input.value.slice(0, maxDigits);
+        }
+    }
 </script>
 
 <?php $this->endSection() ?>

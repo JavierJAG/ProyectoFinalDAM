@@ -64,6 +64,11 @@ class Capturas extends ResourceController
 
     public function new()
     {
+        $zonaPescaModel = new ZonaPescaModel();
+        $zonas = $zonaPescaModel->where('usuario_id',auth()->user()->id)->findAll();
+        if (empty($zonas)){
+            return redirect()->to('/user/perfil/misZonasPesca')->with('mensaje','Debes crear primero zonas de pesca en las que registrar tu captura. Crea al menos una.');
+        }
         return view('/user/capturas/new');
     }
     public function edit($id = null)

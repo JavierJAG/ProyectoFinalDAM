@@ -10,7 +10,7 @@
                     <a class="nav-link active" aria-current="page" href="/web">Inicio</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/user/buscarCapturas">Capturas</a>
+                    <a class="nav-link" href="/user/buscarCapturas">Capturas globales</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/user/salidas">Planificar Salida</a>

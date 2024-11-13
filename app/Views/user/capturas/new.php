@@ -8,7 +8,16 @@
     /* Aplica una altura mínima al área editable del CKEditor */
     .ck-editor__editable[role="textbox"] {
         min-height: 200px;
+
         /* Cambia a la altura deseada, por ejemplo, 300px */
+
+    }
+
+    #character-counter {
+        font-size: 0.9rem;
+        color: #555;
+        margin-top: 5px;
+        text-align: right;
     }
 </style>
 <style>
@@ -97,13 +106,13 @@
                         <label for="tamano" class="form-label">
                             <i class="bi bi-rulers"></i> Tamaño (cm)
                         </label>
-                        <input type="number" step="1" name="tamano" id="tamano" class="form-control form-control-sm" value="<?= old('tamano') ?>" placeholder="Tamaño en cm" required>
+                        <input oninput="limitDigits(this, 8)" type="number" step="1" name="tamano" id="tamano" class="form-control form-control-sm" value="<?= old('tamano') ?>" placeholder="Tamaño en cm" required>
                     </div>
                     <div class="col-md-6">
                         <label for="peso" class="form-label">
                             <i class="bi bi-basket"></i> Peso (Kg)
                         </label>
-                        <input type="number" step="0.01" name="peso" id="peso" class="form-control form-control-sm" value="<?= old('peso') ?>" placeholder="Peso en kg" required>
+                        <input oninput="limitDigits(this, 8)" type="number" step="0.01" name="peso" id="peso" class="form-control form-control-sm" value="<?= old('peso') ?>" placeholder="Peso en kg" required>
                     </div>
                 </div>
             </div>
@@ -123,10 +132,10 @@
                         </label>
                         <select name="provincia" id="provincia" class="form-control form-control-sm" required>
                             <option value="" selected>Selecciona una provincia</option>
-                            <option value="A CORUÑA" >A CORUÑA</option>
-                            <option value="LUGO" >LUGO</option>
-                            <option value="OURENSE" >OURENSE</option>
-                            <option value="PONTEVEDRA" >PONTEVEDRA</option>
+                            <option value="A CORUÑA">A CORUÑA</option>
+                            <option value="LUGO">LUGO</option>
+                            <option value="OURENSE">OURENSE</option>
+                            <option value="PONTEVEDRA">PONTEVEDRA</option>
                         </select>
                     </div>
 
@@ -156,10 +165,13 @@
 
         <!-- Descripción con CKEditor -->
         <div class="mb-3">
-            <label for="descripcion" class="form-label">
-                <i class="bi bi-textarea-t"></i> Detalles
-            </label>
-            <textarea name="descripcion" id="descripcion" class="form-control  w-75" placeholder="Descripción de la captura"><?= old('descripcion') ?></textarea>
+            <div id="editor-container">
+                <label for="descripcion" class="form-label">
+                    <i class="bi bi-textarea-t"></i> Detalles
+                </label>
+                <textarea name="descripcion" id="descripcion" class="form-control  w-75" placeholder="Descripción de la captura"><?= old('descripcion') ?></textarea>
+                <div id="character-counter"></div>
+            </div>
         </div>
         <!-- Subida de Imágenes con Vista Previa -->
         <div class="mb-3">
@@ -176,6 +188,8 @@
 <br>
 
 <script src="https://cdn.ckeditor.com/ckeditor5/30.0.0/classic/ckeditor.js"></script>
+<!-- Script de CKEditor -->
+<script src="https://cdn.ckeditor.com/ckeditor5/35.0.1/classic/ckeditor.js"></script>
 <script>
     ClassicEditor
         .create(document.querySelector('#descripcion'), {
@@ -186,10 +200,49 @@
             },
             placeholder: 'Descripción del momento de la captura, detalles de la jornada, condiciones...',
         })
+        .then(editor => {
+            const maxCharacters = 4000;
+            const counterElement = document.getElementById('character-counter');
+            const showRemainingAfter = 3500; // Número de caracteres restantes después del cual mostrar el contador
+
+            // Función para actualizar el contador de caracteres
+            function updateCharacterCount(content) {
+                const remainingCharacters = maxCharacters - content.length;
+
+                // Solo mostrar los caracteres restantes si son menores que el valor definido
+                if (remainingCharacters <= showRemainingAfter) {
+                    counterElement.textContent = `${remainingCharacters} caracteres restantes`;
+
+                    // Cambiar el color del contador si se alcanza o excede el límite
+                    if (remainingCharacters <= 0) {
+                        counterElement.style.color = 'red'; // Resaltar en rojo cuando se excede el límite
+                    } else {
+                        counterElement.style.color = '#555'; // Color normal
+                    }
+                } else {
+                    counterElement.textContent = ''; // Ocultar el contador si hay más caracteres disponibles que el límite
+                }
+            }
+
+            // Actualizar el contador y permitir seguir escribiendo
+            editor.model.document.on('change:data', () => {
+                let content = editor.getData();
+
+                // Si el contenido excede el máximo, recorta el exceso sobrescribiendo al último carácter
+                if (content.length > maxCharacters) {
+                    content = content.slice(0, maxCharacters); // Recortar el contenido
+                    editor.setData(content); // Actualizar el editor con el contenido recortado
+                }
+
+                updateCharacterCount(content); // Actualiza el contador con el contenido actual
+            });
+        })
         .catch(error => {
             console.error(error);
         });
 </script>
+
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
@@ -344,6 +397,13 @@
             };
 
             reader.readAsDataURL(file);
+        }
+    }
+</script>
+<script>
+    function limitDigits(input, maxDigits) {
+        if (input.value.length > maxDigits) {
+            input.value = input.value.slice(0, maxDigits);
         }
     }
 </script>

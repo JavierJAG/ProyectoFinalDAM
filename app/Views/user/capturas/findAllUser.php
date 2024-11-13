@@ -23,7 +23,7 @@
 
     <!-- Botón para crear una nueva captura -->
     <div class="mb-3">
-        <a href="/user/capturas/new" class="btn btn-primary">Añadir nueva captura</a>
+        <a href="/user/perfil/misCapturas" class="btn btn-primary">Mis capturas</a>
     </div>
 
     <!-- Tabla de capturas -->
