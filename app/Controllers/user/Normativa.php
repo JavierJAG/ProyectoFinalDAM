@@ -84,18 +84,19 @@ class Normativa extends BaseController
                 ->like('nombre_comun', $search)
                 ->orLike('nombre_cientifico', $search)
                 ->orderBy($sort, $order) // Aplicar la ordenación
-                ->findAll();
+                ->paginate(10);
         } else {
             $especies = $especieModel
                 ->orderBy($sort, $order) // Aplicar la ordenación
-                ->findAll();
+                ->paginate(10);
         }
     
         return view('/user/especies/lista', [
             'especies' => $especies,
             'search' => $search,
             'sort' => $sort,
-            'order' => $order
+            'order' => $order,
+            'pager'=>$especieModel->pager
         ]);
     }
     
