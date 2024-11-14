@@ -40,6 +40,7 @@
                                     </div>
                                     <div class="flex-grow-1">
                                         <h5 class="card-title mb-1"><?= esc($logro->logro_nombre) ?></h5>
+                                        <small><?= $logro->logro_descripcion ?></small>
                                         <p class="mb-0 text-muted">
                                             <i class="fas fa-user"></i>
                                             <a href="/user/perfil/<?= esc($logro->user_id) ?>" class="link-primary">

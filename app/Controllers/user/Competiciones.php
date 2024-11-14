@@ -64,7 +64,7 @@ class Competiciones extends ResourceController
         }
         $organizador = $userModel->where('id',$competicion->usuario_id)->first();
         $logros = $usuarioLogroModel
-            ->select('usuarios_logros.*, logros.nombre AS logro_nombre,users.id as user_id,users.username as user_username, usuarios_logros.fecha_obtencion AS fecha_obtencion')
+            ->select('usuarios_logros.*, logros.nombre AS logro_nombre, logros.descripcion as logro_descripcion,users.id as user_id,users.username as user_username, usuarios_logros.fecha_obtencion AS fecha_obtencion')
             ->join('logros', 'logros.id = usuarios_logros.logro_id')
             ->join('competiciones', 'competiciones.id = usuarios_logros.competicion_id')
             ->join('users', 'users.id = usuarios_logros.usuario_id')
