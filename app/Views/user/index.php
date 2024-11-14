@@ -10,7 +10,7 @@
         <!-- Contenido del Perfil -->
         <div class="col-md-9">
             <div class="text-center mb-5">
-                <h1 class="display-4 fw-bold text-primary">Perfil</h1>
+                <h1 class="display-4 fw-bold text-primary">Perfil de Usuario</h1>
             </div>
 
             <div class="card">
@@ -21,21 +21,20 @@
                         <strong>Usuario:</strong> <?= esc(auth()->user()->username) ?>
                     </div>
                     <div class="mb-3">
-                        <strong>Nombre real:</strong> <?= (auth()->user()->nombre!=null)?auth()->user()->nombre : "<small><em>Aún no has indicado tu nombre</em></small>" ?>
-                    </div>
-                    <div class="mb-3">
                         <strong>Correo electrónico:</strong> <?= esc(auth()->user()->email) ?>
                     </div>
                   
-
-                    <!-- Botón para habilitar la edición -->
-                    <div class="text-end mb-3">
+                    <div class="row">
+                    <div class="mb-3 col">
+                        <strong>Nombre real:</strong> <?= (auth()->user()->nombre!=null)?auth()->user()->nombre : "<small><em>Aún no has indicado tu nombre</em></small>" ?>
+                    </div>
+                    <div class="text-end mb-3 col">
                         <button id="editButton" class="btn btn-outline-primary">
                             <i class="bi bi-pencil"></i> Editar Perfil
                         </button>
                     </div>
-
-                    <!-- Formulario de edición (oculto inicialmente) -->
+                    </div>
+                     <!-- Formulario de edición (oculto inicialmente) -->
                     <div id="editForm" style="display: none;">
                         <form action="/user/updateProfile" method="POST">
                             <?= csrf_field() ?>
@@ -46,6 +45,11 @@
                             <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                         </form>
                     </div>
+                    
+
+                  
+
+                   
 
                     <!-- Opción para cambiar la contraseña -->
                     <div class="mt-4">

@@ -4,9 +4,13 @@
 <?= view('/user/partials/_error') ?>
 
 <div class="container mt-5">
+
     <div class="row">
         <?= view('/user/partials/_menuPerfil') ?>
         <div class="col-md-9">
+        <div class="d-flex justify-content-end mb-3">
+        <a href="javascript:history.back()" class="btn btn-secondary"> <i class="bi bi-arrow-left"></i> Volver</a>
+    </div>
             <div class="card">
                 <div class="card-header text-center">
                     <h4>Cambiar Contraseña</h4>

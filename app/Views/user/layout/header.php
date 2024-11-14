@@ -1,6 +1,6 @@
 <header class="bg-light">
     <nav class="navbar navbar-expand-lg navbar-light container">
-    <a class="navbar-brand fw-bold text-primary d-flex align-items-center" href="#">
+    <a class="navbar-brand fw-bold text-primary d-flex align-items-center" href="/web">
             <img src="<?= base_url("faviconv2.ico")?>" alt="Logo" width="40" height="40" class="me-2"> <!-- Logo opcional -->
             <span style="font-size: 1.5rem;">Pescadores<span class="text-success">DaRia</span></span>
         </a>
@@ -10,7 +10,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/web">Inicio</a>
+                    <a class="nav-link" aria-current="page" href="<?= base_url("/user/perfil") ?>">Mi perfil</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/user/buscarCapturas">Capturas globales</a>

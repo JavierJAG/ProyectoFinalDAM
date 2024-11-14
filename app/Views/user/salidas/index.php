@@ -312,5 +312,8 @@
         }
     }
 </script>
+<!-- Carga de Bootstrap CSS y JS al final del cuerpo para que funcione el menú desplegable de Normativa-->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <?php $this->endSection() ?>
