@@ -18,7 +18,7 @@
             </ul>
             <!-- Perfil de Usuario o Acceso -->
             <div class="user-profile">
-                <a class="nav-link text-dark fw-semibold" href="<?= site_url('/login') ?>">Acceder</a>
+                <a class="nav-link text-primary fw-semibold" href="<?= site_url('/login') ?>">Acceder</a>
             </div>
         </div>
     </nav>

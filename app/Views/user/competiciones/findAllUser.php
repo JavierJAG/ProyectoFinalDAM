@@ -3,16 +3,20 @@
 <?= view('/user/partials/_mensaje') ?>
 <?= view('/user/partials/_error') ?>
 
-<div class="container mt-4">
-    <h2 class="text-left mb-4">Lista de Competiciones</h2>
-
-    <div class="d-flex justify-content-between mb-3">
+<div class="container mt-5">
+    <!-- Primera fila: Título y botón Crear Competición -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">Competiciones</h1>
         <?php if (auth()->user()->inGroup('admin') || auth()->user()->inGroup('superadmin')) : ?>
-            <a href="/user/competiciones/new" class="btn btn-primary d-flex align-items-center">Crear Competición</a>
+            <a href="/user/competiciones/new" class="btn btn-primary">Crear Competición</a>
         <?php endif; ?>
-        <form action="/user/buscarCompeticiones" method="get" class="d-flex">
-            <div class="me-3">
-                <label for="provincia" class="form-label">Provincia</label>
+    </div>
+    <br>
+
+    <!-- Segunda fila: Formulario de filtros -->
+    <div class="mb-3">
+        <form action="/user/buscarCompeticiones" method="get" class="row g-3">
+            <div class="col-md-4">
                 <select name="PROVINCIA" id="provincia" class="form-select">
                     <option value="" selected disabled>Selecciona una provincia</option>
                     <?php foreach ($todasProvincias as $prov) : ?>
@@ -23,8 +27,8 @@
                 </select>
             </div>
 
-            <div class="me-3">
-                <label for="localidad" class="form-label">Localidad</label>
+            <div class="col-md-4">
+               
                 <select name="localidad" id="localidad" class="form-select">
                     <option value="" selected disabled>Selecciona una localidad</option>
                     <?php if (!empty($localidades)) : ?>
@@ -36,8 +40,9 @@
                     <?php endif; ?>
                 </select>
             </div>
-            <div class="align-self-end">
-                <button type="submit" class="btn btn-success">Buscar</button>
+
+            <div class="col-md-4 d-flex align-items-end">
+                <button type="submit" class="btn btn-success w-90">Buscar</button>
             </div>
         </form>
     </div>

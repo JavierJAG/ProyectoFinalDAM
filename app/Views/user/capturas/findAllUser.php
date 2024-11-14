@@ -11,7 +11,7 @@
         <p class="text-muted">Desde todos los rincones de Galicia</p>
     </div>
    <!-- Botón de "Mis Capturas" alineado a la derecha -->
-   <div class="d-flex justify-content-end mb-3">
+   <div class="d-flex justify-content-start mb-3">
         <a href="/user/perfil/misCapturas" class="btn btn-success">Mis Capturas</a>
     </div>
     <!-- Barra de búsqueda centrada -->
