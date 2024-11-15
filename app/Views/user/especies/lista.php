@@ -4,7 +4,7 @@
 <?= view('/user/partials/_error') ?>
 
 <div class="container mt-5">
-    <h2 class="text-primary mb-4 text-center">Lista de Especies</h2>
+    <h2 class="text-primary mb-4 text-center">Glosario de Especies</h2>
 
     <!-- Formulario de búsqueda -->
     <form method="GET" action="/user/especies" class="mb-4 d-flex justify-content-center">
